@@ -210,7 +210,7 @@ contain a line that matches both expressions:
 
       # We cut the last element, to avoid a blank line.
       #
-      r = p.stdout.split('\n')
+      r =  str(p.stdout, encoding='UTF-8').split('\n')
       r = r[0:-1]
 
       if have_rev and full_name:

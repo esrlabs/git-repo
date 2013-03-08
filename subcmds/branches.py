@@ -98,7 +98,7 @@ is shown, then the branch appears in all projects.
     project_cnt = len(projects)
 
     for project in projects:
-      for name, b in project.GetBranches().iteritems():
+      for name, b in project.GetBranches().items():
         b.project = project
         if name not in all_branches:
           all_branches[name] = BranchInfo(name)

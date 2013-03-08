@@ -38,8 +38,8 @@ for py in os.listdir(my_dir):
     try:
       cmd = getattr(mod, clsn)()
     except AttributeError:
-      raise SyntaxError, '%s/%s does not define class %s' % (
-                         __name__, py, clsn)
+      raise SyntaxError('%s/%s does not define class %s' % (
+                         __name__, py, clsn))
 
     name = name.replace('_', '-')
     cmd.NAME = name

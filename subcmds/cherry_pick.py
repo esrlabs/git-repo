@@ -55,7 +55,7 @@ change id will be added.
     if p.Wait() != 0:
       print("error: Failed to retrieve old commit message", file=sys.stderr)
       sys.exit(1)
-    old_msg = self._StripHeader(p.stdout)
+    old_msg = self._StripHeader(str(p.stdout, encoding='UTF-8'))
 
     p = GitCommand(None,
                    ['cherry-pick', sha1],

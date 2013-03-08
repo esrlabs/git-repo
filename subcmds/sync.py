@@ -24,13 +24,13 @@ import socket
 import subprocess
 import sys
 import time
-import urlparse
-import xmlrpclib
+import urllib
+import xmlrpc
 
-try:
-  import threading as _threading
-except ImportError:
-  import dummy_threading as _threading
+#try:
+import threading as _threading
+#except ImportError:
+#  import dummy_threading as _threading
 
 try:
   import resource
@@ -282,6 +282,8 @@ later is required to fix a server side protocol bug.
           else:
             sys.exit(1)
     else:
+      # TODO
+      # assume jobs=1 always
       threads = set()
       lock = _threading.Lock()
       sem = _threading.Semaphore(self.jobs)
@@ -481,7 +483,7 @@ later is required to fix a server side protocol bug.
                   file=sys.stderr)
           else:
             try:
-              parse_result = urlparse.urlparse(manifest_server)
+              parse_result = urllib.parse(manifest_server)
               if parse_result.hostname:
                 username, _account, password = \
                   info.authenticators(parse_result.hostname)
@@ -499,7 +501,7 @@ later is required to fix a server side protocol bug.
                                                     1)
 
       try:
-        server = xmlrpclib.Server(manifest_server)
+        server = xmlrpc.server(manifest_server)
         if opt.smart_sync:
           p = self.manifest.manifestProject
           b = p.GetBranch(p.CurrentBranch)
@@ -537,11 +539,11 @@ later is required to fix a server side protocol bug.
         else:
           print('error: %s' % manifest_str, file=sys.stderr)
           sys.exit(1)
-      except (socket.error, IOError, xmlrpclib.Fault) as e:
+      except (socket.error, IOError, xmlrpc.client.Fault) as e:
         print('error: cannot connect to manifest server %s:\n%s'
               % (self.manifest.manifest_server, e), file=sys.stderr)
         sys.exit(1)
-      except xmlrpclib.ProtocolError as e:
+      except xmlrpc.client.ProtocolError as e:
         print('error: cannot connect to manifest server %s:\n%d %s'
               % (self.manifest.manifest_server, e.errcode, e.errmsg),
               file=sys.stderr)

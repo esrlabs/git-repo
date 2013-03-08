@@ -15,16 +15,16 @@
 
 from command import PagedCommand
 
-try:
-  import threading as _threading
-except ImportError:
-  import dummy_threading as _threading
+#try:
+import threading as _threading
+#except ImportError:
+#  import dummy_threading as _threading
 
 import glob
 import itertools
 import os
 import sys
-import StringIO
+import io
 
 from color import Coloring
 
@@ -142,7 +142,7 @@ the following meanings:
       for project in all_projects:
         sem.acquire()
 
-        class BufList(StringIO.StringIO):
+        class BufList(io.StringIO.StringIO):
           def dump(self, ostream):
             for entry in self.buflist:
               ostream.write(entry)
@@ -182,7 +182,7 @@ the following meanings:
       try:
         os.chdir(self.manifest.topdir)
 
-        outstring = StringIO.StringIO()
+        outstring = io.StringIO.StringIO()
         self._FindOrphans(glob.glob('.*') + \
             glob.glob('*'), \
             proj_dirs, proj_dirs_parents, outstring)

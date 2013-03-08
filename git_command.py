@@ -79,7 +79,7 @@ class _GitCall(object):
   def version(self):
     p = GitCommand(None, ['--version'], capture_stdout=True)
     if p.Wait() == 0:
-      return p.stdout
+      return str(p.stdout, encoding='UTF-8')
     return None
 
   def version_tuple(self):
@@ -117,7 +117,7 @@ def git_require(min_version, fail=False):
   return False
 
 def _setenv(env, name, value):
-  env[name] = value.encode()
+  env[name] = value.encode(encoding='UTF-8')
 
 class GitCommand(object):
   def __init__(self,
@@ -164,7 +164,7 @@ class GitCommand(object):
     command = [GIT]
     if bare:
       if gitdir:
-        _setenv(env, GIT_DIR, gitdir)
+        env[GIT_DIR] = gitdir
       cwd = None
     command.extend(cmdv)
 

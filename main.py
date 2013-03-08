@@ -50,6 +50,17 @@ from pager import RunPager
 
 from subcmds import all_commands
 
+REMOTE_DBG = True 
+if REMOTE_DBG:
+    try:
+        sys.path.append("C:\Program Files\eclipsePython\plugins\org.python.pydev_2.7.1.2012100913\pysrc")
+        import pydevd as pydevd
+        # stdoutToServer and stderrToServer redirect stdout and stderr to eclipse console
+        pydevd.settrace('localhost', stdoutToServer=True, stderrToServer=True)
+    except ImportError:
+        sys.stderr.write("Error: you must add pydevd in a pysrc folder (e.g. in eclipse plugin) to your PYTHONPATH.")
+        sys.exit(1)
+
 global_options = optparse.OptionParser(
                  usage="repo [-p|--paginate|--no-pager] COMMAND [ARGS]"
                  )

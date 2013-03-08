@@ -18,8 +18,9 @@ import itertools
 import os
 import re
 import sys
-import urlparse
+import urllib
 import xml.dom.minidom
+import xml.parsers.expat
 
 from git_config import GitConfig
 from git_refs import R_HEADS, HEAD
@@ -30,8 +31,8 @@ MANIFEST_FILE_NAME = 'manifest.xml'
 LOCAL_MANIFEST_NAME = 'local_manifest.xml'
 LOCAL_MANIFESTS_DIR_NAME = 'local_manifests'
 
-urlparse.uses_relative.extend(['ssh', 'git'])
-urlparse.uses_netloc.extend(['ssh', 'git'])
+urllib.parse.uses_relative.extend(['ssh', 'git'])
+urllib.parse.uses_netloc.extend(['ssh', 'git'])
 
 class _Default(object):
   """Project defaults within the manifest."""
@@ -73,7 +74,7 @@ class _XmlRemote(object):
     # ie, if manifestUrl is of the form <hostname:port>
     if manifestUrl.find(':') != manifestUrl.find('/') - 1:
       manifestUrl = 'gopher://' + manifestUrl
-    url = urlparse.urljoin(manifestUrl, url)
+    url = urllib.parse.urljoin(manifestUrl, url)
     url = re.sub(r'^gopher://', '', url)
     if p:
       url = 'persistent-' + url
@@ -388,9 +389,9 @@ class XmlManifest(object):
         name = self._reqatt(node, 'name')
         fp = os.path.join(include_root, name)
         if not os.path.isfile(fp):
-          raise ManifestParseError, \
+          raise ManifestParseError(\
               "include %s doesn't exist or isn't a file" % \
-              (name,)
+              (name,))
         try:
           nodes.extend(self._ParseManifestXml(fp, include_root))
         # should isolate this to the exact exception, but that's
@@ -496,7 +497,7 @@ class XmlManifest(object):
     name = None
     m_url = m.GetRemote(m.remote.name).url
     if m_url.endswith('/.git'):
-      raise ManifestParseError, 'refusing to mirror %s' % m_url
+      raise ManifestParseError('refusing to mirror %s' % m_url)
 
     if self._default and self._default.remote:
       url = self._default.remote.resolvedFetchUrl
@@ -590,7 +591,7 @@ class XmlManifest(object):
 
     # Figure out minimum indentation, skipping the first line (the same line
     # as the <notice> tag)...
-    minIndent = sys.maxint
+    minIndent = sys.maxsize
     lines = notice.splitlines()
     for line in lines[1:]:
       lstrippedLine = line.lstrip()
@@ -629,25 +630,25 @@ class XmlManifest(object):
     if remote is None:
       remote = self._default.remote
     if remote is None:
-      raise ManifestParseError, \
+      raise ManifestParseError(\
             "no remote for project %s within %s" % \
-            (name, self.manifestFile)
+            (name, self.manifestFile))
 
     revisionExpr = node.getAttribute('revision')
     if not revisionExpr:
       revisionExpr = self._default.revisionExpr
     if not revisionExpr:
-      raise ManifestParseError, \
+      raise ManifestParseError(\
             "no revision for project %s within %s" % \
-            (name, self.manifestFile)
+            (name, self.manifestFile))
 
     path = node.getAttribute('path')
     if not path:
       path = name
     if path.startswith('/'):
-      raise ManifestParseError, \
+      raise ManifestParseError(\
             "project %s path cannot be absolute in %s" % \
-            (name, self.manifestFile)
+            (name, self.manifestFile))
 
     rebase = node.getAttribute('rebase')
     if not rebase:
@@ -751,7 +752,7 @@ class XmlManifest(object):
     except ManifestParseError:
       keep = "true"
     if keep != "true" and keep != "false":
-      raise ManifestParseError, "optional \"keep\" attribute must be \"true\" or \"false\""
+      raise ManifestParseError("optional \"keep\" attribute must be \"true\" or \"false\"")
     project.AddAnnotation(name, value, keep)
 
   def _get_remote(self, node):
@@ -761,9 +762,9 @@ class XmlManifest(object):
 
     v = self._remotes.get(name)
     if not v:
-      raise ManifestParseError, \
+      raise ManifestParseError(\
             "remote %s not defined in %s" % \
-            (name, self.manifestFile)
+            (name, self.manifestFile))
     return v
 
   def _reqatt(self, node, attname):
@@ -772,7 +773,7 @@ class XmlManifest(object):
     """
     v = node.getAttribute(attname)
     if not v:
-      raise ManifestParseError, \
+      raise ManifestParseError(\
             "no %s in <%s> within %s" % \
-            (attname, node.nodeName, self.manifestFile)
+            (attname, node.nodeName, self.manifestFile))
     return v

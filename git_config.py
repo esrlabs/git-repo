@@ -14,7 +14,7 @@
 # limitations under the License.
 
 from __future__ import print_function
-import cPickle
+import pickle
 import os
 import re
 import subprocess
@@ -262,7 +262,7 @@ class GitConfig(object):
       Trace(': unpickle %s', self.file)
       fd = open(self._pickle, 'rb')
       try:
-        return cPickle.load(fd)
+        return pickle.load(fd)
       finally:
         fd.close()
     except EOFError:
@@ -271,7 +271,7 @@ class GitConfig(object):
     except IOError:
       os.remove(self._pickle)
       return None
-    except cPickle.PickleError:
+    except pickle.PickleError:
       os.remove(self._pickle)
       return None
 
@@ -279,13 +279,13 @@ class GitConfig(object):
     try:
       fd = open(self._pickle, 'wb')
       try:
-        cPickle.dump(cache, fd, cPickle.HIGHEST_PROTOCOL)
+        pickle.dump(cache, fd, pickle.HIGHEST_PROTOCOL)
       finally:
         fd.close()
     except IOError:
       if os.path.exists(self._pickle):
         os.remove(self._pickle)
-    except cPickle.PickleError:
+    except pickle.PickleError:
       if os.path.exists(self._pickle):
         os.remove(self._pickle)
 
@@ -324,7 +324,7 @@ class GitConfig(object):
                    capture_stdout = True,
                    capture_stderr = True)
     if p.Wait() == 0:
-      return p.stdout
+      return str(p.stdout, encoding='UTF-8')
     else:
       GitError('git config %s: %s' % (str(args), p.stderr))
 
@@ -701,7 +701,7 @@ class Branch(object):
       self._Set('merge', self.merge)
 
     else:
-      fd = open(self._config.file, 'ab')
+      fd = open(self._config.file, 'at')
       try:
         fd.write('[branch "%s"]\n' % self.name)
         if self.remote:

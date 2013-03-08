@@ -14,7 +14,7 @@
 # limitations under the License.
 
 from __future__ import print_function
-import fcntl
+#import fcntl
 import re
 import os
 import select
@@ -218,47 +218,47 @@ without iterating through the remaining projects.
           def fileno(self):
             return self.fd.fileno()
 
-        empty = True
-        errbuf = ''
-
-        p.stdin.close()
-        s_in = [sfd(p.stdout, sys.stdout),
-                sfd(p.stderr, sys.stderr)]
-
-        for s in s_in:
-          flags = fcntl.fcntl(s.fd, fcntl.F_GETFL)
-          fcntl.fcntl(s.fd, fcntl.F_SETFL, flags | os.O_NONBLOCK)
-
-        while s_in:
-          in_ready, _out_ready, _err_ready = select.select(s_in, [], [])
-          for s in in_ready:
-            buf = s.fd.read(4096)
-            if not buf:
-              s.fd.close()
-              s_in.remove(s)
-              continue
-
-            if not opt.verbose:
-              if s.fd != p.stdout:
-                errbuf += buf
-                continue
-
-            if empty:
-              if first:
-                first = False
-              else:
-                out.nl()
-              out.project('project %s/', project.relpath)
-              out.nl()
-              out.flush()
-              if errbuf:
-                sys.stderr.write(errbuf)
-                sys.stderr.flush()
-                errbuf = ''
-              empty = False
-
-            s.dest.write(buf)
-            s.dest.flush()
+#        empty = True
+#        errbuf = ''
+#
+#        p.stdin.close()
+#        s_in = [sfd(p.stdout, sys.stdout),
+#                sfd(p.stderr, sys.stderr)]
+#
+#        for s in s_in:
+#          flags = fcntl.fcntl(s.fd, fcntl.F_GETFL)
+#          fcntl.fcntl(s.fd, fcntl.F_SETFL, flags | os.O_NONBLOCK)
+#
+#        while s_in:
+#          in_ready, _out_ready, _err_ready = select.select(s_in, [], [])
+#          for s in in_ready:
+#            buf = s.fd.read(4096)
+#            if not buf:
+#              s.fd.close()
+#              s_in.remove(s)
+#              continue
+#
+#            if not opt.verbose:
+#              if s.fd != p.stdout:
+#                errbuf += buf
+#                continue
+#
+#            if empty:
+#              if first:
+#                first = False
+#              else:
+#                out.nl()
+#              out.project('project %s/', project.relpath)
+#              out.nl()
+#              out.flush()
+#              if errbuf:
+#                sys.stderr.write(errbuf)
+#                sys.stderr.flush()
+#                errbuf = ''
+#              empty = False
+#
+#            s.dest.write(buf)
+#            s.dest.flush()
 
       r = p.wait()
       if r != 0:
