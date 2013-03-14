@@ -1,2 +1,3 @@
+bin
 *.pyc
 .repopickle_*

@@ -8,6 +8,8 @@ import os
 import platform
 import subprocess
 
+SYNC_REPO_PROGRAM = False
+
 def isLinux():
   if platform.system() == "Windows":
     return False
