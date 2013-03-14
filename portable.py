@@ -10,6 +10,9 @@ import subprocess
 
 SYNC_REPO_PROGRAM = False
 
+def stream2str(stream):
+  return str(stream, encoding='UTF-8')
+
 def isLinux():
   if platform.system() == "Windows":
     return False

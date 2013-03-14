@@ -16,9 +16,8 @@
       <excludeFolder url="file://$MODULE_DIR$/docs" />
       <excludeFolder url="file://$MODULE_DIR$/hooks" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.2.3 (/usr/bin/python3)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.3.0 (/usr/bin/python3.3)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Python 3.2.3 (/usr/bin/python3) interpreter library" level="application" />
   </component>
 </module>
 

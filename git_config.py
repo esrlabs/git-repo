@@ -19,6 +19,8 @@ import os
 import re
 import subprocess
 import sys
+import portable
+
 try:
   import threading as _threading
 except ImportError:
@@ -324,7 +326,7 @@ class GitConfig(object):
                    capture_stdout = True,
                    capture_stderr = True)
     if p.Wait() == 0:
-      return str(p.stdout, encoding='UTF-8')
+      return portable.stream2str(p.stdout)
     else:
       GitError('git config %s: %s' % (str(args), p.stderr))
 

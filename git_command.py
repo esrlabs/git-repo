@@ -20,6 +20,7 @@ import subprocess
 import tempfile
 from signal import SIGTERM
 from error import GitError
+import portable
 from repo_trace import REPO_TRACE, IsTrace, Trace
 
 GIT = 'git'
@@ -79,7 +80,7 @@ class _GitCall(object):
   def version(self):
     p = GitCommand(None, ['--version'], capture_stdout=True)
     if p.Wait() == 0:
-      return str(p.stdout, encoding='UTF-8')
+      return portable.stream2str(p.stdout)
     return None
 
   def version_tuple(self):

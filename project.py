@@ -735,7 +735,7 @@ class Project(object):
       return 'CLEAN'
 
     out = StatusColoring(self.config)
-    if not output_redir == None:
+    if not output_redir is None:
       out.redirect(output_redir)
     out.project('project %-40s', self.relpath + '/')
 
@@ -2019,8 +2019,8 @@ class Project(object):
       if p.Wait() == 0:
         out = p.stdout
         if out:
-          return out[:-1].split('\0')  # pylint: disable=W1401
-                                       # Backslash is not anomalous
+          return portable.stream2str(out)[:-1].split('\0')  # pylint: disable=W1401
+                                                            # Backslash is not anomalous
       return []
 
     def DiffZ(self, name, *args):

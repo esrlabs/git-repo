@@ -18,6 +18,7 @@ import sys
 from color import Coloring
 from command import PagedCommand
 from git_command import git_require, GitCommand
+import portable
 
 class GrepColoring(Coloring):
   def __init__(self, config):
@@ -210,7 +211,7 @@ contain a line that matches both expressions:
 
       # We cut the last element, to avoid a blank line.
       #
-      r =  str(p.stdout, encoding='UTF-8').split('\n')
+      r =  portable.stream2str(p.stdout).split('\n')
       r = r[0:-1]
 
       if have_rev and full_name:

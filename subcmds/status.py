@@ -142,11 +142,9 @@ the following meanings:
       for project in all_projects:
         sem.acquire()
 
-        class BufList(io.StringIO.StringIO):
+        class BufList(io.StringIO):
           def dump(self, ostream):
-            for entry in self.buflist:
-              ostream.write(entry)
-
+            ostream.write(self.getvalue())
         output = BufList()
 
         t = _threading.Thread(target=self._StatusHelper,

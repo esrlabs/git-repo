@@ -18,6 +18,7 @@ import re
 import sys
 from command import Command
 from git_command import GitCommand
+import portable
 
 CHANGE_ID_RE = re.compile(r'^\s*Change-Id: I([0-9a-f]{40})\s*$')
 
@@ -55,7 +56,7 @@ change id will be added.
     if p.Wait() != 0:
       print("error: Failed to retrieve old commit message", file=sys.stderr)
       sys.exit(1)
-    old_msg = self._StripHeader(str(p.stdout, encoding='UTF-8'))
+    old_msg = self._StripHeader(portable.stream2str(p.stdout))
 
     p = GitCommand(None,
                    ['cherry-pick', sha1],
