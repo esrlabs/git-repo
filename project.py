@@ -1949,6 +1949,11 @@ class Project(object):
     if not os.path.exists(dotgit):
       os.makedirs(dotgit)
 
+      # create dir - since on Linux a broken link will be created, which is not allowed on windows
+      rr_cache = os.path.join(self.gitdir, 'rr-cache')
+      if not os.path.exists(rr_cache):
+        os.makedirs(rr_cache)
+
       for name in ['config',
                    'description',
                    'hooks',
@@ -1958,7 +1963,8 @@ class Project(object):
                    'packed-refs',
                    'refs',
                    'rr-cache',
-                   'svn']:
+                   #'svn'
+                   ]:
         try:
           src = os.path.join(self.gitdir, name)
           dst = os.path.join(dotgit, name)
@@ -1980,9 +1986,6 @@ class Project(object):
       if GitCommand(self, cmd).Wait() != 0:
         raise GitError("cannot initialize work tree")
 
-      rr_cache = os.path.join(self.gitdir, 'rr-cache')
-      if not os.path.exists(rr_cache):
-        os.makedirs(rr_cache)
 
       self._CopyFiles()
 

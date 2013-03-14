@@ -537,8 +537,8 @@ class Remote(object):
     self.url = self._Get('url')
     self.review = self._Get('review')
     self.projectname = self._Get('projectname')
-    self.fetch = map(RefSpec.FromString,
-                     self._Get('fetch', all_keys=True))
+    self.fetch = list(map(RefSpec.FromString,
+                     self._Get('fetch', all_keys=True)))
     self._review_url = None
 
   def _InsteadOf(self):
@@ -657,7 +657,7 @@ class Remote(object):
     self._Set('url', self.url)
     self._Set('review', self.review)
     self._Set('projectname', self.projectname)
-    self._Set('fetch', map(str, self.fetch))
+    self._Set('fetch', list(map(str, self.fetch)))
 
   def _Set(self, key, value):
     key = 'remote.%s.%s' % (self.name, key)
