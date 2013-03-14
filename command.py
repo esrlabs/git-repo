@@ -22,7 +22,6 @@ import sys
 from error import NoSuchProjectError
 from error import InvalidProjectGroupsError
 
-
 class Command(object):
   """Base class for any command line action in repo.
   """
@@ -146,11 +145,12 @@ class Command(object):
         if submodules_ok or project.sync_s:
           derived_projects.update((p.name, p)
                                   for p in project.GetDerivedSubprojects())
-      all_projects_list.extend(derived_projects.values())
-      for project in all_projects_list:
-        if ((missing_ok or project.Exists) and
-            project.MatchesGroups(groups)):
-          result.append(project)
+      #all_projects_list.extend(derived_projects.values())
+      for projects in [all_projects_list, derived_projects.values()]:
+        for project in projects:
+          if ((missing_ok or project.Exists) and
+              project.MatchesGroups(groups)):
+            result.append(project)
     else:
       self._ResetPathToProjectMap(all_projects.values())
 

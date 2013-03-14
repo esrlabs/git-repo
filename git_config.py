@@ -39,7 +39,7 @@ else:
 
 from signal import SIGTERM
 from error import GitError, UploadError
-from trace import Trace
+from repo_trace import Trace
 
 from git_command import GitCommand
 from git_command import ssh_sock

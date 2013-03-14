@@ -20,7 +20,7 @@ import subprocess
 import tempfile
 from signal import SIGTERM
 from error import GitError
-from trace import REPO_TRACE, IsTrace, Trace
+from repo_trace import REPO_TRACE, IsTrace, Trace
 
 GIT = 'git'
 MIN_GIT_VERSION = (1, 5, 4)

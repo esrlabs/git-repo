@@ -21,18 +21,10 @@ import netrc
 import optparse
 import os
 import sys
+import traceback
 import time
-try:
-  import urllib2
-except ImportError:
-  # For python3
-  import urllib.request
-else:
-  # For python2
-  urllib = imp.new_module('urllib')
-  urllib.request = urllib2
-
-from trace import SetTrace
+import urllib.request
+from repo_trace import SetTrace
 from git_command import git, GitCommand
 from git_config import init_ssh, close_ssh
 from command import InteractiveCommand
@@ -50,16 +42,12 @@ from pager import RunPager
 
 from subcmds import all_commands
 
-REMOTE_DBG = True 
-if REMOTE_DBG:
-    try:
-        sys.path.append("C:\Program Files\eclipsePython\plugins\org.python.pydev_2.7.1.2012100913\pysrc")
-        import pydevd as pydevd
-        # stdoutToServer and stderrToServer redirect stdout and stderr to eclipse console
-        pydevd.settrace('localhost', stdoutToServer=True, stderrToServer=True)
-    except ImportError:
-        sys.stderr.write("Error: you must add pydevd in a pysrc folder (e.g. in eclipse plugin) to your PYTHONPATH.")
-        sys.exit(1)
+
+
+# TODO workaround: disabled git pager since ideally it would fork to use less as pager
+os.environ['GIT_PAGER'] = ''
+
+
 
 global_options = optparse.OptionParser(
                  usage="repo [-p|--paginate|--no-pager] COMMAND [ARGS]"
@@ -374,18 +362,46 @@ def init_http():
     handlers.append(urllib.request.HTTPSHandler(debuglevel=1))
   urllib.request.install_opener(urllib.request.build_opener(*handlers))
 
+
+def _Debug(host, env):
+  try:
+    if env == "eclipse":
+      sys.path.append("C:\Program Files\eclipsePython\plugins\org.python.pydev_2.7.1.2012100913\pysrc")
+      sys.path.append("/opt/eclipseCPy/plugins/org.python.pydev_2.7.1.2012100913/pysrc")
+      import pydevd as pydevd
+    elif env == "intellij":
+      sys.path.append("C:\\Users\mputz\.IntelliJIdea12\config\plugins\python\pycharm-debug.egg")
+      sys.path.append("/home/mputz/.IntelliJIdea12/config/plugins/python/pycharm-debug.egg")
+      sys.path.append("C:\\Users\mputz\.IntelliJIdea12\config\plugins\python\helpers\pydev")
+      sys.path.append("/home/mputz/.IntelliJIdea12/config/plugins/python/helpers/pydev")
+      from pydev import pydevd
+
+    pydevd.settrace(host, port=19499, stdoutToServer=True, stderrToServer=True)
+
+  except ImportError:
+    traceback.print_exc(file=sys.stdout)
+    sys.stderr.write("Error: you must add pydevd in a pysrc folder (e.g. in eclipse plugin) to your PYTHONPATH.\n")
+    sys.exit(1)
+
 def _Main(argv):
   result = 0
 
   opt = optparse.OptionParser(usage="repo wrapperinfo -- ...")
   opt.add_option("--repo-dir", dest="repodir",
-                 help="path to .repo/")
+                 help="path to .repo/", default=".repo")
   opt.add_option("--wrapper-version", dest="wrapper_version",
-                 help="version of the wrapper script")
+                 help="version of the wrapper script", default="1.19")
   opt.add_option("--wrapper-path", dest="wrapper_path",
-                 help="location of the wrapper script")
+                 help="location of the wrapper script", default="../../git-repo/repo")
+  opt.add_option("-d", "--debug", action="store_true", dest="debug", default=False)
+  opt.add_option("--debug-host", dest="debug_host", default='localhost')
+  opt.add_option("--debug-env", dest="debug_env", default="intellij")
   _PruneOptions(argv, opt)
   opt, argv = opt.parse_args(argv)
+
+  if opt.debug:
+      print("enter debug mode, host %s" % opt.debug_host)
+      _Debug(opt.debug_host, opt.debug_env)
 
   _CheckWrapperVersion(opt.wrapper_version, opt.wrapper_path)
   _CheckRepoDir(opt.repodir)

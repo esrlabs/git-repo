@@ -32,9 +32,10 @@ from git_config import GitConfig, IsId, GetSchemeFromUrl, ID_RE
 from error import GitError, HookError, UploadError
 from error import ManifestInvalidRevisionError
 from error import NoManifestException
-from trace import IsTrace, Trace
+from repo_trace import IsTrace, Trace
 
 from git_refs import GitRefs, HEAD, R_HEADS, R_TAGS, R_PUB, R_M
+import portable
 
 def _lwrite(path, content):
   lock = '%s.lock' % path
@@ -1645,7 +1646,7 @@ class Project(object):
     if not current_branch_only:
       # Fetch whole repo
       cmd.append('--tags')
-      cmd.append((u'+refs/heads/*:') + remote.ToLocal('refs/heads/*'))
+      cmd.append(('+refs/heads/*:') + remote.ToLocal('refs/heads/*'))
     elif tag_name is not None:
       cmd.append('tag')
       cmd.append(tag_name)
@@ -1655,7 +1656,7 @@ class Project(object):
         branch = self.upstream
       if branch.startswith(R_HEADS):
         branch = branch[len(R_HEADS):]
-      cmd.append((u'+refs/heads/%s:' % branch) + remote.ToLocal('refs/heads/%s' % branch))
+      cmd.append(('+refs/heads/%s:' % branch) + remote.ToLocal('refs/heads/%s' % branch))
 
     ok = False
     for _i in range(2):
@@ -1962,7 +1963,7 @@ class Project(object):
           src = os.path.join(self.gitdir, name)
           dst = os.path.join(dotgit, name)
           if os.path.islink(dst) or not os.path.exists(dst):
-            os.symlink(os.path.relpath(src, os.path.dirname(dst)), dst)
+            portable.os_link(src, dst)
           else:
             raise GitError('cannot overwrite a local work tree')
         except OSError as e:

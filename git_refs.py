@@ -14,7 +14,7 @@
 # limitations under the License.
 
 import os
-from trace import Trace
+from repo_trace import Trace
 
 HEAD    = 'HEAD'
 R_HEADS = 'refs/heads/'

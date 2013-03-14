@@ -107,7 +107,7 @@ the following meanings:
     try:
       state = project.PrintWorkTreeStatus(output)
       if state == 'CLEAN':
-        clean_counter.next()
+        clean_counter.__next__()
     finally:
       sem.release()
 
@@ -135,7 +135,7 @@ the following meanings:
       for project in all_projects:
         state = project.PrintWorkTreeStatus()
         if state == 'CLEAN':
-          counter.next()
+          counter.__next__()
     else:
       sem = _threading.Semaphore(opt.jobs)
       threads_and_output = []
@@ -158,7 +158,7 @@ the following meanings:
         t.join()
         output.dump(sys.stdout)
         output.close()
-    if len(all_projects) == counter.next():
+    if len(all_projects) == counter.__next__():
       print('nothing to commit (working directory clean)')
 
     if opt.orphans:
