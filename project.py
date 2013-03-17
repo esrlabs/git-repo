@@ -820,7 +820,7 @@ class Project(object):
         out.project('project %s/' % self.relpath)
         out.nl()
         has_diff = True
-      print(line[:-1])
+      print(portable.stream2str(line)[:-1])
     p.Wait()
 
 

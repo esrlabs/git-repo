@@ -24,6 +24,7 @@ import sys
 import traceback
 import time
 import urllib.request
+import portable
 from repo_trace import SetTrace
 from git_command import git, GitCommand
 from git_config import init_ssh, close_ssh
@@ -45,7 +46,12 @@ from subcmds import all_commands
 
 
 # TODO workaround: disabled git pager since ideally it would fork to use less as pager
-os.environ['GIT_PAGER'] = ''
+if portable.isLinux():
+  # will be set to less automatically, but let it be the default
+  #os.environ['GIT_PAGER'] = 'less'
+  pass
+else:
+  os.environ['GIT_PAGER'] = ''
 
 
 

@@ -18,6 +18,7 @@
     </content>
     <orderEntry type="jdk" jdkName="Python 3.3.0 (/usr/bin/python3.3)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Python 3.3.0 (/usr/bin/python3.3) interpreter library" level="application" />
   </component>
 </module>
 

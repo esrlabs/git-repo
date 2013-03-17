@@ -2,32 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/subcmds/cherry_pick.py" afterPath="$PROJECT_DIR$/subcmds/cherry_pick.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/git_command.py" afterPath="$PROJECT_DIR$/git_command.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/git_config.py" afterPath="$PROJECT_DIR$/git_config.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/subcmds/grep.py" afterPath="$PROJECT_DIR$/subcmds/grep.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/portable.py" afterPath="$PROJECT_DIR$/portable.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests/linux-pager.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests/portable-pager.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project.py" afterPath="$PROJECT_DIR$/project.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/repo.iml" afterPath="$PROJECT_DIR$/repo.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/subcmds/status.py" afterPath="$PROJECT_DIR$/subcmds/status.py" />
     </list>
     <ignored path="git-repo.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363249871987" ignored="false" />
-    <file path="/main.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363252527568" ignored="false" />
+    <file path="/Dummy.txt" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363375534603" ignored="false" />
+    <file path="/main.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363349030501" ignored="false" />
     <file path="/portable.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363275619057" ignored="false" />
     <file path="/a.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363252132925" ignored="false" />
-    <file path="/a.dummy" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363275986579" ignored="false" />
+    <file path="/a.dummy" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363376027133" ignored="false" />
     <file path="/git_config.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363276044335" ignored="false" />
-    <file path="/project.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363275666306" ignored="false" />
-    <file path="/fragment.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363276469024" ignored="false" />
+    <file path="/project.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363348576953" ignored="false" />
+    <file path="/fragment.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363277935175" ignored="false" />
     <file path="/manifest_xml.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363268785719" ignored="false" />
     <file path="/sync.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363272296968" ignored="false" />
-    <file path="/status.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363277085645" ignored="false" />
+    <file path="/status.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363346738778" ignored="false" />
     <file path="/git_command.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363276013040" ignored="false" />
     <file path="/cherry_pick.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363276094232" ignored="false" />
     <file path="/grep.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363276113213" ignored="false" />
-    <file path="/color.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363276972904" ignored="false" />
+    <file path="/color.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363277695599" ignored="false" />
+    <file path="/linux-pager.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363349589439" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,104 +83,63 @@
     <favorites_list name="git-repo" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="main.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="136" column="0" selection-start="4214" selection-end="4214" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="status.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/subcmds/status.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="147" column="0" selection-start="5089" selection-end="5089" vertical-scroll-proportion="0.59375">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="_weakrefset.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file:///usr/lib/python3.3/_weakrefset.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="78" column="0" selection-start="2178" selection-end="2178" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="threading.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file:///usr/lib/python3.3/threading.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="595" column="0" selection-start="18518" selection-end="18518" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="portable.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/portable.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="9" selection-start="152" selection-end="152" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#47#56#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="manifest.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/subcmds/manifest.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="51" column="15" selection-start="1618" selection-end="1618" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="git_config.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/git_config.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="328" column="41" selection-start="8344" selection-end="8344" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#603#640#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="git_command.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/git_command.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="82" column="41" selection-start="2019" selection-end="2019" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="project.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/project.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="739" column="0" selection-start="24079" selection-end="24079" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#601#638#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="color.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/color.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="125" column="22" selection-start="2780" selection-end="2780" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.5">
+      <split-first>
+        <leaf>
+          <file leaf-file-name="linux-pager.py" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/tests/linux-pager.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="58" column="11" selection-start="1200" selection-end="1200" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="portable-pager.py" pinned="false" current="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/tests/portable-pager.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="23" column="14" selection-start="458" selection-end="458" vertical-scroll-proportion="0.30734465">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="main.py" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/main.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="445" column="0" selection-start="13881" selection-end="13881" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="select.py" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$USER_HOME$/.IntelliJIdea12/system/python_stubs/-2066100795/select.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="pager.py" pinned="false" current="true" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/pager.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="61" column="15" selection-start="1537" selection-end="1537" vertical-scroll-proportion="0.9830508">
+                  <folding>
+                    <element signature="e#603#640#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -200,23 +157,25 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/manifest_xml.py" />
         <option value="$PROJECT_DIR$/subcmds/sync.py" />
         <option value="$PROJECT_DIR$/portable.py" />
-        <option value="$PROJECT_DIR$/project.py" />
         <option value="$PROJECT_DIR$/git_command.py" />
         <option value="$PROJECT_DIR$/git_config.py" />
         <option value="$PROJECT_DIR$/subcmds/cherry_pick.py" />
         <option value="$PROJECT_DIR$/subcmds/grep.py" />
         <option value="$PROJECT_DIR$/color.py" />
         <option value="$PROJECT_DIR$/subcmds/status.py" />
+        <option value="$PROJECT_DIR$/project.py" />
+        <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/tests/linux-pager.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="width" value="1353" />
-    <option name="height" value="1042" />
+    <option name="x" value="-3" />
+    <option name="width" value="1926" />
+    <option name="height" value="1057" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -313,6 +272,10 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane">
+        <subPane />
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -345,16 +308,12 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="subcmds" />
+              <option name="myItemId" value="tests" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane">
-        <subPane />
-      </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -400,6 +359,11 @@
     <option name="myDjangoConsoleState">
       <PyConsoleSettings />
     </option>
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/tests" />
+    </key>
   </component>
   <component name="RunManager" selected="Python Remote Debug.git-repo remote localhost">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
@@ -609,32 +573,32 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1353" height="1042" extended-state="0" />
-    <editor active="true" />
+    <frame x="-3" y="0" width="1926" height="1057" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924107" sideWeight="0.49276412" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="SBT Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3046875" sideWeight="0.99306625" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3046875" sideWeight="0.99306625" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924107" sideWeight="0.50217074" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924107" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25518832" sideWeight="0.20982143" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15368196" sideWeight="0.46432492" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25518832" sideWeight="0.47767857" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15368196" sideWeight="0.52799124" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32924107" sideWeight="0.49276412" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -721,12 +685,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>386</line>
+          <line>392</line>
           <option name="timeStamp" value="18" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>136</line>
+          <line>142</line>
           <option name="timeStamp" value="20" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
@@ -755,9 +719,19 @@
           <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/color.py</url>
-          <line>125</line>
-          <option name="timeStamp" value="32" />
+          <url>file://$PROJECT_DIR$/subcmds/status.py</url>
+          <line>146</line>
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/project.py</url>
+          <line>811</line>
+          <option name="timeStamp" value="37" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/pager.py</url>
+          <line>25</line>
+          <option name="timeStamp" value="38" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -770,7 +744,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="33" />
+      <option name="time" value="39" />
     </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
@@ -778,71 +752,9 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/progress.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="0" selection-start="1551" selection-end="1551" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/subcmds/sync.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="588" column="35" selection-start="21092" selection-end="21092" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/subcmds/manifest.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="51" column="15" selection-start="1618" selection-end="1618" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/git_command.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="82" column="41" selection-start="2019" selection-end="2019" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/subcmds/grep.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="111" column="49" selection-start="3638" selection-end="3638" vertical-scroll-proportion="0.7100694">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/subcmds/cherry_pick.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="60" selection-start="1758" selection-end="1758" vertical-scroll-proportion="0.31944445">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portable.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="9" selection-start="152" selection-end="152" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#47#56#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/git_config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="328" column="41" selection-start="8344" selection-end="8344" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#603#640#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.IntelliJIdea12/system/python_stubs/-2066100795/_io.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="756" column="10" selection-start="26440" selection-end="26440" vertical-scroll-proportion="0.30550623">
-          <folding />
-        </state>
+        <state line="756" column="10" selection-start="26440" selection-end="26440" vertical-scroll-proportion="0.30550623" />
       </provider>
     </entry>
     <entry file="file:///usr/lib/python3.3/io.py">
@@ -854,45 +766,89 @@
     </entry>
     <entry file="file:///usr/lib/python3.3/threading.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="595" column="0" selection-start="18518" selection-end="18518" vertical-scroll-proportion="0.0">
+        <state line="595" column="0" selection-start="18518" selection-end="18518" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/git_command.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="82" column="41" selection-start="2019" selection-end="2019" vertical-scroll-proportion="0.31944445" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/git_config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="328" column="41" selection-start="8344" selection-end="8344" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/color.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="125" column="0" selection-start="2758" selection-end="2758" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/subcmds/diff.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="39" column="0" selection-start="1368" selection-end="1368" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/subcmds/status.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="139" column="0" selection-start="4844" selection-end="4844" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/project.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="739" column="0" selection-start="24079" selection-end="24079" vertical-scroll-proportion="0.0">
+        <state line="811" column="0" selection-start="25730" selection-end="25730" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#601#638#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/color.py">
+    <entry file="file:///usr/lib/python3.3/_weakrefset.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="125" column="22" selection-start="2780" selection-end="2780" vertical-scroll-proportion="0.0">
+        <state line="78" column="0" selection-start="2178" selection-end="2178" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/subcmds/manifest.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="51" column="15" selection-start="1618" selection-end="1618" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.IntelliJIdea12/system/python_stubs/-2066100795/select.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="136" column="0" selection-start="4214" selection-end="4214" vertical-scroll-proportion="0.0">
+        <state line="445" column="0" selection-start="13881" selection-end="13881" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file:///usr/lib/python3.3/_weakrefset.py">
+    <entry file="file://$PROJECT_DIR$/tests/linux-pager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="78" column="0" selection-start="2178" selection-end="2178" vertical-scroll-proportion="0.0">
+        <state line="58" column="11" selection-start="1200" selection-end="1200" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/subcmds/status.py">
+    <entry file="file://$PROJECT_DIR$/tests/portable-pager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="147" column="0" selection-start="5089" selection-end="5089" vertical-scroll-proportion="0.59375">
+        <state line="23" column="14" selection-start="458" selection-end="458" vertical-scroll-proportion="0.30734465">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="61" column="15" selection-start="1537" selection-end="1537" vertical-scroll-proportion="0.9830508">
+          <folding>
+            <element signature="e#603#640#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
