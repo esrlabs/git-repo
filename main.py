@@ -45,17 +45,6 @@ from pager import _SelectPager
 from subcmds import all_commands
 
 
-
-# TODO workaround: disabled git pager since ideally it would fork to use less as pager
-if portable.isLinux():
-  # will be set to less automatically, but let it be the default
-  #os.environ['GIT_PAGER'] = 'less'
-  pass
-else:
-  os.environ['GIT_PAGER'] = 'less'
-
-
-
 global_options = optparse.OptionParser(
                  usage="repo [-p|--paginate|--no-pager] COMMAND [ARGS]"
                  )
@@ -152,7 +141,7 @@ class _Repo(object):
       print("repo was not configured, run _Config(argv) before calling _Run(..)")
       return 1
 
-    if portable.isLinux() and _UsePager(name, cmd, gopts, copts):
+    if _UsePager(name, cmd, gopts, copts):
       config = cmd.manifest.globalConfig
       RunPager(config)
 
@@ -456,7 +445,7 @@ def _Main(argv):
   repo._Config(argv)
 
   # intercept here if on Windows and Pager is required
-  if not portable.isLinux():
+  if not portable.isPosix():
     if _WindowsPager(repo):
       # everything was already done; so exit
       exit(0);
