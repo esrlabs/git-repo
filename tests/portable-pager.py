@@ -54,6 +54,21 @@ def _BecomePager(pager):
 
 
 if __name__ == '__main__':
-  RunPager()
-  for i in range(0, 100):
-    print("%d" % i)
+  if len(sys.argv) == 1:
+    print('run pager')
+
+    import subprocess
+    import platform
+    #subprocess.call(["python3.3", "portable-pager.py", "1", "| less"])
+    if platform.system() != "Windows":
+        python = "python3.3"
+    else:
+        python = "python"
+
+    os.system("%s portable-pager.py 1 | less" % python)
+
+    #RunPager()
+  else:
+    print('output data')
+    for i in range(0, 100):
+        print("%d" % i)
