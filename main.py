@@ -51,7 +51,7 @@ if portable.isLinux():
   #os.environ['GIT_PAGER'] = 'less'
   pass
 else:
-  os.environ['GIT_PAGER'] = ''
+  os.environ['GIT_PAGER'] = 'less'
 
 
 
@@ -74,6 +74,20 @@ global_options.add_option('--version',
                           dest='show_version', action='store_true',
                           help='display this version of repo')
 
+
+def _UsePager(name, cmd, gopts, copts):
+  if not gopts.no_pager and not isinstance(cmd, InteractiveCommand):
+    config = cmd.manifest.globalConfig
+    if gopts.pager:
+      use_pager = True
+    else:
+      use_pager = config.GetBoolean('pager.%s' % name)
+      if use_pager is None:
+        use_pager = cmd.WantPager(copts)
+    return use_pager
+  else:
+    return False
+
 class _Repo(object):
   def __init__(self, repodir):
     self.repodir = repodir
@@ -81,8 +95,7 @@ class _Repo(object):
     # add 'branch' as an alias for 'branches'
     all_commands['branch'] = all_commands['branches']
 
-  def _Run(self, argv):
-    result = 0
+  def _Config(self, argv):
     name = None
     glob = []
 
@@ -97,6 +110,7 @@ class _Repo(object):
       glob = argv
       name = 'help'
       argv = []
+
     gopts, _gargs = global_options.parse_args(glob)
 
     if gopts.trace:
@@ -127,16 +141,19 @@ class _Repo(object):
     copts, cargs = cmd.OptionParser.parse_args(argv)
     copts = cmd.ReadEnvironmentOptions(copts)
 
-    if not gopts.no_pager and not isinstance(cmd, InteractiveCommand):
+    self.config = name, cmd, gopts, _gargs, copts, cargs, argv
+    return 0
+
+  def _Run(self):
+    if self.config:
+      (name, cmd, gopts, _gargs, copts, cargs, argv) = self.config
+    else:
+      print("repo was not configured, run _Config(argv) before calling _Run(..)")
+      return 1
+
+    if portable.isLinux() and _UsePager(name, cmd, gopts, copts):
       config = cmd.manifest.globalConfig
-      if gopts.pager:
-        use_pager = True
-      else:
-        use_pager = config.GetBoolean('pager.%s' % name)
-        if use_pager is None:
-          use_pager = cmd.WantPager(copts)
-      if use_pager:
-        RunPager(config)
+      RunPager(config)
 
     start = time.time()
     try:
@@ -389,6 +406,13 @@ def _Debug(host, env):
     sys.stderr.write("Error: you must add pydevd in a pysrc folder (e.g. in eclipse plugin) to your PYTHONPATH.\n")
     sys.exit(1)
 
+def _WindowsPager(repo):
+  (name, cmd, gopts, _gargs, copts, cargs, argv) = repo.config
+  if _UsePager(name, cmd, gopts, copts):
+    print("USE PAGER")
+    return True
+  return False
+
 def _Main(argv):
   result = 0
 
@@ -402,12 +426,9 @@ def _Main(argv):
   opt.add_option("-d", "--debug", action="store_true", dest="debug", default=False)
   opt.add_option("--debug-host", dest="debug_host", default='localhost')
   opt.add_option("--debug-env", dest="debug_env", default="intellij")
+
   _PruneOptions(argv, opt)
   opt, argv = opt.parse_args(argv)
-
-  if opt.debug:
-      print("enter debug mode, host %s" % opt.debug_host)
-      _Debug(opt.debug_host, opt.debug_env)
 
   _CheckWrapperVersion(opt.wrapper_version, opt.wrapper_path)
   _CheckRepoDir(opt.repodir)
@@ -416,11 +437,20 @@ def _Main(argv):
   Version.wrapper_path = opt.wrapper_path
 
   repo = _Repo(opt.repodir)
+  repo._Config(argv)
+  if not portable.isLinux():
+    if _WindowsPager(repo):
+      exit(0);
+
+  if opt.debug:
+      print("enter debug mode, host %s" % opt.debug_host)
+      _Debug(opt.debug_host, opt.debug_env)
+
   try:
     try:
       init_ssh()
       init_http()
-      result = repo._Run(argv) or 0
+      result = repo._Run() or 0
     finally:
       close_ssh()
   except KeyboardInterrupt:

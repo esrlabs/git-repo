@@ -716,7 +716,7 @@ class Project(object):
       output: If specified, redirect the output to this object.
     """
     if not os.path.isdir(self.worktree):
-      if output_redir == None:
+      if output_redir is None:
         output_redir = sys.stdout
       print(file=output_redir)
       print('project %s/' % self.relpath, file=output_redir)
@@ -2036,11 +2036,11 @@ class Project(object):
         out = p.process.stdout.read()
         r = {}
         if out:
-          out = iter(out[:-1].split('\0'))  # pylint: disable=W1401
+          out = iter(portable.stream2str(out)[:-1].split('\0'))  # pylint: disable=W1401
           while out:
             try:
-              info = out.next()
-              path = out.next()
+              info = out.__next__()
+              path = out.__next__()
             except StopIteration:
               break
 
@@ -2193,7 +2193,7 @@ class Project(object):
                          self._project.name,
                          name,
                          p.stderr))
-        r = str(p.stdout, encoding='UTF-8')
+        r = portable.stream2str(p.stdout)
         if r.endswith('\n') and r.index('\n') == len(r) - 1:
           return r[:-1]
         return r
