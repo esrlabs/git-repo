@@ -40,6 +40,7 @@ from error import NoSuchProjectError
 from error import RepoChangedException
 from manifest_xml import XmlManifest
 from pager import RunPager
+from pager import _SelectPager
 
 from subcmds import all_commands
 
@@ -406,10 +407,25 @@ def _Debug(host, env):
     sys.stderr.write("Error: you must add pydevd in a pysrc folder (e.g. in eclipse plugin) to your PYTHONPATH.\n")
     sys.exit(1)
 
+# If program runs in Windows and a Pager is required, fork has to circumvented:
+# make a system call of the current script with the additional parameter '--no-pager' and
+# append a pipe for the pager, e.g. '| less'
 def _WindowsPager(repo):
   (name, cmd, gopts, _gargs, copts, cargs, argv) = repo.config
   if _UsePager(name, cmd, gopts, copts):
-    print("USE PAGER")
+    python = sys.executable
+    thisScript = os.path.abspath(__file__)
+
+    args = sys.argv[1:]
+    argsSplit = args.index('--')
+    args1 = args[:argsSplit]
+    args2 = args[argsSplit+1:]
+    pager = _SelectPager(cmd.manifest.globalConfig)
+
+    shellCommand = "%s %s %s -- --no-pager %s | %s" % (python, thisScript, ' '.join(args1), ' '.join(args2), pager)
+    print("EXECUTE: %s" % shellCommand)
+
+    os.system(shellCommand)
     return True
   return False
 
@@ -438,8 +454,11 @@ def _Main(argv):
 
   repo = _Repo(opt.repodir)
   repo._Config(argv)
+
+  # intercept here if on Windows and Pager is required
   if not portable.isLinux():
     if _WindowsPager(repo):
+      # everything was already done; so exit
       exit(0);
 
   if opt.debug:

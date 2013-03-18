@@ -3,12 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project.py" afterPath="$PROJECT_DIR$/project.py" />
     </list>
     <ignored path="git-repo.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/Dummy.txt" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363590315380" ignored="false" />
-    <file path="/main.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363598089701" ignored="false" />
+    <file path="/main.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363600781772" ignored="false" />
     <file path="/portable.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363275619057" ignored="false" />
     <file path="/a.py" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363252132925" ignored="false" />
     <file path="/a.dummy" changelist="2c74b80f-dc83-420e-8ea2-4ad07fb0ac68" time="1363594579797" ignored="false" />
@@ -80,13 +79,13 @@
     <favorites_list name="git-repo" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5163934">
+    <splitter split-orientation="horizontal" split-proportion="0.684111">
       <split-first>
         <leaf>
           <file leaf-file-name="main.py" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/main.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="81" column="21" selection-start="2796" selection-end="2796" vertical-scroll-proportion="0.6992754">
+                <state line="417" column="0" selection-start="12997" selection-end="12997" vertical-scroll-proportion="0.39823008">
                   <folding>
                     <element signature="e#625#662#0" expanded="true" />
                   </folding>
@@ -97,7 +96,7 @@
           <file leaf-file-name="portable-pager.py" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/tests/portable-pager.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="70" column="6" selection-start="1497" selection-end="1497" vertical-scroll-proportion="0.0">
+                <state line="67" column="4" selection-start="1422" selection-end="1422" vertical-scroll-proportion="0.0">
                   <folding />
                 </state>
               </provider>
@@ -184,7 +183,7 @@
           <file leaf-file-name="pager.py" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/pager.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="55" column="4" selection-start="1423" selection-end="1423" vertical-scroll-proportion="0.3327645">
+                <state line="44" column="4" selection-start="1226" selection-end="1226" vertical-scroll-proportion="0.05235602">
                   <folding>
                     <element signature="e#603#640#0" expanded="true" />
                   </folding>
@@ -760,7 +759,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>416</line>
+          <line>432</line>
           <option name="timeStamp" value="18" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
@@ -800,12 +799,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>157</line>
+          <line>158</line>
           <option name="timeStamp" value="40" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>410</line>
+          <line>414</line>
           <option name="timeStamp" value="42" />
         </line-breakpoint>
       </breakpoints>
@@ -913,17 +912,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="4" selection-start="1423" selection-end="1423" vertical-scroll-proportion="0.3327645">
+        <state line="44" column="4" selection-start="1226" selection-end="1226" vertical-scroll-proportion="0.05235602">
           <folding>
             <element signature="e#603#640#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/portable-pager.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="6" selection-start="1497" selection-end="1497" vertical-scroll-proportion="0.0">
-          <folding />
         </state>
       </provider>
     </entry>
@@ -936,9 +928,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tests/portable-pager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="67" column="4" selection-start="1422" selection-end="1422" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="81" column="21" selection-start="2796" selection-end="2796" vertical-scroll-proportion="0.6992754">
+        <state line="417" column="0" selection-start="12997" selection-end="12997" vertical-scroll-proportion="0.39823008">
           <folding>
             <element signature="e#625#662#0" expanded="true" />
           </folding>
