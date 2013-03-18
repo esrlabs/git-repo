@@ -38,7 +38,7 @@ class Command(object):
 
     env_options = self._RegisteredEnvironmentOptions()
 
-    for env_key, opt_key in env_options.items():
+    for env_key, opt_key in list(env_options.items()):
       # Get the user-set option value if any
       opt_value = getattr(opts, opt_key)
 
@@ -139,20 +139,20 @@ class Command(object):
     groups = [x for x in re.split(r'[,\s]+', groups) if x]
 
     if not args:
-      all_projects_list = all_projects.values()
+      all_projects_list = list(all_projects.values())
       derived_projects = {}
       for project in all_projects_list:
         if submodules_ok or project.sync_s:
           derived_projects.update((p.name, p)
                                   for p in project.GetDerivedSubprojects())
       #all_projects_list.extend(derived_projects.values())
-      for projects in [all_projects_list, derived_projects.values()]:
+      for projects in [all_projects_list, list(derived_projects.values())]:
         for project in projects:
           if ((missing_ok or project.Exists) and
               project.MatchesGroups(groups)):
             result.append(project)
     else:
-      self._ResetPathToProjectMap(all_projects.values())
+      self._ResetPathToProjectMap(list(all_projects.values()))
 
       for arg in args:
         project = all_projects.get(arg)

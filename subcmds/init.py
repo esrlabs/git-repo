@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import print_function
+
 import os
 import platform
 import re
@@ -160,7 +160,7 @@ to update the working directory files.
           not m.config.GetString('repo.mirror') == 'true'):
         groups.append(platformize(platform.system().lower()))
     elif opt.platform == 'all':
-      groups.extend(map(platformize, all_platforms))
+      groups.extend(list(map(platformize, all_platforms)))
     elif opt.platform in all_platforms:
       groups.extend(platformize(opt.platform))
     elif opt.platform != 'none':

@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import print_function
+
 import sys
 from color import Coloring
 from command import Command
@@ -98,13 +98,13 @@ is shown, then the branch appears in all projects.
     project_cnt = len(projects)
 
     for project in projects:
-      for name, b in project.GetBranches().items():
+      for name, b in list(project.GetBranches().items()):
         b.project = project
         if name not in all_branches:
           all_branches[name] = BranchInfo(name)
         all_branches[name].add(b)
 
-    names = all_branches.keys()
+    names = list(all_branches.keys())
     names.sort()
 
     if not names:

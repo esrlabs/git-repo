@@ -66,7 +66,7 @@ class GitRefs(object):
   def _NeedUpdate(self):
     Trace(': scan refs %s', self._gitdir)
 
-    for name, mtime in self._mtime.items():
+    for name, mtime in list(self._mtime.items()):
       try:
         if mtime != os.path.getmtime(os.path.join(self._gitdir, name)):
           return True
@@ -89,7 +89,7 @@ class GitRefs(object):
     attempts = 0
     while scan and attempts < 5:
       scan_next = {}
-      for name, dest in scan.items():
+      for name, dest in list(scan.items()):
         if dest in self._phyref:
           self._phyref[name] = self._phyref[dest]
         else:

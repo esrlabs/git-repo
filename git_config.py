@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import print_function
+
 import pickle
 import os
 import re
@@ -26,18 +26,7 @@ try:
 except ImportError:
   import dummy_threading as _threading
 import time
-try:
-  import urllib2
-except ImportError:
-  # For python3
-  import urllib.request
-  import urllib.error
-else:
-  # For python2
-  import imp
-  urllib = imp.new_module('urllib')
-  urllib.request = urllib2
-  urllib.error = urllib2
+import urllib.request, urllib.error, urllib.parse
 
 from signal import SIGTERM
 from error import GitError, UploadError
@@ -225,7 +214,7 @@ class GitConfig(object):
     d = self._section_dict
     if d is None:
       d = {}
-      for name in self._cache.keys():
+      for name in list(self._cache.keys()):
         p = name.split('.')
         if 2 == len(p):
           section = p[0]

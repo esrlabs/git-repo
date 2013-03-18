@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import print_function
+
 import traceback
 import errno
 import filecmp
@@ -79,7 +79,7 @@ def _ProjectHooks():
   if _project_hook_list is None:
     d = os.path.abspath(os.path.dirname(__file__))
     d = os.path.join(d , 'hooks')
-    _project_hook_list = map(lambda x: os.path.join(d, x), os.listdir(d))
+    _project_hook_list = [os.path.join(d, x) for x in os.listdir(d)]
   return _project_hook_list
 
 
@@ -362,7 +362,7 @@ class RepoHook(object):
                  'Do you want to allow this script to run '
                  '(yes/yes-never-ask-again/NO)? ') % (
                  self._GetMustVerb(), self._script_fullpath)
-      response = raw_input(prompt).lower()
+      response = input(prompt).lower()
       print()
 
       # User is doing a one-time approval.
@@ -407,7 +407,7 @@ class RepoHook(object):
       # and  convert to a HookError w/ just the failing traceback.
       context = {}
       try:
-        execfile(self._script_fullpath, context)
+        exec(compile(open(self._script_fullpath).read(), self._script_fullpath, 'exec'), context)
       except Exception:
         raise HookError('%s\nFailed to import %s hook; see traceback above.' % (
                         traceback.format_exc(), self._hook_type))
@@ -645,7 +645,7 @@ class Project(object):
     all_refs = self._allrefs
     heads = {}
 
-    for name, ref_id in all_refs.items():
+    for name, ref_id in list(all_refs.items()):
       if name.startswith(R_HEADS):
         name = name[len(R_HEADS):]
         b = self.GetBranch(name)
@@ -654,7 +654,7 @@ class Project(object):
         b.revision = ref_id
         heads[name] = b
 
-    for name, ref_id in all_refs.items():
+    for name, ref_id in list(all_refs.items()):
       if name.startswith(R_PUB):
         name = name[len(R_PUB):]
         b = heads.get(name)
@@ -751,8 +751,8 @@ class Project(object):
       out.nl()
 
     paths = list()
-    paths.extend(di.keys())
-    paths.extend(df.keys())
+    paths.extend(list(di.keys()))
+    paths.extend(list(df.keys()))
     paths.extend(do)
 
     paths = list(set(paths))
@@ -850,13 +850,13 @@ class Project(object):
       all_refs = self._allrefs
     heads = set()
     canrm = {}
-    for name, ref_id in all_refs.items():
+    for name, ref_id in list(all_refs.items()):
       if name.startswith(R_HEADS):
         heads.add(name)
       elif name.startswith(R_PUB):
         canrm[name] = ref_id
 
-    for name, ref_id in canrm.items():
+    for name, ref_id in list(canrm.items()):
       n = name[len(R_PUB):]
       if R_HEADS + n not in heads:
         self.bare_git.DeleteRef(name, ref_id)
@@ -867,14 +867,14 @@ class Project(object):
     heads = {}
     pubed = {}
 
-    for name, ref_id in self._allrefs.items():
+    for name, ref_id in list(self._allrefs.items()):
       if name.startswith(R_HEADS):
         heads[name[len(R_HEADS):]] = ref_id
       elif name.startswith(R_PUB):
         pubed[name[len(R_PUB):]] = ref_id
 
     ready = []
-    for branch, ref_id in heads.items():
+    for branch, ref_id in list(heads.items()):
       if branch in pubed and pubed[branch] == ref_id:
         continue
       if selected_branch and branch != selected_branch:
@@ -1210,7 +1210,7 @@ class Project(object):
     cmd = ['fetch', remote.name]
     cmd.append('refs/changes/%2.2d/%d/%d' \
                % (change_id % 100, change_id, patch_id))
-    cmd.extend(map(str, remote.fetch))
+    cmd.extend(list(map(str, remote.fetch)))
     if GitCommand(self, cmd, bare=True).Wait() != 0:
       return None
     return DownloadedChange(self,
@@ -1352,7 +1352,7 @@ class Project(object):
     cb = self.CurrentBranch
     kill = []
     left = self._allrefs
-    for name in left.keys():
+    for name in list(left.keys()):
       if name.startswith(R_HEADS):
         name = name[len(R_HEADS):]
         if cb is None or name != cb:
@@ -1598,7 +1598,7 @@ class Project(object):
         ids = set(all_refs.values())
         tmp = set()
 
-        for r, ref_id in GitRefs(ref_dir).all.items():
+        for r, ref_id in list(GitRefs(ref_dir).all.items()):
           if r not in all_refs:
             if r.startswith(R_TAGS) or remote.WritesTo(r):
               all_refs[r] = ref_id
@@ -2066,7 +2066,7 @@ class Project(object):
             info = _Info(path, *info)
             if info.status in ('R', 'C'):
               info.src_path = info.path
-              info.path = out.next()
+              info.path = next(out)
             r[info.path] = info
         return r
       finally:
@@ -2178,7 +2178,7 @@ class Project(object):
           if not git_require((1, 7, 2)):
             raise ValueError('cannot set config on command line for %s()'
                              % name)
-          for k, v in config.items():
+          for k, v in list(config.items()):
             cmdv.append('-c')
             cmdv.append('%s=%s' % (k, v))
         cmdv.append(name)

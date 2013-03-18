@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import print_function
+
 import copy
 import re
 import sys
@@ -33,7 +33,7 @@ def _ConfirmManyUploads(multiple_branches=False):
     print('ATTENTION: You are uploading an unusually high number of commits.')
   print('YOU PROBABLY DO NOT MEAN TO DO THIS. (Did you rebase across'
         'branches?)')
-  answer = raw_input("If you are sure you intend to do this, type 'yes': ").strip()
+  answer = input("If you are sure you intend to do this, type 'yes': ").strip()
   return answer == "yes"
 
 def _die(fmt, *args):
@@ -234,7 +234,7 @@ Gerrit Code Review:  http://code.google.com/p/gerrit/
     script.append('')
 
     script = [ x.encode('utf-8')
-             if issubclass(type(x), unicode)
+             if issubclass(type(x), str)
              else x
              for x in script ]
 

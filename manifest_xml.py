@@ -13,12 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import print_function
+
 import itertools
 import os
 import re
 import sys
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import xml.dom.minidom
 import xml.parsers.expat
 
@@ -268,7 +268,7 @@ class XmlManifest(object):
         sort_projects.sort()
         output_projects(p, e, sort_projects)
 
-    sort_projects = [key for key in self.projects.keys()
+    sort_projects = [key for key in list(self.projects.keys())
                      if not self.projects[key].parent]
     sort_projects.sort()
     output_projects(None, root, sort_projects)

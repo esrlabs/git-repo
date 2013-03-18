@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import print_function
+
 from color import Coloring
 from command import PagedCommand
 
@@ -42,7 +42,7 @@ are displayed.
     all_branches = []
     for project in self.GetProjects(args):
       br = [project.GetUploadableBranch(x)
-            for x in project.GetBranches().keys()]
+            for x in list(project.GetBranches().keys())]
       br = [x for x in br if x]
       if opt.current_branch:
         br = [x for x in br if x.name == project.CurrentBranch]

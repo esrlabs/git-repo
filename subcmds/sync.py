@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import print_function
+
 import netrc
 from optparse import SUPPRESS_HELP
 import os
@@ -24,7 +24,7 @@ import socket
 import subprocess
 import sys
 import time
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import xmlrpc
 
 #try:
@@ -511,8 +511,8 @@ later is required to fix a server side protocol bug.
             branch = branch[len(R_HEADS):]
 
           env = os.environ.copy()
-          if (env.has_key('TARGET_PRODUCT') and
-              env.has_key('TARGET_BUILD_VARIANT')):
+          if ('TARGET_PRODUCT' in env and
+              'TARGET_BUILD_VARIANT' in env):
             target = '%s-%s' % (env['TARGET_PRODUCT'],
                                 env['TARGET_BUILD_VARIANT'])
             [success, manifest_str] = server.GetApprovedManifest(branch, target)
@@ -642,7 +642,7 @@ def _PostRepoUpgrade(manifest, quiet=False):
   wrapper = WrapperModule()
   if wrapper.NeedSetupGnuPG():
     wrapper.SetupGnuPG(quiet)
-  for project in manifest.projects.values():
+  for project in list(manifest.projects.values()):
     if project.Exists:
       project.PostRepoUpgrade()
 

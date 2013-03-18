@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import print_function
+
 import sys
 
 from color import Coloring
@@ -49,7 +49,7 @@ The '%prog' command stages files to prepare the next commit.
       self.Usage()
 
   def _Interactive(self, opt, args):
-    all_projects = filter(lambda x: x.IsDirty(), self.GetProjects(args))
+    all_projects = [x for x in self.GetProjects(args) if x.IsDirty()]
     if not all_projects:
       print('no projects have uncommitted modifications', file=sys.stderr)
       return
@@ -98,7 +98,7 @@ The '%prog' command stages files to prepare the next commit.
           _AddI(all_projects[a_index - 1])
           continue
 
-      p = filter(lambda x: x.name == a or x.relpath == a, all_projects)
+      p = [x for x in all_projects if x.name == a or x.relpath == a]
       if len(p) == 1:
         _AddI(p[0])
         continue

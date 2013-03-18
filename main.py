@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import print_function
+
 import getpass
 import imp
 import netrc
@@ -298,7 +298,7 @@ def _AddPasswordFromUserInput(handler, msg, req):
   if user is None:
     print(msg)
     try:
-      user = input('User: ')
+      user = eval(input('User: '))
       password = getpass.getpass()
     except KeyboardInterrupt:
       return

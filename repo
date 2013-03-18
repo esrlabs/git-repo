@@ -116,18 +116,8 @@ import re
 import stat
 import subprocess
 import sys
-try:
-  import urllib2
-except ImportError:
-  # For python3
-  import urllib.request
-  import urllib.error
-else:
-  # For python2
-  import imp
-  urllib = imp.new_module('urllib')
-  urllib.request = urllib2
-  urllib.error = urllib2
+import urllib.request
+import urllib.error
 
 home_dot_repo = os.path.expanduser('~/.repoconfig')
 gpg_dir = os.path.join(home_dot_repo, 'gnupg')
