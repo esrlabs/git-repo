@@ -1,0 +1,52 @@
+
+# TODO
+
+* check commands:
+  1. forall -c set repo
+
+
+# Requirements
+
+* python 3.3
+* Git
+* Git Bash (!!)
+* Windows:
+  * start Git Bash as Administrator
+
+
+# Extensions
+
+* Remote Debugging Possibility
+  * options:
+    * enable debugging: -d
+    * set debug host: --debug-host=172.31.0.250
+      (used port is 19499)
+
+
+# repo functionality
+
+## handling external config: repo/.git and repo.git/
+
+* files always created:
+  * hooks, info, logs, objects, refs
+
+* files not linked
+  * HEAD, gitk.cache, index
+
+* problemcatic files: created on demand, when?
+  * [D] rr-cache
+  * [F] packed-refs
+
+## packed-refs
+
+* increases performace since refs are packed - cleartext?
+* affects of:
+  * non existing -> failure in windows when trying to link
+  * empty -> no effect
+
+
+# Problems / Conversions
+
+## Windows, coloring:
+
+* disabled if pager not active => fixed with option: --piped-into-pager
