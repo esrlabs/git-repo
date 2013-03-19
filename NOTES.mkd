@@ -14,6 +14,13 @@
   * start Git Bash as Administrator
 
 
+# Notes on compability
+
+* Windows does not allow links to non-existing files and dirs
+* Windows does not allow a ":" in the filename
+* Windows is case insensitive
+
+
 # Extensions
 
 * Remote Debugging Possibility
