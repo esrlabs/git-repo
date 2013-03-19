@@ -714,7 +714,8 @@ def main(orig_args):
     repo_main = my_main
 
   ver_str = '.'.join(map(str, VERSION))
-  me = [repo_main,
+  me = [sys.executable,
+        repo_main,
         '--repo-dir=%s' % rel_repo_dir,
         '--wrapper-version=%s' % ver_str,
         '--wrapper-path=%s' % wrapper_path,
