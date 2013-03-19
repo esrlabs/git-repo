@@ -1,5 +1,5 @@
 bin
-.idea/workspace.xml
+workspace.xml
 *.bak
 *.pyc
 .repopickle_*

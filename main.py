@@ -61,7 +61,7 @@ global_options.add_option('--time',
 global_options.add_option('--version',
                           dest='show_version', action='store_true',
                           help='display this version of repo')
-global_options.add_option("--piped-into-less", action="store_true", dest="pipedIntoLess", default=False)
+global_options.add_option("--piped-into-pager", action="store_true", dest="pipedIntoPager", default=False)
 
 
 def _UsePager(name, cmd, gopts, copts):
@@ -410,14 +410,14 @@ def _WindowsPager(repo):
     args2 = args[argsSplit+1:]
     pager = _SelectPager(cmd.manifest.globalConfig)
 
-    shellCommand = "%s %s %s -- --piped-into-less --no-pager %s | %s" % (python, thisScript, ' '.join(args1), ' '.join(args2), pager)
+    shellCommand = "%s %s %s -- --piped-into-pager --no-pager %s | %s" % (python, thisScript, ' '.join(args1), ' '.join(args2), pager)
     os.system(shellCommand)
     return True
   else:
-    # set global variable if output is piped into less; means that pager is simulated, this
+    # set global variable if output is piped into pager; means that pager is simulated, this
     # leads to correct coloring in windows
     import pager
-    pager.active = gopts.pipedIntoLess
+    pager.active = gopts.pipedIntoPager
 
     return False
 
