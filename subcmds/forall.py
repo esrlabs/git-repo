@@ -171,7 +171,7 @@ without iterating through the remaining projects.
       def setenv(name, val):
         if val is None:
           val = ''
-        env[name] = val.encode()
+        env[name] = val
 
       setenv('REPO_PROJECT', project.name)
       setenv('REPO_PATH', project.relpath)
