@@ -45,9 +45,7 @@ from pager import _SelectPager
 from subcmds import all_commands
 
 
-global_options = optparse.OptionParser(
-                 usage="repo [-p|--paginate|--no-pager] COMMAND [ARGS]"
-                 )
+global_options = optparse.OptionParser(usage="repo [-p|--paginate|--no-pager|--piped-into-less] COMMAND [ARGS]")
 global_options.add_option('-p', '--paginate',
                           dest='pager', action='store_true',
                           help='display command output in the pager')
@@ -63,6 +61,7 @@ global_options.add_option('--time',
 global_options.add_option('--version',
                           dest='show_version', action='store_true',
                           help='display this version of repo')
+global_options.add_option("--piped-into-less", action="store_true", dest="pipedIntoLess", default=False)
 
 
 def _UsePager(name, cmd, gopts, copts):
@@ -411,12 +410,16 @@ def _WindowsPager(repo):
     args2 = args[argsSplit+1:]
     pager = _SelectPager(cmd.manifest.globalConfig)
 
-    shellCommand = "%s %s %s -- --no-pager %s | %s" % (python, thisScript, ' '.join(args1), ' '.join(args2), pager)
-    print("EXECUTE: %s" % shellCommand)
-
+    shellCommand = "%s %s %s -- --piped-into-less --no-pager %s | %s" % (python, thisScript, ' '.join(args1), ' '.join(args2), pager)
     os.system(shellCommand)
     return True
-  return False
+  else:
+    # set global variable if output is piped into less; means that pager is simulated, this
+    # leads to correct coloring in windows
+    import pager
+    pager.active = gopts.pipedIntoLess
+
+    return False
 
 def _Main(argv):
   result = 0
@@ -451,8 +454,11 @@ def _Main(argv):
       exit(0);
 
   if opt.debug:
-      print("enter debug mode, host %s" % opt.debug_host)
-      _Debug(opt.debug_host, opt.debug_env)
+    print("enter debug mode, host %s" % opt.debug_host)
+    _Debug(opt.debug_host, opt.debug_env)
+    if portable.isPosix():
+      # deactivate pager on posix systems since forked process cant be debugged
+      os.environ['GIT_PAGER'] = ''
 
   try:
     try:

@@ -1953,6 +1953,9 @@ class Project(object):
       rr_cache = os.path.join(self.gitdir, 'rr-cache')
       if not os.path.exists(rr_cache):
         os.makedirs(rr_cache)
+      packed_refs = os.path.join(self.gitdir, 'packed-refs')
+      if not os.path.exists(packed_refs):
+        fd = open(packed_refs, "w")
 
       for name in ['config',
                    'description',
