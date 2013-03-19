@@ -426,11 +426,11 @@ def _Main(argv):
 
   opt = optparse.OptionParser(usage="repo wrapperinfo -- ...")
   opt.add_option("--repo-dir", dest="repodir",
-                 help="path to .repo/", default=".repo")
+                 help="path to .repo/")
   opt.add_option("--wrapper-version", dest="wrapper_version",
-                 help="version of the wrapper script", default="1.19")
+                 help="version of the wrapper script")
   opt.add_option("--wrapper-path", dest="wrapper_path",
-                 help="location of the wrapper script", default="../../git-repo/repo")
+                 help="location of the wrapper script")
   opt.add_option("-d", "--debug", action="store_true", dest="debug", default=False)
   opt.add_option("--debug-host", dest="debug_host", default='localhost')
   opt.add_option("--debug-env", dest="debug_env", default="intellij")

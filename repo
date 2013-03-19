@@ -314,7 +314,7 @@ def SetupGnuPG(quiet):
       sys.exit(1)
 
   env = os.environ.copy()
-  env['GNUPGHOME'] = gpg_dir.encode()
+  env['GNUPGHOME'] = gpg_dir
 
   cmd = ['gpg', '--import']
   try:
