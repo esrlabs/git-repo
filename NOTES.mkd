@@ -19,7 +19,6 @@
 * Tracing: set environment variable
     export REPO_TRACE=1
 
-
 # repo functionality
 
 ## handling external config: repo/.git and repo.git/
