@@ -425,7 +425,7 @@ def _WindowsPager(repo):
 def _Main(argv):
   result = 0
 
-  signal.signal(signal.SIGTERM, portable.terminateHandle())
+  signal.signal(signal.SIGTERM, portable.terminateHandle)
 
   opt = optparse.OptionParser(usage="repo wrapperinfo -- ...")
   opt.add_option("--repo-dir", dest="repodir",

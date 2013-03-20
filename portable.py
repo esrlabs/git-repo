@@ -7,14 +7,16 @@ Created on 12.03.2013
 import os
 import platform
 import subprocess
+import sys
 
 SYNC_REPO_PROGRAM = False
 SUBPROCESSES = []
 
-def terminateHandle(sig1, sig2):
+def terminateHandle(signal, frame):
   for cmd in SUBPROCESSES:
     if cmd:
       cmd.terminate()
+  sys.exit(0)
 
 def stream2str(stream):
   return str(stream, encoding='UTF-8')
