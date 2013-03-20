@@ -491,7 +491,6 @@ def _Main(argv):
   return result
 
 if __name__ == '__main__':
-  #result = _Main(sys.argv[1:])
-  result = 42
+  result = _Main(sys.argv[1:])
   print("EXIT with %d" % result)
-  #sys.exit(result)
+  sys.exit(result)
