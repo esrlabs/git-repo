@@ -453,7 +453,7 @@ def _Main(argv):
   if not portable.isPosix():
     if _WindowsPager(repo):
       # everything was already done; so exit
-      return;
+      return 0
 
   if opt.debug:
     print("enter debug mode, host %s" % opt.debug_host)
@@ -487,9 +487,9 @@ def _Main(argv):
       print('fatal: %s' % e, file=sys.stderr)
       result = 128
 
-  sys.exit(result)
+  return result
 
 if __name__ == '__main__':
-  _Main(sys.argv[1:])
-  print("EXIT")
-  exit(0)
+  result = _Main(sys.argv[1:])
+  print("EXIT with %d" % result)
+  exit(result)
