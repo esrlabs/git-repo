@@ -723,6 +723,7 @@ def main(orig_args):
         '--wrapper-version=%s' % ver_str,
         '--wrapper-path=%s' % wrapper_path,
         '--']
+  print(me)
   me.extend(orig_args)
   me.extend(extra_args)
   try:
