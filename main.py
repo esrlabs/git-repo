@@ -492,3 +492,4 @@ def _Main(argv):
 if __name__ == '__main__':
   _Main(sys.argv[1:])
   print("EXIT")
+  exit(0)
