@@ -20,6 +20,7 @@ import imp
 import netrc
 import optparse
 import os
+import subprocess
 import sys
 import traceback
 import time
@@ -409,9 +410,10 @@ def _WindowsPager(repo):
     args1 = args[:argsSplit]
     args2 = args[argsSplit+1:]
     pager = _SelectPager(cmd.manifest.globalConfig)
-
     shellCommand = "%s %s %s -- --piped-into-pager --no-pager %s | %s" % (python, thisScript, ' '.join(args1), ' '.join(args2), pager)
-    os.system(shellCommand)
+    print("NEW 1")
+    subprocess.call(shellCommand, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+
     return True
   else:
     # set global variable if output is piped into pager; means that pager is simulated, this
@@ -489,3 +491,4 @@ def _Main(argv):
 
 if __name__ == '__main__':
   _Main(sys.argv[1:])
+  print("EXIT")

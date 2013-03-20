@@ -9,7 +9,7 @@ if sys.version_info[0] < 3:
 
 ## repo default configuration
 ##
-REPO_URL = 'ssh://gerrit/Tools/git-repo'
+REPO_URL = 'https://github.com/esrlabs/git-repo'
 REPO_REV = 'stable'
 
 # Copyright (C) 2008 Google Inc.
