@@ -225,6 +225,7 @@ class GitCommand(object):
     if ssh_proxy:
       _add_ssh_client(p)
 
+    portable.SUBPROCESSES.append(p)
     self.process = p
     self.stdin = p.stdin
 
@@ -233,6 +234,7 @@ class GitCommand(object):
       p = self.process
       (self.stdout, self.stderr) = p.communicate()
       rc = p.returncode
+      portable.SUBPROCESSES.remove(p)
     finally:
       _remove_ssh_client(p)
     return rc

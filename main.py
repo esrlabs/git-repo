@@ -25,6 +25,7 @@ import sys
 import traceback
 import time
 import urllib.request
+import signal
 import portable
 from repo_trace import SetTrace
 from git_command import git, GitCommand
@@ -423,6 +424,8 @@ def _WindowsPager(repo):
 
 def _Main(argv):
   result = 0
+
+  signal.signal(signal.SIGTERM, portable.terminateHandle())
 
   opt = optparse.OptionParser(usage="repo wrapperinfo -- ...")
   opt.add_option("--repo-dir", dest="repodir",

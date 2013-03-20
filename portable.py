@@ -9,6 +9,12 @@ import platform
 import subprocess
 
 SYNC_REPO_PROGRAM = False
+SUBPROCESSES = []
+
+def terminateHandle():
+  for cmd in SUBPROCESSES:
+    if cmd:
+      cmd.terminate()
 
 def stream2str(stream):
   return str(stream, encoding='UTF-8')
@@ -44,7 +50,7 @@ def os_link(src, dst):
       dst = toWindowsPath(dst)
       # symlink does create soft links in windows for directories => use mklink
       # call windows cmd tool 'mklink' from git bash (mingw)
-      subprocess.Popen('cmd /c mklink /J %s %s' % (dst, src))
+      subprocess.Popen('cmd /c mklink /J %s %s' % (dst, src), stdout=subprocess.PIPE)
     else:
       # requires paths in relation to current dir (not in relation to target file)
       src = toUnixPath(src)
