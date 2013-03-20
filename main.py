@@ -411,8 +411,12 @@ def _WindowsPager(repo):
     args1 = args[:argsSplit]
     args2 = args[argsSplit+1:]
     pager = _SelectPager(cmd.manifest.globalConfig)
-    shellCommand = "%s %s %s -- --piped-into-pager --no-pager %s | %s" % (python, thisScript, ' '.join(args1), ' '.join(args2), pager)
-    subprocess.call(shellCommand)
+    shellCommand = "%s %s %s -- --piped-into-pager --no-pager %s" % (python, thisScript, ' '.join(args1), ' '.join(args2))
+    #subprocess.call(shellCommand)
+    p1 = subprocess.Popen([shellCommand], stdout=subprocess.PIPE)
+    p2 = subprocess.Popen([pager], stdin=p1.stdout, stdout=subprocess.PIPE)
+    p1.stdout.close()  # Allow p1 to receive a SIGPIPE if p2 exits.
+    p2.communicate()[0]
     return True
   else:
     # set global variable if output is piped into pager; means that pager is simulated, this
