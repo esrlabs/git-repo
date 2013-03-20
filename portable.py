@@ -44,8 +44,7 @@ def os_link(src, dst):
       dst = toWindowsPath(dst)
       # symlink does create soft links in windows for directories => use mklink
       # call windows cmd tool 'mklink' from git bash (mingw)
-      p = subprocess.Popen('cmd /c mklink /J %s %s' % (dst, src))
-      p.communicate()
+      subprocess.Popen('cmd /c mklink /J %s %s' % (dst, src))
     else:
       # requires paths in relation to current dir (not in relation to target file)
       src = toUnixPath(src)

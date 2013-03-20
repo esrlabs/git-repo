@@ -411,10 +411,7 @@ def _WindowsPager(repo):
     args2 = args[argsSplit+1:]
     pager = _SelectPager(cmd.manifest.globalConfig)
     shellCommand = "%s %s %s -- --piped-into-pager --no-pager %s | %s" % (python, thisScript, ' '.join(args1), ' '.join(args2), pager)
-    print("NEW 2")
     subprocess.call(shellCommand, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    #sys.stdin.close()
-    print("DONE")
     return True
   else:
     # set global variable if output is piped into pager; means that pager is simulated, this
@@ -482,7 +479,8 @@ def _Main(argv):
     argv = list(sys.argv)
     argv.extend(rce.extra_args)
     try:
-      os.execv(__file__, argv)
+      argv.insert(0, __file__)
+      subprocess.call(argv)
     except OSError as e:
       print('fatal: cannot restart repo after upgrade', file=sys.stderr)
       print('fatal: %s' % e, file=sys.stderr)

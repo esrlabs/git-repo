@@ -18,6 +18,7 @@
     </content>
     <orderEntry type="jdk" jdkName="Python 3.3.0 (C:/Python33/python.exe)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Python 3.3.0 (C:/Python33/python.exe) interpreter library" level="application" />
   </component>
 </module>
 
