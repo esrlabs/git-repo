@@ -410,7 +410,7 @@ def _WindowsPager(repo):
     args1 = args[:argsSplit]
     args2 = args[argsSplit+1:]
     pager = _SelectPager(cmd.manifest.globalConfig)
-    shellCommand = "ls -all"# "%s %s %s -- --piped-into-pager --no-pager %s | %s" % (python, thisScript, ' '.join(args1), ' '.join(args2), pager)
+    shellCommand = "%s %s %s -- --piped-into-pager --no-pager %s | %s" % (python, thisScript, ' '.join(args1), ' '.join(args2), pager)
     print("NEW 1")
     subprocess.call(shellCommand, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     #sys.stdin.close()
