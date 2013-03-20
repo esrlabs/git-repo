@@ -11,7 +11,7 @@ import subprocess
 SYNC_REPO_PROGRAM = False
 SUBPROCESSES = []
 
-def terminateHandle():
+def terminateHandle(sig1, sig2):
   for cmd in SUBPROCESSES:
     if cmd:
       cmd.terminate()
