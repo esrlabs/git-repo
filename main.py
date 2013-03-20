@@ -412,7 +412,7 @@ def _WindowsPager(repo):
     pager = _SelectPager(cmd.manifest.globalConfig)
     shellCommand = "ls -all"# "%s %s %s -- --piped-into-pager --no-pager %s | %s" % (python, thisScript, ' '.join(args1), ' '.join(args2), pager)
     print("NEW 1")
-    #subprocess.call(shellCommand, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    subprocess.call(shellCommand, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     #sys.stdin.close()
     print("DONE")
     return True
@@ -492,5 +492,4 @@ def _Main(argv):
 
 if __name__ == '__main__':
   result = _Main(sys.argv[1:])
-  print("EXIT with %d" % result)
   sys.exit(result)
