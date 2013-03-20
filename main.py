@@ -412,8 +412,8 @@ def _WindowsPager(repo):
     pager = _SelectPager(cmd.manifest.globalConfig)
     shellCommand = "%s %s %s -- --piped-into-pager --no-pager %s | %s" % (python, thisScript, ' '.join(args1), ' '.join(args2), pager)
     print("NEW 1")
-    subprocess.call(shellCommand, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-
+    subprocess.call(shellCommand, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    print("DONE")
     return True
   else:
     # set global variable if output is piped into pager; means that pager is simulated, this
@@ -453,7 +453,7 @@ def _Main(argv):
   if not portable.isPosix():
     if _WindowsPager(repo):
       # everything was already done; so exit
-      exit(0);
+      return;
 
   if opt.debug:
     print("enter debug mode, host %s" % opt.debug_host)
