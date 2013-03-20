@@ -169,10 +169,6 @@ class GitCommand(object):
       cwd = None
     command.extend(cmdv)
 
-    provide_stdin = True
-    capture_stdout = True
-    capture_stderr = True
-
     if provide_stdin:
       stdin = subprocess.PIPE
     else:
