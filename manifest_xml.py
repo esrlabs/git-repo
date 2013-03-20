@@ -130,10 +130,7 @@ class XmlManifest(object):
     try:
       if os.path.lexists(self.manifestFile):
         os.remove(self.manifestFile)
-      #if portable.isLinux():
       src = 'manifests/%s' % name
-      #else:
-      #  src = self.manifestProject.relpath + '/%s' % name
       portable.os_link('./.repo/%s' % src, self.manifestFile)
     except OSError as e:
       raise ManifestParseError('cannot link manifest %s: %s' % (name, str(e)))

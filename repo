@@ -3,6 +3,8 @@
 import sys
 
 # copied from portable
+import portable
+
 def stream2str(stream):
     return str(stream, encoding='UTF-8')
 
@@ -239,6 +241,7 @@ def _Init(args):
     dst = os.path.abspath(os.path.join(repodir, S_repo))
     _Clone(url, dst, opt.quiet)
 
+    print(opt.no_repo_verify)
     if can_verify and not opt.no_repo_verify:
       rev = _Verify(dst, branch, opt.quiet)
     else:
@@ -331,7 +334,7 @@ def SetupGnuPG(quiet):
       print(file=sys.stderr)
     return False
 
-  proc.stdin.write(MAINTAINER_KEYS)
+  proc.stdin.write(MAINTAINER_KEYS.encode())
   proc.stdin.close()
 
   if proc.wait() != 0:
@@ -519,7 +522,7 @@ def _Verify(cwd, branch, quiet):
       print(file=sys.stderr)
 
   env = os.environ.copy()
-  env['GNUPGHOME'] = gpg_dir.encode()
+  env['GNUPGHOME'] = gpg_dir
 
   cmd = [GIT, 'tag', '-v', cur]
   proc = subprocess.Popen(cmd,
@@ -704,7 +707,7 @@ def main(orig_args):
       except CloneFailure:
         for root, dirs, files in os.walk(repodir, topdown=False):
           for name in files:
-            os.remove(os.path.join(root, name))
+            portable.removeReadOnlyFiles(os.remove, os.path.join(root, name))
           for name in dirs:
             os.rmdir(os.path.join(root, name))
         os.rmdir(repodir)

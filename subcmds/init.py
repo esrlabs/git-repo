@@ -23,6 +23,7 @@ import sys
 from color import Coloring
 from command import InteractiveCommand, MirrorSafeCommand
 from error import ManifestParseError
+import portable
 from project import SyncBuffer
 from git_config import GitConfig
 from git_command import git_require, MIN_GIT_VERSION
@@ -193,7 +194,7 @@ to update the working directory files.
       # Better delete the manifest git dir if we created it; otherwise next
       # time (when user fixes problems) we won't go through the "is_new" logic.
       if is_new:
-        shutil.rmtree(m.gitdir)
+        shutil.rmtree(m.gitdir, onerror=portable.removeReadOnlyFilesHandler)
       sys.exit(1)
 
     if opt.manifest_branch:

@@ -150,10 +150,10 @@ class _Repo(object):
     try:
       result = cmd.Execute(copts, cargs)
     except DownloadError as e:
-      print('error: %s' % str(e), file=sys.stderr)
+      print('error: DownloadError: %s' % str(e), file=sys.stderr)
       result = 1
     except ManifestInvalidRevisionError as e:
-      print('error: %s' % str(e), file=sys.stderr)
+      print('error: ManifestInvalidRevisionError: %s' % str(e), file=sys.stderr)
       result = 1
     except NoManifestException as e:
       print('error: manifest required for this command -- please run init',

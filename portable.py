@@ -8,6 +8,7 @@ import os
 import platform
 import subprocess
 import sys
+import stat
 
 SYNC_REPO_PROGRAM = False
 SUBPROCESSES = []
@@ -57,3 +58,13 @@ def os_link(src, dst):
       # requires paths in relation to current dir (not in relation to target file)
       src = toUnixPath(src)
       os.link(src, dst)
+
+def removeReadOnlyFilesHandler(fn, path, excinfo):
+    removeReadOnlyFiles(fn, path)
+
+def removeReadOnlyFiles(fn, path):
+    if not os.access(path, os.W_OK):
+        os.chmod(path, stat.S_IWUSR)
+        fn(path)
+    else:
+        raise Exception("Could not delete %s" % path)

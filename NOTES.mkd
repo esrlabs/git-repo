@@ -14,6 +14,8 @@
         * enable debugging: -d
         * set debug host: --debug-host=172.31.0.250
         * (used port is 19499)
+* using local git-repo (in $GIT_REPO; branch 'dev') and local git repositories (in $REPOS)
+$GIT_REPO/repo init -u $REPOS/manifest/ --no-repo-verify --repo-branch=dev
 
 
 # repo functionality
