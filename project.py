@@ -1956,6 +1956,7 @@ class Project(object):
       packed_refs = os.path.join(self.gitdir, 'packed-refs')
       if not os.path.exists(packed_refs):
         fd = open(packed_refs, "w")
+        fd.close()
 
       for name in ['config',
                    'description',
