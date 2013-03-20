@@ -331,7 +331,7 @@ def SetupGnuPG(quiet):
       print(file=sys.stderr)
     return False
 
-  proc.stdin.write(MAINTAINER_KEYS)
+  proc.stdin.write(MAINTAINER_KEYS.encode())
   proc.stdin.close()
 
   if proc.wait() != 0:
