@@ -13,7 +13,7 @@ if sys.version_info[0] < 3:
 ## repo default configuration
 ##
 REPO_URL = 'https://github.com/esrlabs/git-repo'
-REPO_REV = 'stable'
+REPO_REV = 'master'
 
 # Copyright (C) 2008 Google Inc.
 #
@@ -723,7 +723,6 @@ def main(orig_args):
         '--wrapper-version=%s' % ver_str,
         '--wrapper-path=%s' % wrapper_path,
         '--']
-  print(me)
   me.extend(orig_args)
   me.extend(extra_args)
   try:
