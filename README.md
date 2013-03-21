@@ -14,11 +14,11 @@ For example, with a single Repo command you can download files from multiple rep
 
 ##### Download and install Git #####
 * Download [Git (http://git-scm.com/downloads)](http://git-scm.com/downloads)
-* Add Git to your path environment variable: C:\Program Files (x86)\Git\cmd;C:\Program Files (x86)\Git\bin;
+* Add Git to your path environment variable: e.g. C:\Program Files (x86)\Git\cmd;C:\Program Files (x86)\Git\bin;
 	
 ##### Download and install Python #####
 * Download [Python 3+ (http://python.org/download/releases/3.3.0/)](http://python.org/download/releases/3.3.0/)
-* Add Python to your path environment variable: C:\Python33;
+* Add Python to your path environment variable: e.g. C:\Python33;
 
 ##### Download and install Repo either using the Windows Command Shell or Git Bash #####
 ###### Windows Command Shell ######
@@ -37,28 +37,20 @@ For example, with a single Repo command you can download files from multiple rep
 	
 #### Setup steps for Linux ####
 
-* Add to environment variable PATH
-    * repo bin folder (separator is ':')
-      ~/bin
-
-* Download repo script
-
-    curl https://raw.github.com/esrlabs/git-repo/master/repo > ~/bin/repo
-
-* Make executable
-
-    chmod +x ~/bin/repo
-
-* Optional: Manage different python versions
-    * setup alternative executables for python
+##### Downloading and installing Git and Python #####
+* sudo apt-get install git-core
+* Since our Repo requires Python 3.3, use the following commands to switch between multiple Python versions:
 
     sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 10
-
     sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.3 20
-
-    * switching to python 3 / python2 (command provides interactive switching)
-
     sudo update-alternatives --config python
+
+##### Download and install Repo #####
+
+    $ mkdir ~/bin
+    $ PATH=~/bin:$PATH
+	$ curl https://raw.github.com/esrlabs/git-repo/master/repo > ~/bin/repo
+    $ chmod a+x ~/bin/repo
 
 ### Usage ###
 
