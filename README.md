@@ -13,25 +13,27 @@ For example, with a single Repo command you can download files from multiple rep
 ### Setup steps for Microsoft Windows ###
 
 ##### Download and install Git #####
-* [Git](http://git-scm.com/downloads)
+* Download [Git (http://git-scm.com/downloads)](http://git-scm.com/downloads)
 * Add Git to your path environment variable: C:\Program Files (x86)\Git\cmd;C:\Program Files (x86)\Git\bin;
 	
 ##### Download and install Python #####
-* [Python 3+](http://python.org/download/releases/3.3.0/)
+* Download [Python 3+ (http://python.org/download/releases/3.3.0/)](http://python.org/download/releases/3.3.0/)
 * Add Python to your path environment variable: C:\Python33;
 
 ##### Download and install Repo either using the Windows Command Shell or Git Bash #####
 ###### Windows Command Shell ######
-md %USERPROFILE%\bin
-curl https://raw.github.com/esrlabs/git-repo/master/repo > %USERPROFILE%/bin/repo
-curl https://raw.github.com/esrlabs/git-repo/master/repo.cmd > %USERPROFILE%/bin/repo.cmd
+
+    md %USERPROFILE%\bin
+    curl https://raw.github.com/esrlabs/git-repo/master/repo > %USERPROFILE%/bin/repo
+    curl https://raw.github.com/esrlabs/git-repo/master/repo.cmd > %USERPROFILE%/bin/repo.cmd
 	
 ###### Git Bash ######
-mkdir ~/bin
-curl https://raw.github.com/esrlabs/git-repo/master/repo > ~/bin/repo
-curl https://raw.github.com/esrlabs/git-repo/master/repo.cmd > ~/bin/repo.cmd
+
+    mkdir ~/bin
+    curl https://raw.github.com/esrlabs/git-repo/master/repo > ~/bin/repo
+    curl https://raw.github.com/esrlabs/git-repo/master/repo.cmd > ~/bin/repo.cmd
 	
-Add Repo to your path environment variable: %USERPROFILE%\bin;
+* Add Repo to your path environment variable: %USERPROFILE%\bin;
 	
 #### Setup steps for Linux ####
 
