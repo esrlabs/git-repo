@@ -35,7 +35,8 @@ VERSION = (1, 19, 1)
 # increment this if the MAINTAINER_KEYS block is modified
 KEYRING_VERSION = (1, 1)
 MAINTAINER_KEYS = """
-    Matthias Putz (E.S.R.Labs) <matthias.putz@esrlabs.com>
+
+     Matthias Putz (E.S.R.Labs) <matthias.putz@esrlabs.com>
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: SKS 1.1.0
 
@@ -97,7 +98,6 @@ t5sKGnfGreTJl8iyzqtQe60Wzxr5tg3W/QvJYaYZRFlZX5cKjXXZizPDHpOcQYwQWM36RLsu
 CWWfbB6lN1jvyojS5ZPw
 =UVAj
 -----END PGP PUBLIC KEY BLOCK-----
-
 """
 
 GIT = 'git'                     # our git command

@@ -20,6 +20,7 @@ The mainly used, platform dependet features are: symbolic links as well as the c
 
 ### Setup ###
 
+#### Windows ####
 * Add to Windows environment variable PATH
     * full additions (explained further on)
         ;C:\Python33C;\Program Files (x86)\Git\cmd;C:\Program Files (x86)\Git\bin;%USERPROFILE%
@@ -27,9 +28,37 @@ The mainly used, platform dependet features are: symbolic links as well as the c
     * Git cmd folder
     * Git bin folder
     * repo script default path
-* Start "Git Bash", Download repo script
-    curl https://github.com/esrlabs/git-repo/repo > ~/repo
-    curl https://github.com/esrlabs/git-repo/repo.cmd > ~/repo.cmd
+* Download repo script
+
+    curl https://raw.github.com/esrlabs/git-repo/master/repo > %USERPROFILE%/repo
+
+    curl https://raw.github.com/esrlabs/git-repo/master/repo > %USERPROFILE%/repo.cmd
+
+
+#### Linux ####
+* Add to environment variable PATH
+    * repo bin folder (separator is ':')
+      ~/bin
+
+* Download repo script
+
+    curl https://raw.github.com/esrlabs/git-repo/master/repo > ~/bin/repo
+
+* Make executable
+
+    chmod +x ~/bin/repo
+
+* Optional: Since commonly on linux systems python will start python2, a fast way to switch is required. A recommended approach is with update-alternatives:
+    * setup alternative executables for python
+
+    sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 10
+
+    sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 20
+
+    * switching to python 3 / python2 (command provides interactive switching)
+
+    sudo update-alternatives --config python
+
 
 ### Usage ###
 
@@ -51,4 +80,5 @@ found on the referenced Android [git-repo](http://source.android.com/source/vers
 * view diff, status, .. (in root folder)
 
     repo status
+
     repo diff
