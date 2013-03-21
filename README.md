@@ -35,7 +35,7 @@ For example, with a single Repo command you can download files from multiple rep
 	
 * Add Repo to your path environment variable: %USERPROFILE%\bin;
 	
-#### Setup steps for Linux ####
+### Setup steps for Linux ###
 
 ##### Downloading and installing Git and Python #####
 * sudo apt-get install git-core
