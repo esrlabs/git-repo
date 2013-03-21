@@ -37,7 +37,7 @@ KEYRING_VERSION = (1, 1)
 MAINTAINER_KEYS = """
 
      Matthias Putz (E.S.R.Labs) <matthias.putz@esrlabs.com>
-     -----BEGIN PGP PUBLIC KEY BLOCK-----
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.11 (GNU/Linux)
 
 mQENBFFLBlsBCADb7H48CO/QoZRcTZb6u+XP9x43YnJmPziU142s/FvwdV1A83ck
