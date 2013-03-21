@@ -14,13 +14,14 @@ The mainly used, platform dependet features are: symbolic links as well as the c
 
 ### Requirements ###
 
-* [Python 3+](http://python.org/download/releases/3.3.0/)
+* [Python 3.3+](http://python.org/download/releases/3.3.0/)
 * [Git](http://git-scm.com/)
 * Windows 7+ or Linux
 
 ### Setup ###
 
 #### Windows ####
+
 * Add to Windows environment variable PATH
     * full additions (explained further on)
         ;C:\Python33C;\Program Files (x86)\Git\cmd;C:\Program Files (x86)\Git\bin;%USERPROFILE%
@@ -28,6 +29,7 @@ The mainly used, platform dependet features are: symbolic links as well as the c
     * Git cmd folder
     * Git bin folder
     * repo script default path
+
 * Download repo script
 
     curl https://raw.github.com/esrlabs/git-repo/master/repo > %USERPROFILE%/repo
@@ -36,6 +38,7 @@ The mainly used, platform dependet features are: symbolic links as well as the c
 
 
 #### Linux ####
+
 * Add to environment variable PATH
     * repo bin folder (separator is ':')
       ~/bin
@@ -48,12 +51,12 @@ The mainly used, platform dependet features are: symbolic links as well as the c
 
     chmod +x ~/bin/repo
 
-* Optional: Since commonly on linux systems python will start python2, a fast way to switch is required. A recommended approach is with update-alternatives:
+* Optional: Manage different python versions
     * setup alternative executables for python
 
     sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 10
 
-    sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 20
+    sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.3 20
 
     * switching to python 3 / python2 (command provides interactive switching)
 
