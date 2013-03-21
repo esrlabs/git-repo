@@ -41,7 +41,7 @@ For example, with a single Repo command you can download files from multiple rep
 * sudo apt-get install git-core
 * Since our Repo requires Python 3.3, use the following commands to switch between multiple Python versions:
 
-<!-- ... -->
+<!-- code block -->
 
     sudo update-alternatives --install /usr/bin/python python /usr/bin/python2 10
     sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.3 20
