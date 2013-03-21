@@ -12,15 +12,15 @@ For example, with a single Repo command you can download files from multiple rep
 
 ### Setup steps for Microsoft Windows ###
 
-1. Download and install Git
+* Download and install Git
 	* [Git](http://git-scm.com/downloads)
 	* Add Git to your path environment variable: C:\Program Files (x86)\Git\cmd;C:\Program Files (x86)\Git\bin;
 	
-2. Download and install Python
+* Download and install Python
 	* [Python 3+](http://python.org/download/releases/3.3.0/)
 	* Add Python to your path environment variable: C:\Python33;
 
-3. Download and install Repo either using the Windows Command Shell or Git Bash
+* Download and install Repo either using the Windows Command Shell or Git Bash
 	* #### Windows Command Shell ####
 	md %USERPROFILE%\bin
     curl https://raw.github.com/esrlabs/git-repo/master/repo > %USERPROFILE%/bin/repo
