@@ -412,7 +412,7 @@ later is required to fix a server side protocol bug.
             else:
               print('Deleting obsolete path %s' % project.worktree,
                     file=sys.stderr)
-              shutil.rmtree(project.worktree)
+              shutil.rmtree(project.worktree, onerror=portable.removeReadOnlyFilesHandler)
               # Try deleting parent subdirs if they are empty
               project_dir = os.path.dirname(project.worktree)
               while project_dir != self.manifest.topdir:
@@ -496,7 +496,7 @@ later is required to fix a server side protocol bug.
             except netrc.NetrcParseError as e:
               print('Error parsing .netrc file: %s' % e, file=sys.stderr)
 
-        if (username and password):
+        if username and password:
           manifest_server = manifest_server.replace('://', '://%s:%s@' %
                                                     (username, password),
                                                     1)
@@ -538,7 +538,7 @@ later is required to fix a server side protocol bug.
             sys.exit(1)
           self.manifest.Override(manifest_name)
         else:
-          print('error: %s' % manifest_str, file=sys.stderr)
+          print('error in getting manifest: %s' % manifest_str, file=sys.stderr)
           sys.exit(1)
       except (socket.error, IOError, xmlrpc.client.Fault) as e:
         print('error: cannot connect to manifest server %s:\n%s'

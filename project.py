@@ -54,7 +54,7 @@ def _lwrite(path, content):
 
 def _error(fmt, *args):
   msg = fmt % args
-  print('error: %s' % msg, file=sys.stderr)
+  print('error in project: %s' % msg, file=sys.stderr)
 
 def not_rev(r):
   return '^' + r

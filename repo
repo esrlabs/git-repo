@@ -3,6 +3,8 @@
 import sys
 
 # copied from portable
+import portable
+
 def stream2str(stream):
     return str(stream, encoding='UTF-8')
 
@@ -662,7 +664,7 @@ def main(orig_args):
       except CloneFailure:
         for root, dirs, files in os.walk(repodir, topdown=False):
           for name in files:
-            os.remove(os.path.join(root, name))
+            portable.removeReadOnlyFiles(os.remove, os.path.join(root, name))
           for name in dirs:
             os.rmdir(os.path.join(root, name))
         os.rmdir(repodir)
