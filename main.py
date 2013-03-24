@@ -411,7 +411,7 @@ def _WindowsPager(repo):
     args1 = args[:argsSplit]
     args2 = args[argsSplit+1:]
     pager = _SelectPager(cmd.manifest.globalConfig)
-    shellCommand = "%s %s %s -- --piped-into-pager --no-pager %s | %s" % (python, thisScript, ' '.join(args1), ' '.join(args2), pager)
+    shellCommand = [python, thisScript] + args1 + ['--', '--piped-into-pager', '--no-pager'] + args2 + ['|', pager]
     subprocess.call(shellCommand, shell=True)
     return True
   else:

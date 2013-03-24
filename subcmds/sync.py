@@ -571,6 +571,11 @@ later is required to fix a server side protocol bug.
       self.manifest._Unload()
       if opt.jobs is None:
         self.jobs = self.manifest.default.sync_j
+
+      if not portable.isPosix():
+        # fix broken manifest.xml link
+        pass
+
     all_projects = self.GetProjects(args,
                                     missing_ok=True,
                                     submodules_ok=opt.fetch_submodules)
