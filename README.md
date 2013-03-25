@@ -12,6 +12,11 @@ For example, with a single Repo command you can download files from multiple rep
 
 ### Setup steps for Microsoft Windows ###
 
+##### Fix priviledges to allow for creation of symbolic links #####
+* If you are a member of the Administrators group you have to [turn off User Access Control (UAC)](http://windows.microsoft.com/en-us/windows7/turn-user-account-control-on-or-off) and restart the computer.
+* Otherwise you have to adjust your user rights to [get SeCreateSymbolicLinkPrivilege priviledges](http://stackoverflow.com/questions/6722589/using-windows-mklink-for-linking-2-files).
+The editrights tools is provided as part of git-repo for Microsoft Windows.
+
 ##### Download and install Git #####
 * Download [Git (http://git-scm.com/downloads)](http://git-scm.com/downloads)
 * Add Git to your path environment variable: e.g. C:\Program Files (x86)\Git\cmd;C:\Program Files (x86)\Git\bin;
