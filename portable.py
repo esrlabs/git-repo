@@ -47,12 +47,13 @@ def os_link(src, dst):
     src = os.path.relpath(src, os.path.dirname(dst))
     os.symlink(src, dst)
   else:
+    isDir = True if os.path.isdir(src) else False
     src = os.path.relpath(src, os.path.dirname(dst))
     src = toWindowsPath(src)
     dst = toWindowsPath(dst)
     # ln in MinGW does not create hard links? - it copies
     # call windows cmd tool 'mklink' from git bash (mingw)
-    if os.path.isdir(src):
+    if isDir:
       cmd = 'cmd /c mklink /D "%s" "%s"' % (dst, src)
       if IsTrace():
         Trace(cmd)
