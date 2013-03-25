@@ -19,7 +19,8 @@ The editrights tools is provided as part of git-repo for Microsoft Windows.
 
 ##### Download and install Git #####
 * Download [Git (http://git-scm.com/downloads)](http://git-scm.com/downloads)
-* Add Git to your path environment variable: e.g. C:\Program Files (x86)\Git\cmd;C:\Program Files (x86)\Git\bin;
+* Add Git to your path environment variable: e.g. C:\Program Files (x86)\Git\cmd;
+* Add MinGW to your path environment variable: e.g. C:\Program Files (x86)\Git\bin;
 	
 ##### Download and install Python #####
 * Download [Python 3+ (http://python.org/download/releases/3.3.0/)](http://python.org/download/releases/3.3.0/)
