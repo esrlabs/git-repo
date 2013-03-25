@@ -13,7 +13,7 @@ For example, with a single Repo command you can download files from multiple rep
 ### Setup steps for Microsoft Windows ###
 
 ##### Fix priviledges to allow for creation of symbolic links #####
-* If you are a member of the Administrators group you have to [turn off User Access Control (UAC)](http://windows.microsoft.com/en-us/windows7/turn-user-account-control-on-or-off) and restart the computer.
+* If you are a member of the Administrators group you have to [turn off User Access Control (UAC)](http://windows.microsoft.com/en-us/windows7/turn-user-account-control-on-or-off) and then restart the computer.
 * Otherwise you have to adjust your user rights to [get SeCreateSymbolicLinkPrivilege priviledges](http://stackoverflow.com/questions/6722589/using-windows-mklink-for-linking-2-files).
 The editrights tools is provided as part of git-repo for Microsoft Windows.
 
