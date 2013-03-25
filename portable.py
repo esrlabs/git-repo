@@ -10,6 +10,8 @@ import subprocess
 import sys
 import stat
 
+from repo_trace import REPO_TRACE, IsTrace, Trace
+
 SYNC_REPO_PROGRAM = False
 SUBPROCESSES = []
 
@@ -45,19 +47,21 @@ def os_link(src, dst):
     src = os.path.relpath(src, os.path.dirname(dst))
     os.symlink(src, dst)
   else:
-    dst = toUnixPath(dst)
-    #subprocess.call(["ln", "-s", src, dst])
+    src = os.path.relpath(src, os.path.dirname(dst))
+    src = toWindowsPath(src)
+    dst = toWindowsPath(dst)
     # ln in MinGW does not create hard links? - it copies
+    # call windows cmd tool 'mklink' from git bash (mingw)
     if os.path.isdir(src):
-      src = toWindowsPath(src)
-      dst = toWindowsPath(dst)
-      # symlink does create soft links in windows for directories => use mklink
-      # call windows cmd tool 'mklink' from git bash (mingw)
-      subprocess.Popen('cmd /c mklink /J %s %s' % (dst, src), stdout=subprocess.PIPE)
+      cmd = 'cmd /c mklink /D "%s" "%s"' % (dst, src)
+      if IsTrace():
+        Trace(cmd)
+      subprocess.Popen(cmd, stdout=subprocess.PIPE)
     else:
-      # requires paths in relation to current dir (not in relation to target file)
-      src = toUnixPath(src)
-      os.link(src, dst)
+      cmd = 'cmd /c mklink "%s" "%s"' % (dst, src)
+      if IsTrace():
+        Trace(cmd)
+      subprocess.Popen(cmd, stdout=subprocess.PIPE)
 
 def removeReadOnlyFilesHandler(fn, path, excinfo):
     removeReadOnlyFiles(fn, path)

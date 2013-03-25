@@ -46,6 +46,8 @@ from pager import _SelectPager
 
 from subcmds import all_commands
 
+from repo_trace import REPO_TRACE, IsTrace, Trace
+
 
 global_options = optparse.OptionParser(usage="repo [-p|--paginate|--no-pager|--piped-into-less] COMMAND [ARGS]")
 global_options.add_option('-p', '--paginate',
@@ -412,6 +414,8 @@ def _WindowsPager(repo):
     args2 = args[argsSplit+1:]
     pager = _SelectPager(cmd.manifest.globalConfig)
     shellCommand = [python, thisScript] + args1 + ['--', '--piped-into-pager', '--no-pager'] + args2 + ['|', pager]
+    if IsTrace():
+      Trace(' '.join(shellCommand))
     subprocess.call(shellCommand, shell=True)
     return True
   else:
