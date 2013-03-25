@@ -1,0 +1,1 @@
+editrights -a SeCreateSymbolicLinkPrivilege -u %USERNAME%
