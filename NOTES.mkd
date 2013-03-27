@@ -1,6 +1,11 @@
 
 # TODO
 
+* upload via https
+* [Linux] analyse problem if git-config not set
+  * comment username + email in config
+  * strange behaviour if prompted
+
 # Notes on compability
 
 * Windows does not allow links to non-existing files and dirs

@@ -582,7 +582,7 @@ class Remote(object):
       else:
         try:
           info_url = u + 'ssh_info'
-          info = urllib.request.urlopen(info_url).read()
+          info = portable.stream2str(urllib.request.urlopen(info_url).read())
           if '<' in info:
             # Assume the server gave us some sort of HTML
             # response back, like maybe a login page.
