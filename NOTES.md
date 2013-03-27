@@ -1,10 +1,11 @@
 
 # TODO
 
+Bugs:
+*
+
+Features:
 * upload via https
-* [Linux] analyse problem if git-config not set
-  * comment username + email in config
-  * strange behaviour if prompted
 
 # Notes on compability
 

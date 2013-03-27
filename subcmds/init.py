@@ -223,6 +223,7 @@ to update the working directory files.
 
   def _Prompt(self, prompt, value):
     sys.stdout.write('%-10s [%s]: ' % (prompt, value))
+    sys.stdout.flush()
     a = sys.stdin.readline().strip()
     if a == '':
       return value
@@ -257,6 +258,7 @@ to update the working directory files.
       print()
       print('Your identity is: %s <%s>' % (name, email))
       sys.stdout.write('is this correct [y/N]? ')
+      sys.stdout.flush()
       a = sys.stdin.readline().strip().lower()
       if a in ('yes', 'y', 't', 'true'):
         break
@@ -299,6 +301,7 @@ to update the working directory files.
     out.nl()
 
     sys.stdout.write('Enable color display in this user account (y/N)? ')
+    sys.stdout.flush()
     a = sys.stdin.readline().strip().lower()
     if a in ('y', 'yes', 't', 'true', 'on'):
       gc.SetString('color.ui', 'auto')

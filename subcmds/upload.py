@@ -320,6 +320,7 @@ Gerrit Code Review:  http://code.google.com/p/gerrit/
           # if they want to auto upload, let's not ask because it could be automated
           if answer is None:
             sys.stdout.write('Uncommitted changes in ' + branch.project.name + ' (did you forget to amend?). Continue uploading? (y/N) ')
+            sys.stdout.flush()
             a = sys.stdin.readline().strip().lower()
             if a not in ('y', 'yes', 't', 'true', 'on'):
               print("skipping upload", file=sys.stderr)
