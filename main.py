@@ -49,7 +49,7 @@ from subcmds import all_commands
 from repo_trace import REPO_TRACE, IsTrace, Trace
 
 
-global_options = optparse.OptionParser(usage="repo [-p|--paginate|--no-pager|--piped-into-less] COMMAND [ARGS]")
+global_options = optparse.OptionParser(usage="repo [-p|--paginate|--no-pager|--piped-into-less|--debug|--debug-host|--debug-env] COMMAND [ARGS]")
 global_options.add_option('-p', '--paginate',
                           dest='pager', action='store_true',
                           help='display command output in the pager')
@@ -66,6 +66,9 @@ global_options.add_option('--version',
                           dest='show_version', action='store_true',
                           help='display this version of repo')
 global_options.add_option("--piped-into-pager", action="store_true", dest="pipedIntoPager", default=False)
+global_options.add_option("--debug", action="store_true", dest="debug", default=False)
+global_options.add_option("--debug-host", dest="debug_host", default='localhost')
+global_options.add_option("--debug-env", dest="debug_env", default="intellij")
 
 
 def _UsePager(name, cmd, gopts, copts):
@@ -438,9 +441,6 @@ def _Main(argv):
                  help="version of the wrapper script")
   opt.add_option("--wrapper-path", dest="wrapper_path",
                  help="location of the wrapper script")
-  opt.add_option("-d", "--debug", action="store_true", dest="debug", default=False)
-  opt.add_option("--debug-host", dest="debug_host", default='localhost')
-  opt.add_option("--debug-env", dest="debug_env", default="intellij")
 
   _PruneOptions(argv, opt)
   opt, argv = opt.parse_args(argv)
@@ -460,9 +460,10 @@ def _Main(argv):
       # everything was already done; so exit
       return 0
 
-  if opt.debug:
-    print("enter debug mode, host %s" % opt.debug_host)
-    _Debug(opt.debug_host, opt.debug_env)
+  gopts = repo.config[2]
+  if gopts.debug:
+    print("enter debug mode, host %s" % gopts.debug_host)
+    _Debug(gopts.debug_host, gopts.debug_env)
     if portable.isPosix():
       # deactivate pager on posix systems since forked process cant be debugged
       os.environ['GIT_PAGER'] = ''

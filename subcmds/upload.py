@@ -21,6 +21,7 @@ import sys
 from command import InteractiveCommand
 from editor import Editor
 from error import HookError, UploadError
+import portable
 from project import RepoHook
 
 UNUSUAL_COMMIT_THRESHOLD = 5
@@ -186,9 +187,10 @@ Gerrit Code Review:  http://code.google.com/p/gerrit/
                     len(commit_list) != 1 and 's' or '',
                     date))
       for commit in commit_list:
-        print('         %s' % commit)
+        print('         %s' % portable.stream2str(commit))
 
       sys.stdout.write('to %s (y/N)? ' % remote.review)
+      sys.stdout.flush()
       answer = sys.stdin.readline().strip().lower()
       answer = answer in ('y', 'yes', '1', 'true', 't')
 
