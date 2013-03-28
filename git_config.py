@@ -581,20 +581,8 @@ class Remote(object):
         REVIEW_CACHE[u] = self._review_url
       else:
         try:
-          info_url = u + 'ssh_info'
-          info = portable.stream2str(urllib.request.urlopen(info_url).read())
-          if '<' in info:
-            # Assume the server gave us some sort of HTML
-            # response back, like maybe a login page.
-            #
-            raise UploadError('%s: Cannot parse response' % info_url)
-
-          if info == 'NOT_AVAILABLE':
-            # Assume HTTP if SSH is not enabled.
-            self._review_url = http_url + 'p/'
-          else:
-            host, port = info.split()
-            self._review_url = self._SshReviewUrl(userEmail, host, port)
+          # NOTE: contrary to original repo: do not switch to ssh, since this is contra-intuitive
+          self._review_url = http_url
         except urllib.error.HTTPError as e:
           raise UploadError('%s: %s' % (self.review, str(e)))
         except urllib.error.URLError as e:
