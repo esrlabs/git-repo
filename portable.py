@@ -57,12 +57,12 @@ def os_link(src, dst):
       cmd = 'cmd /c mklink /D "%s" "%s"' % (dst, src)
       if IsTrace():
         Trace(cmd)
-      subprocess.Popen(cmd, stdout=subprocess.PIPE)
+      subprocess.Popen(cmd, stdout=subprocess.PIPE).wait()
     else:
       cmd = 'cmd /c mklink "%s" "%s"' % (dst, src)
       if IsTrace():
         Trace(cmd)
-      subprocess.Popen(cmd, stdout=subprocess.PIPE)
+      subprocess.Popen(cmd, stdout=subprocess.PIPE).wait()
 
 def removeReadOnlyFilesHandler(fn, path, excinfo):
     removeReadOnlyFiles(fn, path)
