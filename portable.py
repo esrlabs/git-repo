@@ -12,7 +12,6 @@ import stat
 
 from repo_trace import REPO_TRACE, IsTrace, Trace
 
-SYNC_REPO_PROGRAM = False
 SUBPROCESSES = []
 
 def terminateHandle(signal, frame):

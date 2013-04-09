@@ -584,15 +584,13 @@ later is required to fix a server side protocol bug.
     if not opt.local_only:
       to_fetch = []
       now = time.time()
-      if portable.SYNC_REPO_PROGRAM and _ONE_DAY_S <= (now - rp.LastFetch):
+      if _ONE_DAY_S <= (now - rp.LastFetch):
         to_fetch.append(rp)
       to_fetch.extend(all_projects)
       to_fetch.sort(key=self._fetch_times.Get, reverse=True)
 
       fetched = self._Fetch(to_fetch, opt)
-
-      if portable.SYNC_REPO_PROGRAM:
-        _PostRepoFetch(rp, opt.no_repo_verify)
+      _PostRepoFetch(rp, opt.no_repo_verify)
 
       if opt.network_only:
         # bail out now; the rest touches the working tree
