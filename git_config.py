@@ -563,15 +563,12 @@ class Remote(object):
         return None
 
       u = self.review
-      if not u.startswith('http:') and not u.startswith('https:'):
-        u = 'http://%s' % u
       if u.endswith('/Gerrit'):
         u = u[:len(u) - len('/Gerrit')]
       if u.endswith('/ssh_info'):
         u = u[:len(u) - len('/ssh_info')]
       if not u.endswith('/'):
         u += '/'
-      http_url = u
 
       if u in REVIEW_CACHE:
         self._review_url = REVIEW_CACHE[u]
@@ -581,8 +578,33 @@ class Remote(object):
         REVIEW_CACHE[u] = self._review_url
       else:
         try:
-          # NOTE: contrary to original repo: do not switch to ssh, since this is contra-intuitive
-          self._review_url = http_url
+          # NOTE: contrary to original repo: do not switch automatically to ssh, since this is contra-intuitive
+          # try to fetch ssh infos from http gerrit server if protocol not specified
+          protocolSeperator = "://"
+          protocolSepIndex = u.find(protocolSeperator)
+          if protocolSepIndex == -1:
+            http_url = 'http://%s' % u
+            info_url = http_url + 'ssh_info'
+            info = portable.stream2str(urllib.request.urlopen(info_url).read())
+            if '<' in info:
+              # Assume the server gave us some sort of HTML
+              # response back, like maybe a login page.
+              #
+              try:
+                raise UploadError('%s: Cannot parse response' % info_url)
+              except Exception as e:
+                Trace("could not get ssh infos of %s from %s", u, info_url)
+                info = 'NOT_AVAILABLE'
+
+            if info == 'NOT_AVAILABLE':
+              # Assume HTTP if SSH is not enabled.
+              self._review_url = http_url + 'p/'
+              Trace("warning: proceed upload with http url %s since no protocol given and no infos could be retrieved from %s", self._review_url, info_url)
+            else:
+              host, port = info.split()
+              self._review_url = self._SshReviewUrl(userEmail, host, port)
+          else:
+            self._review_url = u
         except urllib.error.HTTPError as e:
           raise UploadError('%s: %s' % (self.review, str(e)))
         except urllib.error.URLError as e:
