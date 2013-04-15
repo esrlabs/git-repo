@@ -3,3 +3,4 @@ workspace.xml
 *.bak
 *.pyc
 .repopickle_*
+.work

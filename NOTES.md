@@ -17,9 +17,9 @@ Features:
 
 * Remote Debugging Possibility
     * options:
-        * enable debugging: -d
+        * enable debugging: --debug
         * set debug host: --debug-host=172.31.0.250
-        * (used port is 19499)
+          (default localhost, uses port is 19499)
 * using local git-repo (in $GIT_REPO; branch 'dev') and local git repositories (in $REPOS)
     $GIT_REPO/repo init -u $REPOS/manifest/ --no-repo-verify --repo-branch=dev
 * Tracing: set environment variable

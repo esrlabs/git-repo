@@ -385,15 +385,19 @@ def init_http():
 def _Debug(host, env):
   try:
     if env == "eclipse":
-      sys.path.append("C:\Program Files\eclipsePython\plugins\org.python.pydev_2.7.1.2012100913\pysrc")
-      sys.path.append("/opt/eclipseCPy/plugins/org.python.pydev_2.7.1.2012100913/pysrc")
+      if portable.isUnix():
+        sys.path.append("/opt/eclipseCPy/plugins/org.python.pydev_2.7.1.2012100913/pysrc")
+      else:
+        sys.path.append("C:\Program Files\eclipsePython\plugins\org.python.pydev_2.7.1.2012100913\pysrc")
       import pydevd as pydevd
     elif env == "intellij":
-      sys.path.append("C:\\Users\mputz\.IntelliJIdea12\config\plugins\python\pycharm-debug.egg")
-      sys.path.append("/home/mputz/.IntelliJIdea12/config/plugins/python/pycharm-debug.egg")
-      sys.path.append("C:\\Users\mputz\.IntelliJIdea12\config\plugins\python\helpers\pydev")
-      sys.path.append("/home/mputz/.IntelliJIdea12/config/plugins/python/helpers/pydev")
-      from pydev import pydevd
+      if portable.isUnix():
+        sys.path.append("/home/mputz/.IntelliJIdea12/config/plugins/python/helpers/pydev")
+        sys.path.append("/home/mputz/.IntelliJIdea12/config/plugins/python/pycharm-debug-py3k.egg")
+      else:
+        sys.path.append("C:\\Users\mputz\.IntelliJIdea12\config\plugins\python\pycharm-debug-py3k.egg")
+        sys.path.append("C:\\Users\mputz\.IntelliJIdea12\config\plugins\python\helpers\pydev")
+      import pydevd as pydevd
 
     pydevd.settrace(host, port=19499, stdoutToServer=True, stderrToServer=True)
 
