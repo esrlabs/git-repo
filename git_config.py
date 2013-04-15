@@ -594,28 +594,34 @@ class Remote(object):
                     protocolSeperator = "://"
                     protocolSepIndex = u.find(protocolSeperator)
                     if protocolSepIndex == -1:
-                        http_url = 'http://%s' % u
-                        info_url = http_url + 'ssh_info'
-                        info = portable.stream2str(urllib.request.urlopen(info_url).read())
-                        if '<' in info:
-                            # Assume the server gave us some sort of HTML
-                            # response back, like maybe a login page.
-                            #
+                        protocols = ["http", "https"]
+                        for prefix in protocols:
+                            http_url = '%s://%s' % (prefix, u)
+                            info_url = http_url + 'ssh_info'
+                            info = None
                             try:
-                                raise UploadError('%s: Cannot parse response' % info_url)
+                                info = portable.stream2str(urllib.request.urlopen(info_url).read())
+                                if '<' in info:
+                                    # Assume the server gave us some sort of HTML
+                                    # response back, like maybe a login page.
+                                    #
+                                    raise UploadError('%s: Cannot parse response' % info_url)
+                                if info != 'NOT_AVAILABLE':
+                                    host, port = info.split()
+                                    self._review_url = self._SshReviewUrl(userEmail, host, port)
+
                             except Exception as e:
-                                Trace("could not get ssh infos of %s from %s", u, info_url)
+                                Trace("could not get ssh infos of %s from %s (received %s), error %s", u, info_url, info, e)
                                 info = 'NOT_AVAILABLE'
 
-                        if info == 'NOT_AVAILABLE':
+                        if not self._review_url:
                             # Assume HTTP if SSH is not enabled.
                             self._review_url = http_url + 'p/'
                             Trace(
                                 "warning: proceed upload with http url %s since no protocol given and no infos could be retrieved from %s",
                                 self._review_url, info_url)
-                        else:
-                            host, port = info.split()
-                            self._review_url = self._SshReviewUrl(userEmail, host, port)
+
+                        print("detected %s as review url" % self._review_url)
                     else:
                         self._review_url = u
                 except urllib.error.HTTPError as e:

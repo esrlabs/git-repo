@@ -244,7 +244,9 @@ Gerrit Code Review:  http://code.google.com/p/gerrit/
                   else x
                   for x in script]
 
-        script = portable.stream2str(Editor.EditString("\n".join(script))).split("\n")
+        script = Editor.EditString(b"\n".join(script))
+        script = script.split("\n")
+
 
         project_re = re.compile(r'^#?\s*project\s*([^\s]+)/:$')
         branch_re = re.compile(r'^\s*branch\s*([^\s(]+)\s*\(.*')
