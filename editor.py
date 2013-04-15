@@ -22,89 +22,90 @@ import tempfile
 
 from error import EditorError
 
+
 class Editor(object):
-  """Manages the user's preferred text editor."""
+    """Manages the user's preferred text editor."""
 
-  _editor = None
-  globalConfig = None
+    _editor = None
+    globalConfig = None
 
-  @classmethod
-  def _GetEditor(cls):
-    if cls._editor is None:
-      cls._editor = cls._SelectEditor()
-    return cls._editor
+    @classmethod
+    def _GetEditor(cls):
+        if cls._editor is None:
+            cls._editor = cls._SelectEditor()
+        return cls._editor
 
-  @classmethod
-  def _SelectEditor(cls):
-    e = os.getenv('GIT_EDITOR')
-    if e:
-      return e
+    @classmethod
+    def _SelectEditor(cls):
+        e = os.getenv('GIT_EDITOR')
+        if e:
+            return e
 
-    if cls.globalConfig:
-      e = cls.globalConfig.GetString('core.editor')
-      if e:
-        return e
+        if cls.globalConfig:
+            e = cls.globalConfig.GetString('core.editor')
+            if e:
+                return e
 
-    e = os.getenv('VISUAL')
-    if e:
-      return e
+        e = os.getenv('VISUAL')
+        if e:
+            return e
 
-    e = os.getenv('EDITOR')
-    if e:
-      return e
+        e = os.getenv('EDITOR')
+        if e:
+            return e
 
-    if os.getenv('TERM') == 'dumb':
-      print(
-"""No editor specified in GIT_EDITOR, core.editor, VISUAL or EDITOR.
-Tried to fall back to vi but terminal is dumb.  Please configure at
-least one of these before using this command.""", file=sys.stderr)
-      sys.exit(1)
+        if os.getenv('TERM') == 'dumb':
+            print(
+                """No editor specified in GIT_EDITOR, core.editor, VISUAL or EDITOR.
+                Tried to fall back to vi but terminal is dumb.  Please configure at
+                least one of these before using this command.""", file=sys.stderr)
+            sys.exit(1)
 
-    return 'vi'
+        return 'vi'
 
-  @classmethod
-  def EditString(cls, data):
-    """Opens an editor to edit the given content.
+    @classmethod
+    def EditString(cls, data):
+        """Opens an editor to edit the given content.
 
-       Args:
-         data        : the text to edit
+           Args:
+             data        : the text to edit
 
-      Returns:
-        new value of edited text; None if editing did not succeed
-    """
-    editor = cls._GetEditor()
-    if editor == ':':
-      return data
+          Returns:
+            new value of edited text; None if editing did not succeed
+        """
+        editor = cls._GetEditor()
+        if editor == ':':
+            return data
 
-    fd, path = tempfile.mkstemp()
-    try:
-      os.write(fd, data)
-      os.close(fd)
-      fd = None
+        fd, path = tempfile.mkstemp()
+        try:
+            os.write(fd, data)
+            os.close(fd)
+            fd = None
 
-      if re.compile("^.*[$ \t'].*$").match(editor):
-        args = [editor + ' "$@"', 'sh']
-        shell = True
-      else:
-        args = [editor]
-        shell = False
-      args.append(path)
+            if re.compile("^.*[$ \t'].*$").match(editor):
+                args = [editor + ' "$@"', 'sh']
+                shell = True
+            else:
+                args = [editor]
+                shell = False
+            args.append(path)
 
-      try:
-        rc = subprocess.Popen(args, shell=shell).wait()
-      except OSError as e:
-        raise EditorError('editor failed, %s: %s %s'
-          % (str(e), editor, path))
-      if rc != 0:
-        raise EditorError('editor failed with exit status %d: %s %s'
-          % (rc, editor, path))
+            try:
+                rc = subprocess.Popen(args, shell=shell).wait()
+            except OSError as e:
+                raise EditorError('editor failed, %s: %s %s'
+                                  % (str(e), editor, path))
+            if rc != 0:
+                raise EditorError('editor failed with exit status %d: %s %s'
+                                  % (rc, editor, path))
 
-      fd2 = open(path)
-      try:
-        return fd2.read()
-      finally:
-        fd2.close()
-    finally:
-      if fd:
-        os.close(fd)
-      os.remove(path)
+            fd2 = open(path)
+            try:
+                return fd2.read()
+            finally:
+                fd2.close()
+        finally:
+            if fd:
+                os.close(fd)
+            os.remove(path)

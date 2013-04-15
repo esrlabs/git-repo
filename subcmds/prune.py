@@ -17,44 +17,45 @@
 from color import Coloring
 from command import PagedCommand
 
+
 class Prune(PagedCommand):
-  common = True
-  helpSummary = "Prune (delete) already merged topics"
-  helpUsage = """
+    common = True
+    helpSummary = "Prune (delete) already merged topics"
+    helpUsage = """
 %prog [<project>...]
 """
 
-  def Execute(self, opt, args):
-    all_branches = []
-    for project in self.GetProjects(args):
-      all_branches.extend(project.PruneHeads())
+    def Execute(self, opt, args):
+        all_branches = []
+        for project in self.GetProjects(args):
+            all_branches.extend(project.PruneHeads())
 
-    if not all_branches:
-      return
+        if not all_branches:
+            return
 
-    class Report(Coloring):
-      def __init__(self, config):
-        Coloring.__init__(self, config, 'status')
-        self.project = self.printer('header', attr='bold')
+        class Report(Coloring):
+            def __init__(self, config):
+                Coloring.__init__(self, config, 'status')
+                self.project = self.printer('header', attr='bold')
 
-    out = Report(all_branches[0].project.config)
-    out.project('Pending Branches')
-    out.nl()
-
-    project = None
-
-    for branch in all_branches:
-      if project != branch.project:
-        project = branch.project
-        out.nl()
-        out.project('project %s/' % project.relpath)
+        out = Report(all_branches[0].project.config)
+        out.project('Pending Branches')
         out.nl()
 
-      commits = branch.commits
-      date = branch.date
-      print('%s %-33s (%2d commit%s, %s)' % (
-            branch.name == project.CurrentBranch and '*' or ' ',
-            branch.name,
-            len(commits),
-            len(commits) != 1 and 's' or ' ',
-            date))
+        project = None
+
+        for branch in all_branches:
+            if project != branch.project:
+                project = branch.project
+                out.nl()
+                out.project('project %s/' % project.relpath)
+                out.nl()
+
+            commits = branch.commits
+            date = branch.date
+            print('%s %-33s (%2d commit%s, %s)' % (
+                branch.name == project.CurrentBranch and '*' or ' ',
+                branch.name,
+                len(commits),
+                len(commits) != 1 and 's' or ' ',
+                date))

@@ -15,19 +15,20 @@
 
 from subcmds.sync import Sync
 
+
 class Smartsync(Sync):
-  common = True
-  helpSummary = "Update working tree to the latest known good revision"
-  helpUsage = """
+    common = True
+    helpSummary = "Update working tree to the latest known good revision"
+    helpUsage = """
 %prog [<project>...]
 """
-  helpDescription = """
+    helpDescription = """
 The '%prog' command is a shortcut for sync -s.
 """
 
-  def _Options(self, p):
-    Sync._Options(self, p, show_smart=False)
+    def _Options(self, p):
+        Sync._Options(self, p, show_smart=False)
 
-  def Execute(self, opt, args):
-    opt.smart_sync = True
-    Sync.Execute(self, opt, args)
+    def Execute(self, opt, args):
+        opt.smart_sync = True
+        Sync.Execute(self, opt, args)

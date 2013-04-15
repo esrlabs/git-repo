@@ -25,25 +25,26 @@ from color import Coloring
 from command import Command, MirrorSafeCommand
 
 _CAN_COLOR = [
-  'branch',
-  'diff',
-  'grep',
-  'log',
+    'branch',
+    'diff',
+    'grep',
+    'log',
 ]
 
+
 class ForallColoring(Coloring):
-  def __init__(self, config):
-    Coloring.__init__(self, config, 'forall')
-    self.project = self.printer('project', attr='bold')
+    def __init__(self, config):
+        Coloring.__init__(self, config, 'forall')
+        self.project = self.printer('project', attr='bold')
 
 
 class Forall(Command, MirrorSafeCommand):
-  common = False
-  helpSummary = "Run a shell command in each project"
-  helpUsage = """
+    common = False
+    helpSummary = "Run a shell command in each project"
+    helpUsage = """
 %prog [<project>...] -c <command> [<arg>...]
 """
-  helpDescription = """
+    helpDescription = """
 Executes the same shell command in each project.
 
 Output Formatting
@@ -98,175 +99,179 @@ If -e is used, when a command exits unsuccessfully, '%prog' will abort
 without iterating through the remaining projects.
 """
 
-  def _Options(self, p):
-    def cmd(option, opt_str, value, parser):
-      setattr(parser.values, option.dest, list(parser.rargs))
-      while parser.rargs:
-        del parser.rargs[0]
-    p.add_option('-c', '--command',
-                 help='Command (and arguments) to execute',
-                 dest='command',
-                 action='callback',
-                 callback=cmd)
-    p.add_option('-e', '--abort-on-errors',
-                 dest='abort_on_errors', action='store_true',
-                 help='Abort if a command exits unsuccessfully')
+    def _Options(self, p):
+        def cmd(option, opt_str, value, parser):
+            setattr(parser.values, option.dest, list(parser.rargs))
+            while parser.rargs:
+                del parser.rargs[0]
 
-    g = p.add_option_group('Output')
-    g.add_option('-p',
-                 dest='project_header', action='store_true',
-                 help='Show project headers before output')
-    g.add_option('-v', '--verbose',
-                 dest='verbose', action='store_true',
-                 help='Show command error messages')
+        p.add_option('-c', '--command',
+                     help='Command (and arguments) to execute',
+                     dest='command',
+                     action='callback',
+                     callback=cmd)
+        p.add_option('-e', '--abort-on-errors',
+                     dest='abort_on_errors', action='store_true',
+                     help='Abort if a command exits unsuccessfully')
 
-  def WantPager(self, opt):
-    return opt.project_header
+        g = p.add_option_group('Output')
+        g.add_option('-p',
+                     dest='project_header', action='store_true',
+                     help='Show project headers before output')
+        g.add_option('-v', '--verbose',
+                     dest='verbose', action='store_true',
+                     help='Show command error messages')
 
-  def Execute(self, opt, args):
-    if not opt.command:
-      self.Usage()
+    def WantPager(self, opt):
+        return opt.project_header
 
-    cmd = [opt.command[0]]
+    def Execute(self, opt, args):
+        if not opt.command:
+            self.Usage()
 
-    shell = True
-    if re.compile(r'^[a-z0-9A-Z_/\.-]+$').match(cmd[0]):
-      shell = False
+        cmd = [opt.command[0]]
 
-    if shell:
-      cmd.append(cmd[0])
-    cmd.extend(opt.command[1:])
+        shell = True
+        if re.compile(r'^[a-z0-9A-Z_/\.-]+$').match(cmd[0]):
+            shell = False
 
-    if  opt.project_header \
-    and not shell \
-    and cmd[0] == 'git':
-      # If this is a direct git command that can enable colorized
-      # output and the user prefers coloring, add --color into the
-      # command line because we are going to wrap the command into
-      # a pipe and git won't know coloring should activate.
-      #
-      for cn in cmd[1:]:
-        if not cn.startswith('-'):
-          break
-      else:
-        cn = None
-      # pylint: disable=W0631
-      if cn and cn in _CAN_COLOR:
-        class ColorCmd(Coloring):
-          def __init__(self, config, cmd):
-            Coloring.__init__(self, config, cmd)
-        if ColorCmd(self.manifest.manifestProject.config, cn).is_on:
-          cmd.insert(cmd.index(cn) + 1, '--color')
-      # pylint: enable=W0631
+        if shell:
+            cmd.append(cmd[0])
+        cmd.extend(opt.command[1:])
 
-    mirror = self.manifest.IsMirror
-    out = ForallColoring(self.manifest.manifestProject.config)
-    out.redirect(sys.stdout)
+        if opt.project_header \
+            and not shell \
+            and cmd[0] == 'git':
+            # If this is a direct git command that can enable colorized
+            # output and the user prefers coloring, add --color into the
+            # command line because we are going to wrap the command into
+            # a pipe and git won't know coloring should activate.
+            #
+            for cn in cmd[1:]:
+                if not cn.startswith('-'):
+                    break
+            else:
+                cn = None
+                # pylint: disable=W0631
+            if cn and cn in _CAN_COLOR:
+                class ColorCmd(Coloring):
+                    def __init__(self, config, cmd):
+                        Coloring.__init__(self, config, cmd)
 
-    rc = 0
-    first = True
+                if ColorCmd(self.manifest.manifestProject.config, cn).is_on:
+                    cmd.insert(cmd.index(cn) + 1, '--color')
+                    # pylint: enable=W0631
 
-    for project in self.GetProjects(args):
-      env = os.environ.copy()
-      def setenv(name, val):
-        if val is None:
-          val = ''
-        env[name] = val
+        mirror = self.manifest.IsMirror
+        out = ForallColoring(self.manifest.manifestProject.config)
+        out.redirect(sys.stdout)
 
-      setenv('REPO_PROJECT', project.name)
-      setenv('REPO_PATH', project.relpath)
-      setenv('REPO_REMOTE', project.remote.name)
-      setenv('REPO_LREV', project.GetRevisionId())
-      setenv('REPO_RREV', project.revisionExpr)
-      for a in project.annotations:
-        setenv("REPO__%s" % (a.name), a.value)
+        rc = 0
+        first = True
 
-      if mirror:
-        setenv('GIT_DIR', project.gitdir)
-        cwd = project.gitdir
-      else:
-        cwd = project.worktree
+        for project in self.GetProjects(args):
+            env = os.environ.copy()
 
-      if not os.path.exists(cwd):
-        if (opt.project_header and opt.verbose) \
-        or not opt.project_header:
-          print('skipping %s/' % project.relpath, file=sys.stderr)
-        continue
+            def setenv(name, val):
+                if val is None:
+                    val = ''
+                env[name] = val
 
-      if opt.project_header:
-        stdin = subprocess.PIPE
-        stdout = subprocess.PIPE
-        stderr = subprocess.PIPE
-      else:
-        stdin = None
-        stdout = None
-        stderr = None
+            setenv('REPO_PROJECT', project.name)
+            setenv('REPO_PATH', project.relpath)
+            setenv('REPO_REMOTE', project.remote.name)
+            setenv('REPO_LREV', project.GetRevisionId())
+            setenv('REPO_RREV', project.revisionExpr)
+            for a in project.annotations:
+                setenv("REPO__%s" % (a.name), a.value)
 
-      p = subprocess.Popen(cmd,
-                           cwd = cwd,
-                           shell = shell,
-                           env = env,
-                           stdin = stdin,
-                           stdout = stdout,
-                           stderr = stderr)
+            if mirror:
+                setenv('GIT_DIR', project.gitdir)
+                cwd = project.gitdir
+            else:
+                cwd = project.worktree
 
-      if opt.project_header:
-        class sfd(object):
-          def __init__(self, fd, dest):
-            self.fd = fd
-            self.dest = dest
-          def fileno(self):
-            return self.fd.fileno()
+            if not os.path.exists(cwd):
+                if (opt.project_header and opt.verbose) \
+                    or not opt.project_header:
+                    print('skipping %s/' % project.relpath, file=sys.stderr)
+                continue
 
-#        empty = True
-#        errbuf = ''
-#
-#        p.stdin.close()
-#        s_in = [sfd(p.stdout, sys.stdout),
-#                sfd(p.stderr, sys.stderr)]
-#
-#        for s in s_in:
-#          flags = fcntl.fcntl(s.fd, fcntl.F_GETFL)
-#          fcntl.fcntl(s.fd, fcntl.F_SETFL, flags | os.O_NONBLOCK)
-#
-#        while s_in:
-#          in_ready, _out_ready, _err_ready = select.select(s_in, [], [])
-#          for s in in_ready:
-#            buf = s.fd.read(4096)
-#            if not buf:
-#              s.fd.close()
-#              s_in.remove(s)
-#              continue
-#
-#            if not opt.verbose:
-#              if s.fd != p.stdout:
-#                errbuf += buf
-#                continue
-#
-#            if empty:
-#              if first:
-#                first = False
-#              else:
-#                out.nl()
-#              out.project('project %s/', project.relpath)
-#              out.nl()
-#              out.flush()
-#              if errbuf:
-#                sys.stderr.write(errbuf)
-#                sys.stderr.flush()
-#                errbuf = ''
-#              empty = False
-#
-#            s.dest.write(buf)
-#            s.dest.flush()
+            if opt.project_header:
+                stdin = subprocess.PIPE
+                stdout = subprocess.PIPE
+                stderr = subprocess.PIPE
+            else:
+                stdin = None
+                stdout = None
+                stderr = None
 
-      r = p.wait()
-      if r != 0:
-        if r != rc:
-          rc = r
-        if opt.abort_on_errors:
-          print("error: %s: Aborting due to previous error" % project.relpath,
-                file=sys.stderr)
-          sys.exit(r)
-    if rc != 0:
-      sys.exit(rc)
+            p = subprocess.Popen(cmd,
+                                 cwd=cwd,
+                                 shell=shell,
+                                 env=env,
+                                 stdin=stdin,
+                                 stdout=stdout,
+                                 stderr=stderr)
+
+            if opt.project_header:
+                class sfd(object):
+                    def __init__(self, fd, dest):
+                        self.fd = fd
+                        self.dest = dest
+
+                    def fileno(self):
+                        return self.fd.fileno()
+
+                    #        empty = True
+                    #        errbuf = ''
+                    #
+                    #        p.stdin.close()
+                    #        s_in = [sfd(p.stdout, sys.stdout),
+                    #                sfd(p.stderr, sys.stderr)]
+                    #
+                    #        for s in s_in:
+                    #          flags = fcntl.fcntl(s.fd, fcntl.F_GETFL)
+                    #          fcntl.fcntl(s.fd, fcntl.F_SETFL, flags | os.O_NONBLOCK)
+                    #
+                    #        while s_in:
+                    #          in_ready, _out_ready, _err_ready = select.select(s_in, [], [])
+                    #          for s in in_ready:
+                    #            buf = s.fd.read(4096)
+                    #            if not buf:
+                    #              s.fd.close()
+                    #              s_in.remove(s)
+                    #              continue
+                    #
+                    #            if not opt.verbose:
+                    #              if s.fd != p.stdout:
+                    #                errbuf += buf
+                    #                continue
+                    #
+                    #            if empty:
+                    #              if first:
+                    #                first = False
+                    #              else:
+                    #                out.nl()
+                    #              out.project('project %s/', project.relpath)
+                    #              out.nl()
+                    #              out.flush()
+                    #              if errbuf:
+                    #                sys.stderr.write(errbuf)
+                    #                sys.stderr.flush()
+                    #                errbuf = ''
+                    #              empty = False
+                    #
+                    #            s.dest.write(buf)
+                    #            s.dest.flush()
+
+            r = p.wait()
+            if r != 0:
+                if r != rc:
+                    rc = r
+                if opt.abort_on_errors:
+                    print("error: %s: Aborting due to previous error" % project.relpath,
+                          file=sys.stderr)
+                    sys.exit(r)
+        if rc != 0:
+            sys.exit(rc)

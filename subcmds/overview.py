@@ -19,12 +19,12 @@ from command import PagedCommand
 
 
 class Overview(PagedCommand):
-  common = True
-  helpSummary = "Display overview of unmerged project branches"
-  helpUsage = """
+    common = True
+    helpSummary = "Display overview of unmerged project branches"
+    helpUsage = """
 %prog [--current-branch] [<project>...]
 """
-  helpDescription = """
+    helpDescription = """
 The '%prog' command is used to display an overview of the projects branches,
 and list any local commits that have not yet been merged into the project.
 
@@ -33,52 +33,52 @@ branches currently checked out in each project.  By default, all branches
 are displayed.
 """
 
-  def _Options(self, p):
-    p.add_option('-b', '--current-branch',
-                 dest="current_branch", action="store_true",
-                 help="Consider only checked out branches")
+    def _Options(self, p):
+        p.add_option('-b', '--current-branch',
+                     dest="current_branch", action="store_true",
+                     help="Consider only checked out branches")
 
-  def Execute(self, opt, args):
-    all_branches = []
-    for project in self.GetProjects(args):
-      br = [project.GetUploadableBranch(x)
-            for x in list(project.GetBranches().keys())]
-      br = [x for x in br if x]
-      if opt.current_branch:
-        br = [x for x in br if x.name == project.CurrentBranch]
-      all_branches.extend(br)
+    def Execute(self, opt, args):
+        all_branches = []
+        for project in self.GetProjects(args):
+            br = [project.GetUploadableBranch(x)
+                  for x in list(project.GetBranches().keys())]
+            br = [x for x in br if x]
+            if opt.current_branch:
+                br = [x for x in br if x.name == project.CurrentBranch]
+            all_branches.extend(br)
 
-    if not all_branches:
-      return
+        if not all_branches:
+            return
 
-    class Report(Coloring):
-      def __init__(self, config):
-        Coloring.__init__(self, config, 'status')
-        self.project = self.printer('header', attr='bold')
-        self.text = self.printer('text')
+        class Report(Coloring):
+            def __init__(self, config):
+                Coloring.__init__(self, config, 'status')
+                self.project = self.printer('header', attr='bold')
+                self.text = self.printer('text')
 
-    out = Report(all_branches[0].project.config)
-    out.text("Deprecated. See repo info -o.")
-    out.nl()
-    out.project('Projects Overview')
-    out.nl()
-
-    project = None
-
-    for branch in all_branches:
-      if project != branch.project:
-        project = branch.project
+        out = Report(all_branches[0].project.config)
+        out.text("Deprecated. See repo info -o.")
         out.nl()
-        out.project('project %s/' % project.relpath)
+        out.project('Projects Overview')
         out.nl()
 
-      commits = branch.commits
-      date = branch.date
-      print('%s %-33s (%2d commit%s, %s)' % (
-            branch.name == project.CurrentBranch and '*' or ' ',
-            branch.name,
-            len(commits),
-            len(commits) != 1 and 's' or ' ',
-            date))
-      for commit in commits:
-        print('%-35s   - %s' % ('', commit))
+        project = None
+
+        for branch in all_branches:
+            if project != branch.project:
+                project = branch.project
+                out.nl()
+                out.project('project %s/' % project.relpath)
+                out.nl()
+
+            commits = branch.commits
+            date = branch.date
+            print('%s %-33s (%2d commit%s, %s)' % (
+                branch.name == project.CurrentBranch and '*' or ' ',
+                branch.name,
+                len(commits),
+                len(commits) != 1 and 's' or ' ',
+                date))
+            for commit in commits:
+                print('%-35s   - %s' % ('', commit))

@@ -18,47 +18,49 @@ import sys
 from color import Coloring
 from command import Command
 
+
 class BranchColoring(Coloring):
-  def __init__(self, config):
-    Coloring.__init__(self, config, 'branch')
-    self.current = self.printer('current', fg='green')
-    self.local   = self.printer('local')
-    self.notinproject = self.printer('notinproject', fg='red')
+    def __init__(self, config):
+        Coloring.__init__(self, config, 'branch')
+        self.current = self.printer('current', fg='green')
+        self.local = self.printer('local')
+        self.notinproject = self.printer('notinproject', fg='red')
+
 
 class BranchInfo(object):
-  def __init__(self, name):
-    self.name = name
-    self.current = 0
-    self.published = 0
-    self.published_equal = 0
-    self.projects = []
+    def __init__(self, name):
+        self.name = name
+        self.current = 0
+        self.published = 0
+        self.published_equal = 0
+        self.projects = []
 
-  def add(self, b):
-    if b.current:
-      self.current += 1
-    if b.published:
-      self.published += 1
-    if b.revision == b.published:
-      self.published_equal += 1
-    self.projects.append(b)
+    def add(self, b):
+        if b.current:
+            self.current += 1
+        if b.published:
+            self.published += 1
+        if b.revision == b.published:
+            self.published_equal += 1
+        self.projects.append(b)
 
-  @property
-  def IsCurrent(self):
-    return self.current > 0
+    @property
+    def IsCurrent(self):
+        return self.current > 0
 
-  @property
-  def IsPublished(self):
-    return self.published > 0
+    @property
+    def IsPublished(self):
+        return self.published > 0
 
-  @property
-  def IsPublishedEqual(self):
-    return self.published_equal == len(self.projects)
+    @property
+    def IsPublishedEqual(self):
+        return self.published_equal == len(self.projects)
 
 
 class Branches(Command):
-  common = True
-  helpSummary = "View current topic branches"
-  helpUsage = """
+    common = True
+    helpSummary = "View current topic branches"
+    helpUsage = """
 %prog [<project>...]
 
 Summarizes the currently available topic branches.
@@ -91,77 +93,77 @@ is shown, then the branch appears in all projects.
 
 """
 
-  def Execute(self, opt, args):
-    projects = self.GetProjects(args)
-    out = BranchColoring(self.manifest.manifestProject.config)
-    all_branches = {}
-    project_cnt = len(projects)
+    def Execute(self, opt, args):
+        projects = self.GetProjects(args)
+        out = BranchColoring(self.manifest.manifestProject.config)
+        all_branches = {}
+        project_cnt = len(projects)
 
-    for project in projects:
-      for name, b in list(project.GetBranches().items()):
-        b.project = project
-        if name not in all_branches:
-          all_branches[name] = BranchInfo(name)
-        all_branches[name].add(b)
+        for project in projects:
+            for name, b in list(project.GetBranches().items()):
+                b.project = project
+                if name not in all_branches:
+                    all_branches[name] = BranchInfo(name)
+                all_branches[name].add(b)
 
-    names = list(all_branches.keys())
-    names.sort()
+        names = list(all_branches.keys())
+        names.sort()
 
-    if not names:
-      print('   (no branches)', file=sys.stderr)
-      return
+        if not names:
+            print('   (no branches)', file=sys.stderr)
+            return
 
-    width = 25
-    for name in names:
-      if width < len(name):
-        width = len(name)
+        width = 25
+        for name in names:
+            if width < len(name):
+                width = len(name)
 
-    for name in names:
-      i = all_branches[name]
-      in_cnt = len(i.projects)
+        for name in names:
+            i = all_branches[name]
+            in_cnt = len(i.projects)
 
-      if i.IsCurrent:
-        current = '*'
-        hdr = out.current
-      else:
-        current = ' '
-        hdr = out.local
+            if i.IsCurrent:
+                current = '*'
+                hdr = out.current
+            else:
+                current = ' '
+                hdr = out.local
 
-      if i.IsPublishedEqual:
-        published = 'P'
-      elif i.IsPublished:
-        published = 'p'
-      else:
-        published = ' '
+            if i.IsPublishedEqual:
+                published = 'P'
+            elif i.IsPublished:
+                published = 'p'
+            else:
+                published = ' '
 
-      hdr('%c%c %-*s' % (current, published, width, name))
-      out.write(' |')
+            hdr('%c%c %-*s' % (current, published, width, name))
+            out.write(' |')
 
-      if in_cnt < project_cnt:
-        fmt = out.write
-        paths = []
-        if in_cnt < project_cnt - in_cnt: 
-          in_type = 'in'
-          for b in i.projects:
-            paths.append(b.project.relpath)
-        else:
-          fmt = out.notinproject
-          in_type = 'not in'
-          have = set()
-          for b in i.projects:
-            have.add(b.project)
-          for p in projects:
-            if not p in have:
-              paths.append(p.relpath)
+            if in_cnt < project_cnt:
+                fmt = out.write
+                paths = []
+                if in_cnt < project_cnt - in_cnt:
+                    in_type = 'in'
+                    for b in i.projects:
+                        paths.append(b.project.relpath)
+                else:
+                    fmt = out.notinproject
+                    in_type = 'not in'
+                    have = set()
+                    for b in i.projects:
+                        have.add(b.project)
+                    for p in projects:
+                        if not p in have:
+                            paths.append(p.relpath)
 
-        s = ' %s %s' % (in_type, ', '.join(paths))
-        if width + 7 + len(s) < 80:
-          fmt(s)
-        else:
-          fmt(' %s:' % in_type)
-          for p in paths:
+                s = ' %s %s' % (in_type, ', '.join(paths))
+                if width + 7 + len(s) < 80:
+                    fmt(s)
+                else:
+                    fmt(' %s:' % in_type)
+                    for p in paths:
+                        out.nl()
+                        fmt(width * ' ' + '          %s' % p)
+            else:
+                out.write(' in all projects')
             out.nl()
-            fmt(width*' ' + '          %s' % p)
-      else:
-        out.write(' in all projects')
-      out.nl()

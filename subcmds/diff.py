@@ -15,10 +15,11 @@
 
 from command import PagedCommand
 
+
 class Diff(PagedCommand):
-  common = True
-  helpSummary = "Show changes between commit and working tree"
-  helpUsage = """
+    common = True
+    helpSummary = "Show changes between commit and working tree"
+    helpUsage = """
 %prog [<project>...]
 
 The -u option causes '%prog' to generate diff output with file paths
@@ -26,15 +27,16 @@ relative to the repository root, so the output can be applied
 to the Unix 'patch' command.
 """
 
-  def _Options(self, p):
-    def cmd(option, opt_str, value, parser):
-      setattr(parser.values, option.dest, list(parser.rargs))
-      while parser.rargs:
-        del parser.rargs[0]
-    p.add_option('-u', '--absolute',
-                 dest='absolute', action='store_true',
-                 help='Paths are relative to the repository root')
+    def _Options(self, p):
+        def cmd(option, opt_str, value, parser):
+            setattr(parser.values, option.dest, list(parser.rargs))
+            while parser.rargs:
+                del parser.rargs[0]
 
-  def Execute(self, opt, args):
-    for project in self.GetProjects(args):
-      project.PrintWorkTreeDiff(opt.absolute)
+        p.add_option('-u', '--absolute',
+                     dest='absolute', action='store_true',
+                     help='Paths are relative to the repository root')
+
+    def Execute(self, opt, args):
+        for project in self.GetProjects(args):
+            project.PrintWorkTreeDiff(opt.absolute)

@@ -16,20 +16,24 @@
 
 import sys
 import os
+
 REPO_TRACE = 'REPO_TRACE'
 
 try:
-  _TRACE = os.environ[REPO_TRACE] == '1'
+    _TRACE = os.environ[REPO_TRACE] == '1'
 except KeyError:
-  _TRACE = False
+    _TRACE = False
+
 
 def IsTrace():
-  return _TRACE
+    return _TRACE
+
 
 def SetTrace():
-  global _TRACE
-  _TRACE = True
+    global _TRACE
+    _TRACE = True
+
 
 def Trace(fmt, *args):
-  if IsTrace():
-    print(fmt % args, file=sys.stderr)
+    if IsTrace():
+        print(fmt % args, file=sys.stderr)

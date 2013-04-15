@@ -28,13 +28,14 @@ from project import SyncBuffer
 from git_config import GitConfig
 from git_command import git_require, MIN_GIT_VERSION
 
+
 class Init(InteractiveCommand, MirrorSafeCommand):
-  common = True
-  helpSummary = "Initialize repo in the current directory"
-  helpUsage = """
+    common = True
+    helpSummary = "Initialize repo in the current directory"
+    helpUsage = """
 %prog [options]
 """
-  helpDescription = """
+    helpDescription = """
 The '%prog' command is run once to install and initialize repo.
 The latest repo source code and manifest collection is downloaded
 from the server and is installed in the .repo/ directory in the
@@ -63,299 +64,300 @@ manifest, a subsequent `repo sync` (or `repo sync -d`) is necessary
 to update the working directory files.
 """
 
-  def _Options(self, p):
-    # Logging
-    g = p.add_option_group('Logging options')
-    g.add_option('-q', '--quiet',
-                 dest="quiet", action="store_true", default=False,
-                 help="be quiet")
+    def _Options(self, p):
+        # Logging
+        g = p.add_option_group('Logging options')
+        g.add_option('-q', '--quiet',
+                     dest="quiet", action="store_true", default=False,
+                     help="be quiet")
 
-    # Manifest
-    g = p.add_option_group('Manifest options')
-    g.add_option('-u', '--manifest-url',
-                 dest='manifest_url',
-                 help='manifest repository location', metavar='URL')
-    g.add_option('-b', '--manifest-branch',
-                 dest='manifest_branch',
-                 help='manifest branch or revision', metavar='REVISION')
-    g.add_option('-m', '--manifest-name',
-                 dest='manifest_name', default='default.xml',
-                 help='initial manifest file', metavar='NAME.xml')
-    g.add_option('--mirror',
-                 dest='mirror', action='store_true',
-                 help='create a replica of the remote repositories '
-                      'rather than a client working directory')
-    g.add_option('--reference',
-                 dest='reference',
-                 help='location of mirror directory', metavar='DIR')
-    g.add_option('--depth', type='int', default=None,
-                 dest='depth',
-                 help='create a shallow clone with given depth; see git clone')
-    g.add_option('-g', '--groups',
-                 dest='groups', default='all,-notdefault',
-                 help='restrict manifest projects to ones with a specified group',
-                 metavar='GROUP')
-    g.add_option('-p', '--platform',
-                 dest='platform', default='auto',
-                 help='restrict manifest projects to ones with a specified '
-                      'platform group [auto|all|none|linux|darwin|...]',
-                 metavar='PLATFORM')
+        # Manifest
+        g = p.add_option_group('Manifest options')
+        g.add_option('-u', '--manifest-url',
+                     dest='manifest_url',
+                     help='manifest repository location', metavar='URL')
+        g.add_option('-b', '--manifest-branch',
+                     dest='manifest_branch',
+                     help='manifest branch or revision', metavar='REVISION')
+        g.add_option('-m', '--manifest-name',
+                     dest='manifest_name', default='default.xml',
+                     help='initial manifest file', metavar='NAME.xml')
+        g.add_option('--mirror',
+                     dest='mirror', action='store_true',
+                     help='create a replica of the remote repositories '
+                          'rather than a client working directory')
+        g.add_option('--reference',
+                     dest='reference',
+                     help='location of mirror directory', metavar='DIR')
+        g.add_option('--depth', type='int', default=None,
+                     dest='depth',
+                     help='create a shallow clone with given depth; see git clone')
+        g.add_option('-g', '--groups',
+                     dest='groups', default='all,-notdefault',
+                     help='restrict manifest projects to ones with a specified group',
+                     metavar='GROUP')
+        g.add_option('-p', '--platform',
+                     dest='platform', default='auto',
+                     help='restrict manifest projects to ones with a specified '
+                          'platform group [auto|all|none|linux|darwin|...]',
+                     metavar='PLATFORM')
 
-    # Tool
-    g = p.add_option_group('repo Version options')
-    g.add_option('--repo-url',
-                 dest='repo_url',
-                 help='repo repository location', metavar='URL')
-    g.add_option('--repo-branch',
-                 dest='repo_branch',
-                 help='repo branch or revision', metavar='REVISION')
-    g.add_option('--no-repo-verify',
-                 dest='no_repo_verify', action='store_true',
-                 help='do not verify repo source code')
+        # Tool
+        g = p.add_option_group('repo Version options')
+        g.add_option('--repo-url',
+                     dest='repo_url',
+                     help='repo repository location', metavar='URL')
+        g.add_option('--repo-branch',
+                     dest='repo_branch',
+                     help='repo branch or revision', metavar='REVISION')
+        g.add_option('--no-repo-verify',
+                     dest='no_repo_verify', action='store_true',
+                     help='do not verify repo source code')
 
-    # Other
-    g = p.add_option_group('Other options')
-    g.add_option('--config-name',
-                 dest='config_name', action="store_true", default=False,
-                 help='Always prompt for name/e-mail')
+        # Other
+        g = p.add_option_group('Other options')
+        g.add_option('--config-name',
+                     dest='config_name', action="store_true", default=False,
+                     help='Always prompt for name/e-mail')
 
-  def _RegisteredEnvironmentOptions(self):
-    return {'REPO_MANIFEST_URL': 'manifest_url',
-            'REPO_MIRROR_LOCATION': 'reference'}
+    def _RegisteredEnvironmentOptions(self):
+        return {'REPO_MANIFEST_URL': 'manifest_url',
+                'REPO_MIRROR_LOCATION': 'reference'}
 
-  def _SyncManifest(self, opt):
-    m = self.manifest.manifestProject
-    is_new = not m.Exists
+    def _SyncManifest(self, opt):
+        m = self.manifest.manifestProject
+        is_new = not m.Exists
 
-    if is_new:
-      if not opt.manifest_url:
-        print('fatal: manifest url (-u) is required.', file=sys.stderr)
-        sys.exit(1)
+        if is_new:
+            if not opt.manifest_url:
+                print('fatal: manifest url (-u) is required.', file=sys.stderr)
+                sys.exit(1)
 
-      if not opt.quiet:
-        print('Get %s' % GitConfig.ForUser().UrlInsteadOf(opt.manifest_url),
-              file=sys.stderr)
-      m._InitGitDir()
+            if not opt.quiet:
+                print('Get %s' % GitConfig.ForUser().UrlInsteadOf(opt.manifest_url),
+                      file=sys.stderr)
+            m._InitGitDir()
 
-      if opt.manifest_branch:
-        m.revisionExpr = opt.manifest_branch
-      else:
-        m.revisionExpr = 'refs/heads/master'
-    else:
-      if opt.manifest_branch:
-        m.revisionExpr = opt.manifest_branch
-      else:
-        m.PreSync()
+            if opt.manifest_branch:
+                m.revisionExpr = opt.manifest_branch
+            else:
+                m.revisionExpr = 'refs/heads/master'
+        else:
+            if opt.manifest_branch:
+                m.revisionExpr = opt.manifest_branch
+            else:
+                m.PreSync()
 
-    if opt.manifest_url:
-      r = m.GetRemote(m.remote.name)
-      r.url = opt.manifest_url
-      r.ResetFetch()
-      r.Save()
+        if opt.manifest_url:
+            r = m.GetRemote(m.remote.name)
+            r.url = opt.manifest_url
+            r.ResetFetch()
+            r.Save()
 
-    groups = re.split(r'[,\s]+', opt.groups)
-    all_platforms = ['linux', 'darwin']
-    platformize = lambda x: 'platform-' + x
-    if opt.platform == 'auto':
-      if (not opt.mirror and
-          not m.config.GetString('repo.mirror') == 'true'):
-        groups.append(platformize(platform.system().lower()))
-    elif opt.platform == 'all':
-      groups.extend(list(map(platformize, all_platforms)))
-    elif opt.platform in all_platforms:
-      groups.extend(platformize(opt.platform))
-    elif opt.platform != 'none':
-      print('fatal: invalid platform flag', file=sys.stderr)
-      sys.exit(1)
+        groups = re.split(r'[,\s]+', opt.groups)
+        all_platforms = ['linux', 'darwin']
+        platformize = lambda x: 'platform-' + x
+        if opt.platform == 'auto':
+            if (not opt.mirror and
+                    not m.config.GetString('repo.mirror') == 'true'):
+                groups.append(platformize(platform.system().lower()))
+        elif opt.platform == 'all':
+            groups.extend(list(map(platformize, all_platforms)))
+        elif opt.platform in all_platforms:
+            groups.extend(platformize(opt.platform))
+        elif opt.platform != 'none':
+            print('fatal: invalid platform flag', file=sys.stderr)
+            sys.exit(1)
 
-    groups = [x for x in groups if x]
-    groupstr = ','.join(groups)
-    if opt.platform == 'auto' and groupstr == 'all,-notdefault,platform-' + platform.system().lower():
-      groupstr = None
-    m.config.SetString('manifest.groups', groupstr)
+        groups = [x for x in groups if x]
+        groupstr = ','.join(groups)
+        if opt.platform == 'auto' and groupstr == 'all,-notdefault,platform-' + platform.system().lower():
+            groupstr = None
+        m.config.SetString('manifest.groups', groupstr)
 
-    if opt.reference:
-      m.config.SetString('repo.reference', opt.reference)
+        if opt.reference:
+            m.config.SetString('repo.reference', opt.reference)
 
-    if opt.mirror:
-      if is_new:
-        m.config.SetString('repo.mirror', 'true')
-      else:
-        print('fatal: --mirror is only supported when initializing a new '
-              'workspace.', file=sys.stderr)
-        print('Either delete the .repo folder in this workspace, or initialize '
-              'in another location.', file=sys.stderr)
-        sys.exit(1)
+        if opt.mirror:
+            if is_new:
+                m.config.SetString('repo.mirror', 'true')
+            else:
+                print('fatal: --mirror is only supported when initializing a new '
+                      'workspace.', file=sys.stderr)
+                print('Either delete the .repo folder in this workspace, or initialize '
+                      'in another location.', file=sys.stderr)
+                sys.exit(1)
 
-    if not m.Sync_NetworkHalf(is_new=is_new):
-      r = m.GetRemote(m.remote.name)
-      print('fatal: cannot obtain manifest %s' % r.url, file=sys.stderr)
+        if not m.Sync_NetworkHalf(is_new=is_new):
+            r = m.GetRemote(m.remote.name)
+            print('fatal: cannot obtain manifest %s' % r.url, file=sys.stderr)
 
-      # Better delete the manifest git dir if we created it; otherwise next
-      # time (when user fixes problems) we won't go through the "is_new" logic.
-      if is_new:
-        shutil.rmtree(m.gitdir, onerror=portable.removeReadOnlyFilesHandler)
-      sys.exit(1)
+            # Better delete the manifest git dir if we created it; otherwise next
+            # time (when user fixes problems) we won't go through the "is_new" logic.
+            if is_new:
+                shutil.rmtree(m.gitdir, onerror=portable.removeReadOnlyFilesHandler)
+            sys.exit(1)
 
-    if opt.manifest_branch:
-      m.MetaBranchSwitch(opt.manifest_branch)
+        if opt.manifest_branch:
+            m.MetaBranchSwitch(opt.manifest_branch)
 
-    syncbuf = SyncBuffer(m.config)
-    m.Sync_LocalHalf(syncbuf)
-    syncbuf.Finish()
+        syncbuf = SyncBuffer(m.config)
+        m.Sync_LocalHalf(syncbuf)
+        syncbuf.Finish()
 
-    if is_new or m.CurrentBranch is None:
-      if not m.StartBranch('default'):
-        print('fatal: cannot create default in manifest', file=sys.stderr)
-        sys.exit(1)
+        if is_new or m.CurrentBranch is None:
+            if not m.StartBranch('default'):
+                print('fatal: cannot create default in manifest', file=sys.stderr)
+                sys.exit(1)
 
-  def _LinkManifest(self, name):
-    if not name:
-      print('fatal: manifest name (-m) is required.', file=sys.stderr)
-      sys.exit(1)
+    def _LinkManifest(self, name):
+        if not name:
+            print('fatal: manifest name (-m) is required.', file=sys.stderr)
+            sys.exit(1)
 
-    try:
-      self.manifest.Link(name)
-    except ManifestParseError as e:
-      print("fatal: manifest '%s' not available" % name, file=sys.stderr)
-      print('fatal: %s' % str(e), file=sys.stderr)
-      sys.exit(1)
+        try:
+            self.manifest.Link(name)
+        except ManifestParseError as e:
+            print("fatal: manifest '%s' not available" % name, file=sys.stderr)
+            print('fatal: %s' % str(e), file=sys.stderr)
+            sys.exit(1)
 
-  def _Prompt(self, prompt, value):
-    sys.stdout.write('%-10s [%s]: ' % (prompt, value))
-    sys.stdout.flush()
-    a = sys.stdin.readline().strip()
-    if a == '':
-      return value
-    return a
+    def _Prompt(self, prompt, value):
+        sys.stdout.write('%-10s [%s]: ' % (prompt, value))
+        sys.stdout.flush()
+        a = sys.stdin.readline().strip()
+        if a == '':
+            return value
+        return a
 
-  def _ShouldConfigureUser(self):
-    gc = self.manifest.globalConfig
-    mp = self.manifest.manifestProject
+    def _ShouldConfigureUser(self):
+        gc = self.manifest.globalConfig
+        mp = self.manifest.manifestProject
 
-    # If we don't have local settings, get from global.
-    if not mp.config.Has('user.name') or not mp.config.Has('user.email'):
-      if not gc.Has('user.name') or not gc.Has('user.email'):
-        return True
+        # If we don't have local settings, get from global.
+        if not mp.config.Has('user.name') or not mp.config.Has('user.email'):
+            if not gc.Has('user.name') or not gc.Has('user.email'):
+                return True
 
-      mp.config.SetString('user.name', gc.GetString('user.name'))
-      mp.config.SetString('user.email', gc.GetString('user.email'))
+            mp.config.SetString('user.name', gc.GetString('user.name'))
+            mp.config.SetString('user.email', gc.GetString('user.email'))
 
-    print()
-    print('Your identity is: %s <%s>' % (mp.config.GetString('user.name'),
-                                         mp.config.GetString('user.email')))
-    print('If you want to change this, please re-run \'repo init\' with --config-name')
-    return False
+        print()
+        print('Your identity is: %s <%s>' % (mp.config.GetString('user.name'),
+                                             mp.config.GetString('user.email')))
+        print('If you want to change this, please re-run \'repo init\' with --config-name')
+        return False
 
-  def _ConfigureUser(self):
-    mp = self.manifest.manifestProject
+    def _ConfigureUser(self):
+        mp = self.manifest.manifestProject
 
-    while True:
-      print()
-      name  = self._Prompt('Your Name', mp.UserName)
-      email = self._Prompt('Your Email', mp.UserEmail)
+        while True:
+            print()
+            name = self._Prompt('Your Name', mp.UserName)
+            email = self._Prompt('Your Email', mp.UserEmail)
 
-      print()
-      print('Your identity is: %s <%s>' % (name, email))
-      sys.stdout.write('is this correct [y/N]? ')
-      sys.stdout.flush()
-      a = sys.stdin.readline().strip().lower()
-      if a in ('yes', 'y', 't', 'true'):
-        break
+            print()
+            print('Your identity is: %s <%s>' % (name, email))
+            sys.stdout.write('is this correct [y/N]? ')
+            sys.stdout.flush()
+            a = sys.stdin.readline().strip().lower()
+            if a in ('yes', 'y', 't', 'true'):
+                break
 
-    if name != mp.UserName:
-      mp.config.SetString('user.name', name)
-    if email != mp.UserEmail:
-      mp.config.SetString('user.email', email)
+        if name != mp.UserName:
+            mp.config.SetString('user.name', name)
+        if email != mp.UserEmail:
+            mp.config.SetString('user.email', email)
 
-  def _HasColorSet(self, gc):
-    for n in ['ui', 'diff', 'status']:
-      if gc.Has('color.%s' % n):
-        return True
-    return False
+    def _HasColorSet(self, gc):
+        for n in ['ui', 'diff', 'status']:
+            if gc.Has('color.%s' % n):
+                return True
+        return False
 
-  def _ConfigureColor(self):
-    gc = self.manifest.globalConfig
-    if self._HasColorSet(gc):
-      return
+    def _ConfigureColor(self):
+        gc = self.manifest.globalConfig
+        if self._HasColorSet(gc):
+            return
 
-    class _Test(Coloring):
-      def __init__(self):
-        Coloring.__init__(self, gc, 'test color display')
-        self._on = True
-    out = _Test()
+        class _Test(Coloring):
+            def __init__(self):
+                Coloring.__init__(self, gc, 'test color display')
+                self._on = True
 
-    print()
-    print("Testing colorized output (for 'repo diff', 'repo status'):")
+        out = _Test()
 
-    for c in ['black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan']:
-      out.write(' ')
-      out.printer(fg=c)(' %-6s ', c)
-    out.write(' ')
-    out.printer(fg='white', bg='black')(' %s ' % 'white')
-    out.nl()
+        print()
+        print("Testing colorized output (for 'repo diff', 'repo status'):")
 
-    for c in ['bold', 'dim', 'ul', 'reverse']:
-      out.write(' ')
-      out.printer(fg='black', attr=c)(' %-6s ', c)
-    out.nl()
+        for c in ['black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan']:
+            out.write(' ')
+            out.printer(fg=c)(' %-6s ', c)
+        out.write(' ')
+        out.printer(fg='white', bg='black')(' %s ' % 'white')
+        out.nl()
 
-    sys.stdout.write('Enable color display in this user account (y/N)? ')
-    sys.stdout.flush()
-    a = sys.stdin.readline().strip().lower()
-    if a in ('y', 'yes', 't', 'true', 'on'):
-      gc.SetString('color.ui', 'auto')
+        for c in ['bold', 'dim', 'ul', 'reverse']:
+            out.write(' ')
+            out.printer(fg='black', attr=c)(' %-6s ', c)
+        out.nl()
 
-  def _ConfigureDepth(self, opt):
-    """Configure the depth we'll sync down.
+        sys.stdout.write('Enable color display in this user account (y/N)? ')
+        sys.stdout.flush()
+        a = sys.stdin.readline().strip().lower()
+        if a in ('y', 'yes', 't', 'true', 'on'):
+            gc.SetString('color.ui', 'auto')
 
-    Args:
-      opt: Options from optparse.  We care about opt.depth.
-    """
-    # Opt.depth will be non-None if user actually passed --depth to repo init.
-    if opt.depth is not None:
-      if opt.depth > 0:
-        # Positive values will set the depth.
-        depth = str(opt.depth)
-      else:
-        # Negative numbers will clear the depth; passing None to SetString
-        # will do that.
-        depth = None
+    def _ConfigureDepth(self, opt):
+        """Configure the depth we'll sync down.
 
-      # We store the depth in the main manifest project.
-      self.manifest.manifestProject.config.SetString('repo.depth', depth)
+        Args:
+          opt: Options from optparse.  We care about opt.depth.
+        """
+        # Opt.depth will be non-None if user actually passed --depth to repo init.
+        if opt.depth is not None:
+            if opt.depth > 0:
+                # Positive values will set the depth.
+                depth = str(opt.depth)
+            else:
+                # Negative numbers will clear the depth; passing None to SetString
+                # will do that.
+                depth = None
 
-  def _DisplayResult(self):
-    if self.manifest.IsMirror:
-      init_type = 'mirror '
-    else:
-      init_type = ''
+            # We store the depth in the main manifest project.
+            self.manifest.manifestProject.config.SetString('repo.depth', depth)
 
-    print()
-    print('repo %shas been initialized in %s'
-          % (init_type, self.manifest.topdir))
+    def _DisplayResult(self):
+        if self.manifest.IsMirror:
+            init_type = 'mirror '
+        else:
+            init_type = ''
 
-    current_dir = os.getcwd()
-    if current_dir != self.manifest.topdir:
-      print('If this is not the directory in which you want to initialize '
-            'repo, please run:')
-      print('   rm -r %s/.repo' % self.manifest.topdir)
-      print('and try again.')
+        print()
+        print('repo %shas been initialized in %s'
+              % (init_type, self.manifest.topdir))
 
-  def Execute(self, opt, args):
-    git_require(MIN_GIT_VERSION, fail=True)
+        current_dir = os.getcwd()
+        if current_dir != self.manifest.topdir:
+            print('If this is not the directory in which you want to initialize '
+                  'repo, please run:')
+            print('   rm -r %s/.repo' % self.manifest.topdir)
+            print('and try again.')
 
-    if opt.reference:
-      opt.reference = os.path.expanduser(opt.reference)
+    def Execute(self, opt, args):
+        git_require(MIN_GIT_VERSION, fail=True)
 
-    self._SyncManifest(opt)
-    self._LinkManifest(opt.manifest_name)
+        if opt.reference:
+            opt.reference = os.path.expanduser(opt.reference)
 
-    if os.isatty(0) and os.isatty(1) and not self.manifest.IsMirror:
-      if opt.config_name or self._ShouldConfigureUser():
-        self._ConfigureUser()
-      self._ConfigureColor()
+        self._SyncManifest(opt)
+        self._LinkManifest(opt.manifest_name)
 
-    self._ConfigureDepth(opt)
+        if os.isatty(0) and os.isatty(1) and not self.manifest.IsMirror:
+            if opt.config_name or self._ShouldConfigureUser():
+                self._ConfigureUser()
+            self._ConfigureColor()
 
-    self._DisplayResult()
+        self._ConfigureDepth(opt)
+
+        self._DisplayResult()

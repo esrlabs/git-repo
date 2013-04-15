@@ -19,13 +19,14 @@ import sys
 
 from command import PagedCommand
 
+
 class Manifest(PagedCommand):
-  common = False
-  helpSummary = "Manifest inspection utility"
-  helpUsage = """
+    common = False
+    helpSummary = "Manifest inspection utility"
+    helpUsage = """
 %prog [-o {-|NAME.xml} [-r]]
 """
-  _helpDescription = """
+    _helpDescription = """
 
 With the -o option, exports the current manifest for inspection.
 The manifest and (if present) local_manifest.xml are combined
@@ -34,52 +35,52 @@ in a Git repository for use during future 'repo init' invocations.
 
 """
 
-  @property
-  def helpDescription(self):
-    helptext = self._helpDescription + '\n'
-    r = os.path.dirname(__file__)
-    r = os.path.dirname(r)
-    fd = open(os.path.join(r, 'docs', 'manifest-format.txt'))
-    for line in fd:
-      helptext += line
-    fd.close()
-    return helptext
+    @property
+    def helpDescription(self):
+        helptext = self._helpDescription + '\n'
+        r = os.path.dirname(__file__)
+        r = os.path.dirname(r)
+        fd = open(os.path.join(r, 'docs', 'manifest-format.txt'))
+        for line in fd:
+            helptext += line
+        fd.close()
+        return helptext
 
-  def _Options(self, p):
-    p.add_option('-r', '--revision-as-HEAD',
-                 dest='peg_rev', action='store_true',
-                 help='Save revisions as current HEAD')
-    p.add_option('--suppress-upstream-revision', dest='peg_rev_upstream',
-                 default=True, action='store_false',
-                 help='If in -r mode, do not write the upstream field.  '
-                 'Only of use if the branch names for a sha1 manifest are '
-                 'sensitive.')
-    p.add_option('-o', '--output-file',
-                 dest='output_file',
-                 default='-',
-                 help='File to save the manifest to',
-                 metavar='-|NAME.xml')
+    def _Options(self, p):
+        p.add_option('-r', '--revision-as-HEAD',
+                     dest='peg_rev', action='store_true',
+                     help='Save revisions as current HEAD')
+        p.add_option('--suppress-upstream-revision', dest='peg_rev_upstream',
+                     default=True, action='store_false',
+                     help='If in -r mode, do not write the upstream field.  '
+                          'Only of use if the branch names for a sha1 manifest are '
+                          'sensitive.')
+        p.add_option('-o', '--output-file',
+                     dest='output_file',
+                     default='-',
+                     help='File to save the manifest to',
+                     metavar='-|NAME.xml')
 
-  def _Output(self, opt):
-    if opt.output_file == '-':
-      fd = sys.stdout
-    else:
-      fd = open(opt.output_file, 'w')
-    self.manifest.Save(fd,
-                       peg_rev = opt.peg_rev,
-                       peg_rev_upstream = opt.peg_rev_upstream)
-    fd.close()
-    if opt.output_file != '-':
-      print('Saved manifest to %s' % opt.output_file, file=sys.stderr)
+    def _Output(self, opt):
+        if opt.output_file == '-':
+            fd = sys.stdout
+        else:
+            fd = open(opt.output_file, 'w')
+        self.manifest.Save(fd,
+                           peg_rev=opt.peg_rev,
+                           peg_rev_upstream=opt.peg_rev_upstream)
+        fd.close()
+        if opt.output_file != '-':
+            print('Saved manifest to %s' % opt.output_file, file=sys.stderr)
 
-  def Execute(self, opt, args):
-    if args:
-      self.Usage()
+    def Execute(self, opt, args):
+        if args:
+            self.Usage()
 
-    if opt.output_file is not None:
-      self._Output(opt)
-      return
+        if opt.output_file is not None:
+            self._Output(opt)
+            return
 
-    print('error: no operation to perform', file=sys.stderr)
-    print('error: see repo help manifest', file=sys.stderr)
-    sys.exit(1)
+        print('error: no operation to perform', file=sys.stderr)
+        print('error: see repo help manifest', file=sys.stderr)
+        sys.exit(1)
