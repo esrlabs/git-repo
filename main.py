@@ -419,7 +419,7 @@ def _Debug(host, env):
             else:
                 sys.path.append("C:\\Users\mputz\.IntelliJIdea12\config\plugins\python\pycharm-debug-py3k.egg")
                 sys.path.append("C:\\Users\mputz\.IntelliJIdea12\config\plugins\python\helpers\pydev")
-            import pydevd as pydevd
+            import pydevd
 
         pydevd.settrace(host, port=19499, stdoutToServer=True, stderrToServer=True)
         print("hey")
@@ -485,6 +485,10 @@ def _Main(argv):
 
     gopts = repo.config[2]
     if gopts.debug:
+        print("enter debug mode, host %s" % gopts.debug_host)
+        _Debug(gopts.debug_host, gopts.debug_env)
+
+    if gopts.debug:
         if portable.isPosix():
             # deactivate pager on posix systems since forked process cant be debugged
             os.environ['GIT_PAGER'] = ''
@@ -494,11 +498,6 @@ def _Main(argv):
         if _WindowsPager(repo):
             # everything was already done; so exit
             return 0
-
-    if gopts.debug:
-        print("enter debug mode, host %s" % gopts.debug_host)
-        _Debug(gopts.debug_host, gopts.debug_env)
-        print("done debugging?")
 
     try:
         try:
