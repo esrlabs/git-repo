@@ -482,19 +482,21 @@ def _Main(argv):
     repo = _Repo(opt.repodir)
     repo._Config(argv)
 
+    gopts = repo.config[2]
+    if gopts.debug:
+        if portable.isPosix():
+            # deactivate pager on posix systems since forked process cant be debugged
+            os.environ['GIT_PAGER'] = ''
+
     # intercept here if on Windows and Pager is required
     if not portable.isPosix():
         if _WindowsPager(repo):
             # everything was already done; so exit
             return 0
 
-    gopts = repo.config[2]
     if gopts.debug:
         print("enter debug mode, host %s" % gopts.debug_host)
         _Debug(gopts.debug_host, gopts.debug_env)
-        if portable.isPosix():
-            # deactivate pager on posix systems since forked process cant be debugged
-            os.environ['GIT_PAGER'] = ''
 
     try:
         try:
@@ -518,7 +520,7 @@ def _Main(argv):
             argv.insert(0, __file__)
             subprocess.call(argv)
         except OSError as e:
-            print('fatal: cannot restart repo after upgrade (command %s)' % argv, file=sys.stderr)
+            print('fatal: cannot restart repo after upgrade', file=sys.stderr)
             print('fatal: %s' % e, file=sys.stderr)
             result = 128
 
