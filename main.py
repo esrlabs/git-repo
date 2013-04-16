@@ -497,6 +497,7 @@ def _Main(argv):
     if gopts.debug:
         print("enter debug mode, host %s" % gopts.debug_host)
         _Debug(gopts.debug_host, gopts.debug_env)
+        print("done debugging?")
 
     try:
         try:
