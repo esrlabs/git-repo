@@ -41,6 +41,7 @@ The editrights tools is provided as part of git-repo for Microsoft Windows.
 	
 * Add Repo to your path environment variable: %USERPROFILE%\bin;
 * Create a HOME environment variable that points to %USERPROFILE% (necessary for OpenSSH to find its .ssh directory).
+* Create a GIT_EDITOR environment variable that has an editor executable as value. For this, first add the home directory of the editor executable to the path environment variable. GIT_EDITOR can than be set to "notepad++.exe", "gvim.exe", for example.
 	
 ### Setup steps for Linux ###
 
