@@ -698,8 +698,8 @@ def _VerifyTag(project):
         return False
 
     env = os.environ.copy()
-    env['GIT_DIR'] = project.gitdir.encode()
-    env['GNUPGHOME'] = gpg_dir.encode()
+    env['GIT_DIR'] = project.gitdir
+    env['GNUPGHOME'] = gpg_dir
 
     cmd = [GIT, 'tag', '-v', cur]
     proc = subprocess.Popen(cmd,
