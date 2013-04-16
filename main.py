@@ -516,6 +516,7 @@ def _Main(argv):
         #
         argv = list(sys.argv)
         argv.extend(rce.extra_args)
+        argv = [sys.executable] + argv
         try:
             argv.insert(0, __file__)
             subprocess.call(argv)
