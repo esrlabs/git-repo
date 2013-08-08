@@ -6,6 +6,7 @@ Bugs:
 
 Features:
 * upload via https
+* upload without reviewing
 
 # Notes on compability
 

@@ -145,6 +145,9 @@ Gerrit Code Review:  http://code.google.com/p/gerrit/
         p.add_option('-d', '--draft',
                      action='store_true', dest='draft', default=False,
                      help='If specified, upload as a draft.')
+        p.add_option('-n', '--no-review',
+                     action='store_true', dest='no_review', default=False,
+                     help='Uploads without reviewing.')
 
         # Options relating to upload hook.  Note that verify and no-verify are NOT
         # opposites of each other, which is why they store to different locations.
@@ -169,7 +172,7 @@ Gerrit Code Review:  http://code.google.com/p/gerrit/
                      dest='allow_all_hooks', action='store_true',
                      help='Run the upload hook without prompting.')
 
-    def _SingleBranch(self, opt, branch, people):
+    def _SingleBranch(self, opt, branch, people, no_review):
         project = branch.project
         name = branch.name
         remote = project.GetBranch(name).remote
@@ -203,11 +206,11 @@ Gerrit Code Review:  http://code.google.com/p/gerrit/
                 answer = _ConfirmManyUploads()
 
         if answer:
-            self._UploadAndReport(opt, [branch], people)
+            self._UploadAndReport(opt, [branch], people, no_review)
         else:
             _die("upload aborted by user")
 
-    def _MultipleBranches(self, opt, pending, people):
+    def _MultipleBranches(self, opt, pending, people, no_review):
         projects = {}
         branches = {}
 
@@ -284,7 +287,7 @@ Gerrit Code Review:  http://code.google.com/p/gerrit/
             if not _ConfirmManyUploads(multiple_branches=True):
                 _die("upload aborted by user")
 
-        self._UploadAndReport(opt, todo, people)
+        self._UploadAndReport(opt, todo, people, no_review)
 
     def _AppendAutoCcList(self, branch, people):
         """
@@ -311,7 +314,7 @@ Gerrit Code Review:  http://code.google.com/p/gerrit/
         except (AttributeError, IndexError):
             return ""
 
-    def _UploadAndReport(self, opt, todo, original_people):
+    def _UploadAndReport(self, opt, todo, original_people, no_review):
         have_errors = False
         for branch in todo:
             try:
@@ -340,7 +343,7 @@ Gerrit Code Review:  http://code.google.com/p/gerrit/
                     key = 'review.%s.uploadtopic' % branch.project.remote.review
                     opt.auto_topic = branch.project.config.GetBoolean(key)
 
-                branch.UploadForReview(people, auto_topic=opt.auto_topic, draft=opt.draft)
+                branch.Upload(people, auto_topic=opt.auto_topic, draft=opt.draft, no_review=no_review)
                 branch.uploaded = True
             except UploadError as e:
                 branch.error = e
@@ -409,9 +412,13 @@ Gerrit Code Review:  http://code.google.com/p/gerrit/
             cc = _SplitEmails(opt.cc)
         people = (reviewers, cc)
 
+        no_review = opt.no_review
+        if no_review:
+            print("WARNING: uploading without reviewing")
+
         if not pending:
             print("no branches ready for upload", file=sys.stderr)
         elif len(pending) == 1 and len(pending[0][1]) == 1:
-            self._SingleBranch(opt, pending[0][1][0], people)
+            self._SingleBranch(opt, pending[0][1][0], people, no_review)
         else:
-            self._MultipleBranches(opt, pending, people)
+            self._MultipleBranches(opt, pending, people, no_review)
