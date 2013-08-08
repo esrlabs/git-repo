@@ -20,6 +20,7 @@ Features:
         * enable debugging: --debug
         * set debug host: --debug-host=172.31.0.250
           (default localhost, uses port is 19499)
+    * in debugger startup code: set path mappings (! elsewise breakpoints not found)
 * using local git-repo (in $GIT_REPO; branch 'dev') and local git repositories (in $REPOS)
     $GIT_REPO/repo init -u $REPOS/manifest/ --no-repo-verify --repo-branch=dev
 * Tracing: set environment variable

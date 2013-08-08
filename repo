@@ -93,7 +93,7 @@ import subprocess
 import urllib.request
 import urllib.error
 
-home_dot_repo = os.path.expanduser('~/.repoconfig')
+home_dot_repo = os.path.expanduser('~/.repoconfig_esrlabs')
 gpg_dir = os.path.join(home_dot_repo, 'gnupg')
 
 extra_args = []

@@ -81,7 +81,7 @@ class GitConfig(object):
         if pickleFile is None:
             self._pickle = os.path.join(
                 os.path.dirname(self.file),
-                '.repopickle_' + os.path.basename(self.file))
+                '.repopickle_esrlabs_' + os.path.basename(self.file))
         else:
             self._pickle = pickleFile
 

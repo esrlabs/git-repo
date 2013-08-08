@@ -422,7 +422,6 @@ def _Debug(host, env):
             import pydevd
 
         pydevd.settrace(host, port=19499, stdoutToServer=True, stderrToServer=True)
-        print("hey")
 
     except ImportError:
         traceback.print_exc(file=sys.stdout)
