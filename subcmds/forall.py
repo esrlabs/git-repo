@@ -20,9 +20,11 @@ import os
 import select
 import sys
 import subprocess
+import portable
 
 from color import Coloring
 from command import Command, MirrorSafeCommand
+from repo_trace import REPO_TRACE, IsTrace, Trace
 
 _CAN_COLOR = [
     'branch',
@@ -67,6 +69,9 @@ at least one byte of output on stdout.
 
 Environment
 -----------
+
+Note: Variables are referred to in the %PATH% style on Windows systems.
+On unix systems in $PATH style.
 
 pwd is the project's working directory.  If the current client is
 a mirror client, then pwd is the Git repository.
@@ -135,7 +140,7 @@ without iterating through the remaining projects.
         if re.compile(r'^[a-z0-9A-Z_/\.-]+$').match(cmd[0]):
             shell = False
 
-        if shell:
+        if shell and portable.isPosix():
             cmd.append(cmd[0])
         cmd.extend(opt.command[1:])
 
@@ -205,6 +210,14 @@ without iterating through the remaining projects.
                 stdin = None
                 stdout = None
                 stderr = None
+
+            if not portable.isUnix():
+                if type(cmd) is list:
+                    cmd = " ".join(cmd)
+
+            if IsTrace():
+                Trace("execute command: %s" % str(cmd).replace("%", "%%"))
+                Trace("environment is: %s" % str(env))
 
             p = subprocess.Popen(cmd,
                                  cwd=cwd,
