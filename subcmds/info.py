@@ -138,7 +138,7 @@ class Info(PagedCommand):
         self.out.nl()
 
         for c in localCommits:
-            split = c.split()
+            split = c.decode('UTF-8').split()
             self.sha(split[0] + " ")
             self.text(" ".join(split[1:]))
             self.out.nl()
@@ -150,7 +150,7 @@ class Info(PagedCommand):
         self.out.nl()
 
         for c in originCommits:
-            split = c.split()
+            split = c.decode('UTF-8').split()
             self.sha(split[0] + " ")
             self.text(" ".join(split[1:]))
             self.out.nl()
@@ -190,7 +190,7 @@ class Info(PagedCommand):
             self.out.nl()
 
             for commit in commits:
-                split = commit.split()
+                split = commit.decode('UTF-8').split()
                 self.text('{0:38}{1} '.format('', '-'))
                 self.sha(split[0] + " ")
                 self.text(" ".join(split[1:]))
