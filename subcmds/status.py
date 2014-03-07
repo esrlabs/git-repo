@@ -117,7 +117,7 @@ the following meanings:
         status_header = ' --\t'
         for item in dirs:
             if not os.path.isdir(item):
-                outstring.write(''.join([status_header, item]))
+                outstring.write(''.join([status_header, item, '\n']))
                 continue
             if item in proj_dirs:
                 continue
@@ -126,7 +126,7 @@ the following meanings:
                                   glob.glob('%s/*' % item), \
                                   proj_dirs, proj_dirs_parents, outstring)
                 continue
-            outstring.write(''.join([status_header, item, '/']))
+            outstring.write(''.join([status_header, item, '/', '\n']))
 
     def Execute(self, opt, args):
         all_projects = self.GetProjects(args)
@@ -182,18 +182,20 @@ the following meanings:
             try:
                 os.chdir(self.manifest.topdir)
 
-                outstring = io.StringIO.StringIO()
+                outstring = io.StringIO()
                 self._FindOrphans(glob.glob('.*') + \
                                   glob.glob('*'), \
                                   proj_dirs, proj_dirs_parents, outstring)
 
-                if outstring.buflist:
+                if outstring.tell() > 0:
                     output = StatusColoring(self.manifest.globalConfig)
                     output.project('Objects not within a project (orphans)')
                     output.nl()
-                    for entry in outstring.buflist:
-                        output.untracked(entry)
-                        output.nl()
+                    outstring.seek(0)
+                    lines = outstring.readlines()
+                    for line in lines[0:len(lines)-1]:
+                        output.untracked(line)
+                    output.untracked(str.rstrip(lines[len(lines)-1]))
                 else:
                     print('No orphan files or directories')
 
