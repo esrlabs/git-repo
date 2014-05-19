@@ -36,8 +36,8 @@ The editrights tools is provided as part of git-repo for Microsoft Windows.
 ###### Git Bash ######
 
     mkdir ~/bin
-    curl https://raw.github.com/esrlabs/git-repo/master/repo > ~/bin/repo
-    curl https://raw.github.com/esrlabs/git-repo/master/repo.cmd > ~/bin/repo.cmd
+    curl https://raw.githubusercontent.com/esrlabs/git-repo/master/repo > ~/bin/repo
+    curl https://raw.githubusercontent.com/esrlabs/git-repo/master/repo.cmd > ~/bin/repo.cmd
 	
 * Add Repo to your path environment variable: %USERPROFILE%\bin;
 * Create a HOME environment variable that points to %USERPROFILE% (necessary for OpenSSH to find its .ssh directory).
