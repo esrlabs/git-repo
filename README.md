@@ -21,7 +21,7 @@ The editrights tools is provided as part of git-repo for Microsoft Windows.
 * Download [Git (http://git-scm.com/downloads)](http://git-scm.com/downloads)
 * Add Git to your path environment variable: e.g. C:\Program Files (x86)\Git\cmd;
 * Add MinGW to your path environment variable: e.g. C:\Program Files (x86)\Git\bin;
-	
+
 ##### Download and install Python #####
 * Download [Python 3+ (http://python.org/download/releases/3.3.0/)](http://python.org/download/releases/3.3.0/)
 * Add Python to your path environment variable: e.g. C:\Python33;
@@ -32,22 +32,26 @@ The editrights tools is provided as part of git-repo for Microsoft Windows.
     md %USERPROFILE%\bin
     curl https://raw.github.com/esrlabs/git-repo/master/repo > %USERPROFILE%/bin/repo
     curl https://raw.github.com/esrlabs/git-repo/master/repo.cmd > %USERPROFILE%/bin/repo.cmd
-	
+
 ###### Git Bash ######
 
     mkdir ~/bin
     curl https://raw.githubusercontent.com/esrlabs/git-repo/master/repo > ~/bin/repo
     curl https://raw.githubusercontent.com/esrlabs/git-repo/master/repo.cmd > ~/bin/repo.cmd
-	
+
 * Add Repo to your path environment variable: %USERPROFILE%\bin;
 * Create a HOME environment variable that points to %USERPROFILE% (necessary for OpenSSH to find its .ssh directory).
 * Create a GIT_EDITOR environment variable that has an editor executable as value. For this, first add the home directory of the editor executable to the path environment variable. GIT_EDITOR can than be set to "notepad++.exe", "gvim.exe", for example.
-	
+
 ### Setup steps for Linux ###
 
 ##### Downloading and installing Git and Python #####
 * sudo apt-get install git-core
-* Since our Repo requires Python 3.3, use the following commands to switch between multiple Python versions:
+* Since our Repo requires Python 3.3, we recommend to change the first line of the ~/bin/repo executable to:
+
+    #!/usr/bin/env python3.3
+
+* Alternatively, use the following commands to switch between multiple Python versions:
 
 <!-- code block -->
 
