@@ -49,6 +49,8 @@ The editrights tools is provided as part of git-repo for Microsoft Windows.
 * sudo apt-get install git-core
 * Since our Repo requires Python 3.3, we recommend to change the first line of the ~/bin/repo executable to:
 
+<!-- code block -->
+
     #!/usr/bin/env python3.3
 
 * Alternatively, use the following commands to switch between multiple Python versions:
