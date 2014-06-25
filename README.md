@@ -63,7 +63,7 @@ The editrights tools is provided as part of git-repo for Microsoft Windows.
 
     $ mkdir ~/bin
     $ PATH=~/bin:$PATH
-	$ curl https://raw.github.com/esrlabs/git-repo/master/repo > ~/bin/repo
+    $ curl https://raw.githubusercontent.com/esrlabs/git-repo/master/repo > ~/bin/repo
     $ chmod a+x ~/bin/repo
 
 ### Usage ###
