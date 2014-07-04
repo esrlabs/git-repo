@@ -21,7 +21,7 @@ from command import PagedCommand
 
 
 class Manifest(PagedCommand):
-    common = False
+    common = True
     helpSummary = "Manifest inspection utility"
     helpUsage = """
 %prog [-o {-|NAME.xml} [-r]]
