@@ -26,6 +26,7 @@ import sys
 import time
 import urllib.request, urllib.parse, urllib.error
 import xmlrpc
+from git_command import GitCommand
 
 #try:
 import threading as _threading
@@ -169,6 +170,9 @@ later is required to fix a server side protocol bug.
         p.add_option('-d', '--detach',
                      dest='detach_head', action='store_true',
                      help='detach projects back to manifest revision')
+        p.add_option('--dry-run', action='store_true',
+                     dest='dry_run',
+                     help='dry run; do not rebase after fetch')
         p.add_option('-c', '--current-branch',
                      dest='current_branch_only', action='store_true',
                      help='fetch only current branch from server')
@@ -190,6 +194,9 @@ later is required to fix a server side protocol bug.
         p.add_option('-p', '--manifest-server-password', action='store',
                      dest='manifest_server_password',
                      help='password to authenticate with the manifest server')
+        p.add_option('-r', '--report', action='store_true',
+                     dest='report',
+                     help='print report after sync')
         p.add_option('--fetch-submodules',
                      dest='fetch_submodules', action='store_true',
                      help='fetch submodules from server')
@@ -633,7 +640,20 @@ later is required to fix a server side protocol bug.
         for project in all_projects:
             pm.update()
             if project.worktree:
-                project.Sync_LocalHalf(syncbuf)
+                if opt.report:
+                    p = GitCommand(project, ['log',
+                        '--pretty=%h %s (%cn, %ar)',
+                        'HEAD..m/master'],
+                           capture_stdout=True)
+                    if p.Wait() != 0:
+                        print("Failed to create report")
+                    else:
+                        if len(p.stdout):
+                            print('\n' + project.name + ':\n')
+                            print(portable.stream2str(p.stdout)[:-1])
+                            print('\n')
+                if not opt.dry_run:
+                    project.Sync_LocalHalf(syncbuf)
         pm.end()
         print(file=sys.stderr)
         if not syncbuf.Finish():
