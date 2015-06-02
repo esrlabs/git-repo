@@ -231,7 +231,7 @@ class _CopyFile:
                 # make the file read-only
                 mode = os.stat(dest)[stat.ST_MODE]
                 mode = mode & ~(stat.S_IWUSR | stat.S_IWGRP | stat.S_IWOTH)
-                os.chmod(dest, mode)
+                # os.chmod(dest, mode)
             except IOError:
                 _error('Cannot copy file %s to %s', src, dest)
 
