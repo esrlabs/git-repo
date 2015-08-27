@@ -84,8 +84,9 @@ class Editor(object):
             fd = None
 
             if re.compile("^.*[$ \t'].*$").match(editor):
-                args = [editor + ' "$@"', 'sh']
-                shell = True
+                editor = re.sub('["\']', '', editor)  ## Removes " or ' from windows path like "C:/Program Files (x86)/GitExtensions/GitExtensions.exe" so they don't go into the Popen list.
+                args = editor.rsplit()                ## supports multiple spaces in windows path, and editor arguments like "C:/Program Files (x86)/GitExtensions/GitExtensions.exe fileeditor".
+                shell = False
             else:
                 args = [editor]
                 shell = False
