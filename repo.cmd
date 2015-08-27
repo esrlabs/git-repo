@@ -1,1 +1,1 @@
-@bash -c "repo %*"
+@call python %~dp0\repo %*
