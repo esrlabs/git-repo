@@ -1,0 +1,49 @@
+#!/bin/sh
+#
+# An example hook script to verify if you are on battery, in case you
+# are running Linux or OS X. Called by git-gc --auto with no arguments.
+# The hook should exit with non-zero status after issuing an appropriate
+# message if it wants to stop the auto repacking.
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+if test -x /sbin/on_ac_power && /sbin/on_ac_power
+then
+	exit 0
+elif test "$(cat /sys/class/power_supply/AC/online 2>/dev/null)" = 1
+then
+	exit 0
+elif grep -q 'on-line' /proc/acpi/ac_adapter/AC/state 2>/dev/null
+then
+	exit 0
+elif grep -q '0x01$' /proc/apm 2>/dev/null
+then
+	exit 0
+elif grep -q "AC Power \+: 1" /proc/pmu/info 2>/dev/null
+then
+	exit 0
+elif test -x /usr/bin/pmset && /usr/bin/pmset -g batt |
+	grep -q "drawing from 'AC Power'"
+then
+	exit 0
+elif test -d /sys/bus/acpi/drivers/battery && test 0 = \
+  "$(find /sys/bus/acpi/drivers/battery/ -type l | wc -l)";
+then
+	# No battery exists.
+	exit 0
+fi
+
+echo "Auto packing deferred; not on AC"
+exit 1
