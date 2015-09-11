@@ -629,7 +629,13 @@ class Remote(object):
       else:
         try:
           info_url = u + 'ssh_info'
-          info = urllib.request.urlopen(info_url).read()
+          from trace import Trace
+          Trace("urlopen %s" % info_url)
+          try:
+            info = urllib.request.urlopen(info_url).read()
+          except Exception:
+            info = 'NOT_AVAILABLE'
+
           if info == 'NOT_AVAILABLE' or '<' in info:
             # If `info` contains '<', we assume the server gave us some sort
             # of HTML response back, like maybe a login page.
