@@ -1,6 +1,9 @@
 import os
+import pager
 import platform
 import socket
+import sys
+import subprocess
 import threading
 from trace import Trace
 
@@ -78,3 +81,61 @@ class socket_reader():
 
   def fileno(self):
     return self.server_socket.fileno()
+
+
+child_process = None
+
+def RunPager(cmd):
+  if isUnix():
+    pager.RunPager(cmd.manifest.globalConfig)
+  else:
+    RunWindowsPager(cmd)
+
+def RunWindowsPager(cmd):
+  executable = pager._SelectPager(cmd.manifest.globalConfig)
+  redirect_all(executable)
+  pager.active = True
+
+def NoPager(cmd):
+  if not isUnix():
+    RunWindowsShell(cmd)
+
+def RunWindowsShell(cmd):
+  executable = _SelectCatenate(cmd.manifest.globalConfig)
+  redirect_all(executable)
+
+def redirect_all(executable):
+  old_sysin = sys.stdin
+  old_sysout = sys.stdout
+  old_syserr = sys.stderr
+  Trace("redirecting to %s" % executable)
+  p = subprocess.Popen([executable], stdin=subprocess.PIPE, stdout=old_sysout, stderr=old_syserr)
+  sys.stdout = p.stdin
+  sys.stderr = p.stdin
+  old_sysout.close()
+  global child_process
+  child_process = p
+
+def _SelectCatenate(globalConfig):
+  try:
+    return os.environ['GIT_CATENATE']
+  except KeyError:
+    pass
+
+  pager = globalConfig.GetString('core.catenate')
+  if pager:
+    return pager
+
+  try:
+    return os.environ['CATENATE']
+  except KeyError:
+    pass
+
+  return 'cat'
+
+def WaitForProcess():
+  if not isUnix():
+    global child_process
+    if child_process:
+      child_process.stdin.close()
+      child_process.wait()

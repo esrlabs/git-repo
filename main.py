@@ -20,6 +20,7 @@ import imp
 import netrc
 import optparse
 import os
+import portable
 import sys
 import time
 
@@ -168,7 +169,10 @@ class _Repo(object):
         if use_pager is None:
           use_pager = cmd.WantPager(copts)
       if use_pager:
-        RunPager(config)
+        # RunPager(cmd)
+        portable.RunPager(cmd)
+    else:
+      portable.NoPager(cmd)
 
     start = time.time()
     try:
@@ -514,12 +518,14 @@ def _Main(argv):
     argv = list(sys.argv)
     argv.extend(rce.extra_args)
     try:
-      os.execv(__file__, argv)
+      # os.execv(__file__, argv)
+      subprocess.call([__file__, argv])
     except OSError as e:
       print('fatal: cannot restart repo after upgrade', file=sys.stderr)
       print('fatal: %s' % e, file=sys.stderr)
       result = 128
 
+  portable.WaitForProcess()
   sys.exit(result)
 
 if __name__ == '__main__':
