@@ -17,6 +17,7 @@ import errno
 import filecmp
 import glob
 import os
+import portable
 import random
 import re
 import shutil
@@ -246,7 +247,8 @@ class _LinkFile(object):
 
   def __linkIt(self, relSrc, absDest):
     # link file if it does not exist or is out of date
-    if not os.path.islink(absDest) or (os.readlink(absDest) != relSrc):
+    # if not os.path.islink(absDest) or (os.readlink(absDest) != relSrc):
+    if not portable.os_path_islink(absDest) or (portable.os_path_realpath(absDest) != relSrc):
       try:
         # remove existing file first, since it might be read-only
         if os.path.exists(absDest):
@@ -255,7 +257,8 @@ class _LinkFile(object):
           dest_dir = os.path.dirname(absDest)
           if not os.path.isdir(dest_dir):
             os.makedirs(dest_dir)
-        os.symlink(relSrc, absDest)
+        # os.symlink(relSrc, absDest)
+        portable.os_symlink(relSrc, absDest)
       except IOError:
         _error('Cannot link file %s to %s', relSrc, absDest)
 
@@ -2231,7 +2234,8 @@ class Project(object):
         continue
 
       dst = os.path.join(hooks, name)
-      if os.path.islink(dst):
+      # if os.path.islink(dst):
+      if portable.os_path_islink(dst):
         continue
       if os.path.exists(dst):
         if filecmp.cmp(stock_hook, dst, shallow=False):
@@ -2240,7 +2244,8 @@ class Project(object):
           _warn("%s: Not replacing locally modified %s hook", self.relpath, name)
           continue
       try:
-        os.symlink(os.path.relpath(stock_hook, os.path.dirname(dst)), dst)
+        # os.symlink(os.path.relpath(stock_hook, os.path.dirname(dst)), dst)
+        portable.os_symlink(os.path.relpath(stock_hook, os.path.dirname(dst)), dst)
       except OSError as e:
         if e.errno == errno.EPERM:
           raise GitError('filesystem must support symlinks')
@@ -2293,6 +2298,10 @@ class Project(object):
       dst = os.path.realpath(os.path.join(destdir, name))
       if os.path.lexists(dst):
         src = os.path.realpath(os.path.join(srcdir, name))
+        src = portable.os_path_realpath(src)
+        dst = portable.os_path_realpath(dst)
+        Trace("%s ~= %s", src, dst)
+
         # Fail if the links are pointing to the wrong place
         if src != dst:
           raise GitError('--force-sync not enabled; cannot overwrite a local '
@@ -2345,8 +2354,10 @@ class Project(object):
             pass
 
         if name in to_symlink:
-          os.symlink(os.path.relpath(src, os.path.dirname(dst)), dst)
-        elif copy_all and not os.path.islink(dst):
+          # os.symlink(os.path.relpath(src, os.path.dirname(dst)), dst)
+          portable.os_symlink(os.path.relpath(src, os.path.dirname(dst)), dst)
+        # elif copy_all and not os.path.islink(dst):
+        elif copy_all and not portable.os_path_islink(dst):
           if os.path.isdir(src):
             shutil.copytree(src, dst)
           elif os.path.isfile(src):

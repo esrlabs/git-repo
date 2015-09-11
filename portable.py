@@ -1,6 +1,8 @@
+import git_config
 import os
 import pager
 import platform
+import re
 import socket
 import sys
 import subprocess
@@ -81,6 +83,139 @@ class socket_reader():
 
   def fileno(self):
     return self.server_socket.fileno()
+
+
+def os_symlink(src, dst):
+  if isUnix():
+    os.symlink(src, dst)
+  else:
+    windows_symlink(src, dst)
+
+def windows_symlink(src, dst):
+  globalConfig = git_config.GitConfig.ForUser()
+
+  src = to_windows_path(src)
+  dst = to_windows_path(dst)
+  is_dir = True if os.path.isdir(os.path.realpath(os.path.join(os.path.dirname(dst), src))) else False
+
+  no_symlinks = globalConfig.GetBoolean("portable.windowsNoSymlinks")
+  if no_symlinks is None or no_symlinks == False:
+    symlink_options_dir = '/D'
+    symlink_options_file = ''
+  else:
+    src = os.path.abspath(os.path.join(os.path.dirname(dst), src))
+    Trace("Using no symlinks for %s from %s to %s", "dir" if is_dir else "file", src, dst)
+    symlink_options_dir = '/J'
+    symlink_options_file = '/H'
+
+  if is_dir:
+    cmd = ['cmd', '/c', 'mklink', symlink_options_dir, dst, src]
+    cmd = filter(len, cmd)
+    Trace(' '.join(cmd))
+    try:
+      subprocess.Popen(cmd, stdout=subprocess.PIPE).wait()
+    except Exception as e:
+      Trace("failed to create dir symlink: %s", e.strerror)
+      pass
+  else:
+    cmd = ['cmd', '/c', 'mklink', symlink_options_file, dst, src]
+    cmd = filter(len, cmd)
+    Trace(' '.join(cmd))
+    try:
+      subprocess.Popen(cmd, stdout=subprocess.PIPE).wait()
+    except Exception as e:
+      Trace("failed to create file symlink: %s", e.strerror)
+      pass
+
+def os_path_islink(path):
+  if isUnix():
+    os.path.islink(path)
+  else:
+    if get_windows_symlink(path) is not None:
+      return True
+    if get_windows_hardlink(path) is not None:
+      return True
+    return False
+
+def os_path_realpath(file_path):
+  if isUnix():
+    os.path.realpath(file_path)
+  else:
+    if not os.path.exists(file_path):
+      return file_path
+    return windows_realpath(file_path)
+
+def windows_realpath(file_path):
+  symlink = file_path
+  while True:
+    s = get_windows_symlink(symlink)
+    if s is None:
+      break
+    else:
+      symlink = s
+
+  hardlink = get_windows_hardlink(symlink)
+  if hardlink is not None:
+    return hardlink
+  else:
+    return symlink
+
+def get_windows_symlink(file_path):
+  if os.path.isdir(file_path):
+    root = os.path.abspath(os.path.join(file_path, os.pardir))
+    file_object = os.path.split(file_path)[1]
+    if not file_object:
+      file_object = os.path.split(os.path.split(file_object)[0])[1]
+  else:
+    root = os.path.dirname(file_path)
+    file_object = os.path.split(file_path)[1]
+
+  cmd = ['cmd', '/c', 'dir', '/AL', root]
+  try:
+    Trace(' '.join(cmd))
+    out = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
+  except:
+    return None
+
+  lines = [s.strip() for s in out.split('\n')]
+  if len(lines) < 6:
+    return None
+
+  pattern = re.compile('.*<(.*)>\\s*(.*) \[(.*)\]$')
+  for line in lines[5:]:
+    result = pattern.match(line)
+    if result:
+      ftype = result.group(1)
+      fname = result.group(2)
+      flink = result.group(3)
+      if file_object == fname:
+        if ftype == 'SYMLINK' or ftype == 'SYMLINKD':
+          new_path = os.path.realpath(os.path.join(os.path.dirname(file_path), flink))
+          Trace("Relative link found: %s -> %s -> %s", fname, flink, new_path)
+        else:
+          new_path = flink
+          Trace("Absolute link found: %s -> %s", fname, flink)
+        return new_path
+  return None
+
+def get_windows_hardlink(file_path):
+  if os.path.isdir(file_path):
+    return None
+
+  cmd = ['cmd', '/c', 'fsutil', 'hardlink', 'list', file_path]
+  try:
+    Trace(' '.join(cmd))
+    out = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
+  except:
+    return None
+
+  lines = [s.strip() for s in out.split('\n')]
+  if len(lines) >= 2 and len(lines[1]) > 0:
+    hardlink = file_path[0:2] + lines[0]
+    Trace("Hard link found: %s -> %s", file_path, hardlink)
+    return hardlink
+  else:
+    return None
 
 
 child_process = None
