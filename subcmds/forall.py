@@ -15,7 +15,7 @@
 
 from __future__ import print_function
 import errno
-import fcntl
+#import fcntl
 import multiprocessing
 import re
 import os
@@ -23,6 +23,7 @@ import select
 import signal
 import sys
 import subprocess
+import portable
 
 from color import Coloring
 from command import Command, MirrorSafeCommand
@@ -337,28 +338,31 @@ def DoWork(project, mirror, opt, cmd, shell, cnt, config):
   if opt.project_header:
     out = ForallColoring(config)
     out.redirect(sys.stdout)
-    class sfd(object):
-      def __init__(self, fd, dest):
-        self.fd = fd
-        self.dest = dest
-      def fileno(self):
-        return self.fd.fileno()
+    # class sfd(object):
+    #   def __init__(self, fd, dest):
+    #     self.fd = fd
+    #     self.dest = dest
+    #   def fileno(self):
+    #     return self.fd.fileno()
 
     empty = True
     errbuf = ''
 
     p.stdin.close()
-    s_in = [sfd(p.stdout, sys.stdout),
-            sfd(p.stderr, sys.stderr)]
+    # s_in = [sfd(p.stdout, sys.stdout),
+    #         sfd(p.stderr, sys.stderr)]
+    s_in = [portable.input_reader(p.stdout, sys.stdout, 'stdout'),
+            portable.input_reader(p.stderr, sys.stderr, 'stderr')]
 
-    for s in s_in:
-      flags = fcntl.fcntl(s.fd, fcntl.F_GETFL)
-      fcntl.fcntl(s.fd, fcntl.F_SETFL, flags | os.O_NONBLOCK)
+    # for s in s_in:
+    #   flags = fcntl.fcntl(s.fd, fcntl.F_GETFL)
+    #   fcntl.fcntl(s.fd, fcntl.F_SETFL, flags | os.O_NONBLOCK)
 
     while s_in:
       in_ready, _out_ready, _err_ready = select.select(s_in, [], [])
       for s in in_ready:
-        buf = s.fd.read(4096)
+        # buf = s.fd.read(4096)
+        buf = s.read(4096)
         if not buf:
           s.fd.close()
           s_in.remove(s)
