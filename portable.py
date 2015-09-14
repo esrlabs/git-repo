@@ -285,3 +285,8 @@ def prepare_editor_args(editor):
     args = editor.rsplit()
     shell = False
   return (args, shell)
+
+
+def os_chmod(dest, mode):
+  if isUnix():
+    os.chmod(dest, mode)
