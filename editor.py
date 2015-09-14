@@ -15,6 +15,7 @@
 
 from __future__ import print_function
 import os
+import portable
 import re
 import sys
 import subprocess
@@ -83,8 +84,9 @@ least one of these before using this command.""", file=sys.stderr)
       fd = None
 
       if re.compile("^.*[$ \t'].*$").match(editor):
-        args = [editor + ' "$@"', 'sh']
-        shell = True
+        # args = [editor + ' "$@"', 'sh']
+        # shell = True
+        (args, shell) = portable.prepare_editor_args(editor)
       else:
         args = [editor]
         shell = False

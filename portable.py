@@ -274,3 +274,14 @@ def WaitForProcess():
     if child_process:
       child_process.stdin.close()
       child_process.wait()
+
+
+def prepare_editor_args(editor):
+  if isUnix():
+    args = [editor + ' "$@"', 'sh']
+    shell = True
+  else:
+    editor = re.sub('["\']', '', editor)
+    args = editor.rsplit()
+    shell = False
+  return (args, shell)
