@@ -3,7 +3,9 @@ import os
 import pager
 import platform
 import re
+import shutil
 import socket
+import stat
 import sys
 import subprocess
 import threading
@@ -17,6 +19,24 @@ if isUnix():
 
 def to_windows_path(path):
   return path.replace('/', '\\')
+
+def rmtree(path):
+  shutil.rmtree(path, onerror=onerror)
+
+def rename(src, dst):
+  if isUnix():
+    os.rename(src, dst)
+  else:
+    if os.path.exists(dst):
+      os.remove(dst)
+    os.rename(src, dst)
+
+def onerror(function, path, excinfo):
+  if not os.access(path, os.W_OK):
+    os.chmod(path, stat.S_IWUSR)
+    function(path)
+  else:
+    raise
 
 
 def input_reader(src, dest, std_name):

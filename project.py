@@ -55,7 +55,8 @@ def _lwrite(path, content):
     fd.close()
 
   try:
-    os.rename(lock, path)
+    # os.rename(lock, path)
+    portable.rename(lock, path)
   except OSError:
     os.remove(lock)
     raise
@@ -2401,7 +2402,8 @@ class Project(object):
         self._CopyAndLinkFiles()
     except Exception:
       if init_dotgit:
-        shutil.rmtree(dotgit)
+        # shutil.rmtree(dotgit)
+        portable.rmtree(dotgit)
       raise
 
   def _gitdir_path(self, path):
