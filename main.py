@@ -21,6 +21,7 @@ import netrc
 import optparse
 import os
 import portable
+import subprocess
 import sys
 import time
 
