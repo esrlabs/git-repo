@@ -72,7 +72,7 @@ The editrights tools is provided as part of git-repo for Microsoft Windows.
 
 ### Usage ###
 
-For more detailed instructions regarding git-repo usage, please visit [git-repo](http://source.android.com/source/version-control.html).
+For more detailed instructions regarding git-repo usage, please visit [git-repo](http://source.android.com/source/using-repo.html).
 
 
 ### Changes to original git-repo ###
