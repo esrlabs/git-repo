@@ -57,7 +57,6 @@ revision specified in the manifest.
         print("error: at least one project must be specified", file=sys.stderr)
         sys.exit(1)
 
-    proj_name_to_gitc_proj_dict = {}
     if self.gitc_manifest:
       all_projects = self.GetProjects(projects, manifest=self.gitc_manifest,
                                       missing_ok=True)
@@ -67,7 +66,6 @@ revision specified in the manifest.
         else:
           project.already_synced = False
           project.old_revision = project.revisionExpr
-        proj_name_to_gitc_proj_dict[project.name] = project
         project.revisionExpr = None
       # Save the GITC manifest.
       gitc_utils.save_manifest(self.gitc_manifest)
@@ -77,9 +75,10 @@ revision specified in the manifest.
     pm = Progress('Starting %s' % nb, len(all_projects))
     for project in all_projects:
       pm.update()
+
       if self.gitc_manifest:
-        gitc_project = proj_name_to_gitc_proj_dict[project.name]
-        # Sync projects that have already been opened.
+        gitc_project = self.gitc_manifest.paths[project.relpath]
+        # Sync projects that have not been opened.
         if not gitc_project.already_synced:
           proj_localdir = os.path.join(self.gitc_manifest.gitc_client_dir,
                                        project.relpath)
@@ -89,7 +88,7 @@ revision specified in the manifest.
           project.Sync_NetworkHalf()
           sync_buf = SyncBuffer(self.manifest.manifestProject.config)
           project.Sync_LocalHalf(sync_buf)
-          project.revisionExpr = gitc_project.old_revision
+          project.revisionId = gitc_project.old_revision
 
       # If the current revision is a specific SHA1 then we can't push back
       # to it; so substitute with dest_branch if defined, or with manifest
@@ -100,6 +99,7 @@ revision specified in the manifest.
           branch_merge = project.dest_branch
         else:
           branch_merge = self.manifest.default.revisionExpr
+
       if not project.StartBranch(nb, branch_merge=branch_merge):
         err.append(project)
     pm.end()

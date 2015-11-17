@@ -21,7 +21,7 @@ REPO_REV = 'stable'
 # limitations under the License.
 
 # increment this whenever we make important changes to this script
-VERSION = (1, 21)
+VERSION = (1, 22)
 
 # increment this if the MAINTAINER_KEYS block is modified
 KEYRING_VERSION = (1, 2)
@@ -68,6 +68,7 @@ S_manifests = 'manifests'       # special manifest repository
 REPO_MAIN = S_repo + '/main.py' # main script
 MIN_PYTHON_VERSION = (2, 6)     # minimum supported python version
 GITC_CONFIG_FILE = '/gitc/.config'
+GITC_FS_ROOT_DIR = '/gitc/manifest-rw/'
 
 
 import errno
@@ -180,7 +181,7 @@ def _GitcInitOptions(init_optparse):
                help='Optional manifest file to use for this GITC client.')
   g.add_option('-c', '--gitc-client',
                dest='gitc_client',
-               help='The name for the new gitc_client instance.')
+               help='The name of the gitc_client instance to create or modify.')
 
 _gitc_manifest_dir = None
 def get_gitc_manifest_dir():
@@ -196,6 +197,28 @@ def get_gitc_manifest_dir():
     except IOError:
       pass
   return _gitc_manifest_dir
+
+def gitc_parse_clientdir(gitc_fs_path):
+  """Parse a path in the GITC FS and return its client name.
+
+  @param gitc_fs_path: A subdirectory path within the GITC_FS_ROOT_DIR.
+
+  @returns: The GITC client name
+  """
+  if gitc_fs_path == GITC_FS_ROOT_DIR:
+    return None
+  if not gitc_fs_path.startswith(GITC_FS_ROOT_DIR):
+    manifest_dir = get_gitc_manifest_dir()
+    if manifest_dir == '':
+      return None
+    if manifest_dir[-1] != '/':
+      manifest_dir += '/'
+    if gitc_fs_path == manifest_dir:
+      return None
+    if not gitc_fs_path.startswith(manifest_dir):
+      return None
+    return gitc_fs_path.split(manifest_dir)[1].split('/')[0]
+  return gitc_fs_path.split(GITC_FS_ROOT_DIR)[1].split('/')[0]
 
 class CloneFailure(Exception):
   """Indicate the remote clone of repo itself failed.
@@ -235,10 +258,13 @@ def _Init(args, gitc_init=False):
         _print('fatal: GITC filesystem is not available. Exiting...',
                file=sys.stderr)
         sys.exit(1)
-      if not opt.gitc_client:
+      gitc_client = opt.gitc_client
+      if not gitc_client:
+        gitc_client = gitc_parse_clientdir(os.getcwd())
+      if not gitc_client:
         _print('fatal: GITC client (-c) is required.', file=sys.stderr)
         sys.exit(1)
-      client_dir = os.path.join(gitc_manifest_dir, opt.gitc_client)
+      client_dir = os.path.join(gitc_manifest_dir, gitc_client)
       if not os.path.exists(client_dir):
         os.makedirs(client_dir)
       os.chdir(client_dir)
@@ -526,8 +552,7 @@ def _Clone(url, local, quiet):
                     '+refs/heads/*:refs/remotes/origin/*')
   if _DownloadBundle(url, local, quiet):
     _ImportBundle(local)
-  else:
-    _Fetch(url, local, 'origin', quiet)
+  _Fetch(url, local, 'origin', quiet)
 
 
 def _Verify(cwd, branch, quiet):
@@ -732,8 +757,12 @@ def _SetDefaultsTo(gitdir):
 
 
 def main(orig_args):
-  repo_main, rel_repo_dir = _FindRepo()
   cmd, opt, args = _ParseArguments(orig_args)
+
+  repo_main, rel_repo_dir = None, None
+  # Don't use the local repo copy, make sure to switch to the gitc client first.
+  if cmd != 'gitc-init':
+    repo_main, rel_repo_dir = _FindRepo()
 
   wrapper_path = os.path.abspath(__file__)
   my_main, my_git = _RunSelf(wrapper_path)

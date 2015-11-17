@@ -50,7 +50,9 @@ following DTD:
     <!ATTLIST url              CDATA #REQUIRED>
 
     <!ELEMENT project (annotation*,
-                       project*)>
+                       project*,
+                       copyfile?,
+                       linkfile?)>
     <!ATTLIST project name        CDATA #REQUIRED>
     <!ATTLIST project path        CDATA #IMPLIED>
     <!ATTLIST project remote      IDREF #IMPLIED>
@@ -67,6 +69,14 @@ following DTD:
     <!ATTLIST annotation name  CDATA #REQUIRED>
     <!ATTLIST annotation value CDATA #REQUIRED>
     <!ATTLIST annotation keep  CDATA "true">
+
+    <!ELEMENT copyfile (EMPTY)>
+    <!ATTLIST src value  CDATA #REQUIRED>
+    <!ATTLIST dest value CDATA #REQUIRED>
+
+    <!ELEMENT linkfile (EMPTY)>
+    <!ATTLIST src value  CDATA #REQUIRED>
+    <!ATTLIST dest value CDATA #REQUIRED>
 
     <!ELEMENT extend-project>
     <!ATTLIST extend-project name CDATA #REQUIRED>
@@ -284,6 +294,21 @@ prefixed with REPO__.  In addition, there is an optional attribute
 "keep" which accepts the case insensitive values "true" (default) or
 "false".  This attribute determines whether or not the annotation will
 be kept when exported with the manifest subcommand.
+
+Element copyfile
+----------------
+
+Zero or more copyfile elements may be specified as children of a
+project element. Each element describes a src-dest pair of files;
+the "src" file will be copied to the "dest" place during 'repo sync'
+command.
+"src" is project relative, "dest" is relative to the top of the tree.
+
+Element linkfile
+----------------
+
+It's just like copyfile and runs at the same time as copyfile but
+instead of copying it creates a symlink.
 
 Element remove-project
 ----------------------
