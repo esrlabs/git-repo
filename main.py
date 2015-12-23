@@ -525,7 +525,7 @@ def _Main(argv):
     argv.extend(rce.extra_args)
     try:
       # os.execv(__file__, argv)
-      subprocess.call([sys.executable] + argv)
+      result = subprocess.call([sys.executable] + argv)
     except OSError as e:
       print('fatal: cannot restart repo after upgrade', file=sys.stderr)
       print('fatal: %s' % e, file=sys.stderr)
