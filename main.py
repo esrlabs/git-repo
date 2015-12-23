@@ -519,7 +519,7 @@ def _Main(argv):
         argv = [sys.executable] + argv
         try:
             argv.insert(0, __file__)
-            subprocess.call(argv)
+            result = subprocess.call(argv)
         except OSError as e:
             print('fatal: cannot restart repo after upgrade', file=sys.stderr)
             print('fatal: %s' % e, file=sys.stderr)

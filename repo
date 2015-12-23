@@ -39,7 +39,7 @@ REPO_REV = 'master'
 # limitations under the License.
 
 # increment this whenever we make important changes to this script
-VERSION = (1, 19, 1)
+VERSION = (1, 19, 2)
 
 # increment this if the MAINTAINER_KEYS block is modified
 KEYRING_VERSION = (1, 1)
@@ -698,7 +698,7 @@ def main(orig_args):
     me.extend(orig_args)
     me.extend(extra_args)
     try:
-        subprocess.call(me)
+        sys.exit(subprocess.call(me))
     except OSError as e:
         print("fatal: unable to start %s" % repo_main, file=sys.stderr)
         print("fatal: %s" % e, file=sys.stderr)
