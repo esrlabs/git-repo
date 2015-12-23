@@ -21,7 +21,7 @@ REPO_REV = 'stable'
 # limitations under the License.
 
 # increment this whenever we make important changes to this script
-VERSION = (1, 22)
+VERSION = (1, 23)
 
 # increment this if the MAINTAINER_KEYS block is modified
 KEYRING_VERSION = (1, 2)
@@ -500,7 +500,8 @@ def _DownloadBundle(url, local, quiet):
     except urllib.error.URLError as e:
       _print('fatal: Cannot get %s' % url, file=sys.stderr)
       _print('fatal: error %s' % e.reason, file=sys.stderr)
-      raise CloneFailure()
+      # raise CloneFailure()
+      return False
     try:
       if not quiet:
         _print('Get %s' % url, file=sys.stderr)
