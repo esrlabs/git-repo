@@ -797,7 +797,7 @@ def _PostRepoFetch(rp, no_repo_verify=False, verbose=False):
             file=sys.stderr)
 
 def _VerifyTag(project):
-  gpg_dir = os.path.expanduser('~/.repoconfig/gnupg')
+  gpg_dir = os.path.expanduser('~/.repoconfig-esrlabs/gnupg')
   if not os.path.exists(gpg_dir):
     print('warning: GnuPG was not available during last "repo init"\n'
           'warning: Cannot automatically authenticate repo."""',
