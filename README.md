@@ -1,7 +1,5 @@
 ## Repo for Microsoft Windows and Linux ##
 
-**State: Testing.** Please do not use for productive projects yet!
-
 This is E.S.R.Labs Repo - just like Google Repo but this one also runs under Microsoft Windows.
 For more information, see [Version Control with Repo and Git](http://source.android.com/source/version-control.html).
 
