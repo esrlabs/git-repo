@@ -1,3 +1,7 @@
+
+**NOT MAINTAINED ANYMORE**
+Please use the up-to-date version on the [stable branch](https://github.com/esrlabs/git-repo/tree/stable).
+
 ## Repo for Microsoft Windows and Linux ##
 
 Note: No support for Mac (untested).
