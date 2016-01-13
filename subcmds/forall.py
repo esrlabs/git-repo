@@ -364,12 +364,14 @@ def DoWork(project, mirror, opt, cmd, shell, cnt, config):
         # buf = s.fd.read(4096)
         buf = s.read(4096)
         if not buf:
-          s.fd.close()
+          # s.fd.close()
+          s.close()
           s_in.remove(s)
           continue
 
         if not opt.verbose:
-          if s.fd != p.stdout:
+          # if s.fd != p.stdout:
+          if s.src != p.stdout:
             errbuf += buf
             continue
 

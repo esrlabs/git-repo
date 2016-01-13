@@ -64,6 +64,12 @@ class file_reader(object):
   def read(self, bufsize):
     return self.fd.read(bufsize)
 
+  def close(self):
+    return self.fd.close()
+
+  def src(self):
+    return self.fd
+
 class socket_reader():
   """select socket with file descriptor class"""
   def __init__(self, src, dest, std_name=''):
@@ -98,11 +104,19 @@ class socket_reader():
       return self.server_socket.recv(bufsize)
     except Exception as e:
       Trace("failed to read from server socket: " + e.strerror)
+      self.close()
+
+  def close(self):
+    if self.client_socket:
       self.client_socket.close()
+    if self.server_socket:
       self.server_socket.close()
 
   def fileno(self):
     return self.server_socket.fileno()
+
+  def src(self):
+    return self.src
 
 
 def os_symlink(src, dst):
