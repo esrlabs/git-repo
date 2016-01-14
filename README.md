@@ -54,6 +54,7 @@ The editrights tools is provided as part of git-repo for Microsoft Windows.
 * Create a HOME environment variable that points to %USERPROFILE% (necessary for OpenSSH to find its .ssh directory).
 * Create a GIT_EDITOR environment variable that has an editor executable as value. For this, first add the home directory of the editor executable to the path environment variable. GIT_EDITOR can than be set to "notepad++.exe", "gvim.exe", for example.
 
+
 ### Setup steps for Linux ###
 
 ##### Downloading and installing Git and Python #####
@@ -71,6 +72,23 @@ The editrights tools is provided as part of git-repo for Microsoft Windows.
 ### Usage ###
 
 For more detailed instructions regarding git-repo usage, please visit [git-repo](http://source.android.com/source/using-repo.html).
+
+#### FAQ Troubleshooting ###
+
+##### I can not see any colors for `repo status` #####
+The pager which is used for `repo status` is set per default to `less` which is not capable of parsing color codes on Windows. This can be fixed by setting the default pager to `more`. This can be done by
+
+    git config --global core.pager more
+
+. Alternativly, the environment variable `GIT_PAGER` can be set to `more`.
+
+##### I get a WindowsError when initializing my repo with `repo init ..` in Windows Command Shell #####
+If there is a warning at the beginning of the output which reads states that GPG is not available
+
+    warning: gpg (GnuPG) is not available.
+    warning: Installing it is strongly encouraged.
+
+you have to add `gpg.exe` to your PATH variable. The executable can be found in your Git installation folder `$GIT\usr\bin`. When you are using Git Bash, the `$Git\usr\bin` folder is already added to your PATH.
 
 
 ### Changes to original git-repo ###
