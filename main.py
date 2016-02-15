@@ -530,9 +530,11 @@ def _Main(argv):
 
 
 if __name__ == '__main__':
-    print('!! NOT MAINTAINED ANYMORE !!')
-    print('Please use the up-to-date version on the stable branch: https://github.com/esrlabs/git-repo/tree/stable')
-    print('')
+    disableWarningKey = 'REPO_DISABLE_DEPRECATION_WARNING'
+    if not disableWarningKey in os.environ or os.environ[disableWarningKey] != '1':
+        print('!!! NOT MAINTAINED ANYMORE !!!')
+        print('Please use the up-to-date version on the stable branch: https://github.com/esrlabs/git-repo/tree/stable')
+        print('')
 
     result = _Main(sys.argv[1:])
     sys.exit(result)
