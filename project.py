@@ -2220,7 +2220,7 @@ class Project(object):
       self._InitHooks()
 
   def _InitHooks(self):
-    hooks = os.path.realpath(self._gitdir_path('hooks'))
+    hooks = os.path.realpath(self._objdir_path('hooks'))
     if not os.path.exists(hooks):
       os.makedirs(hooks)
     for stock_hook in _ProjectHooks():
@@ -2406,8 +2406,8 @@ class Project(object):
         portable.rmtree(dotgit)
       raise
 
-  def _gitdir_path(self, path):
-    return os.path.realpath(os.path.join(self.gitdir, path))
+  def _objdir_path(self, path):
+    return os.path.realpath(os.path.join(self.objdir, path))
 
   def _revlist(self, *args, **kw):
     a = []
