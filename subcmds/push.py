@@ -84,6 +84,10 @@ in all projects listed in the manifest.
                  type='string', action='store', dest='dest_branch',
                  metavar='BRANCH',
                  help='Push on this target branch.')
+    p.add_option('-f', '--force',
+                 dest='force_push',
+                 action='store_true',
+                 help='Force push')
 
     # Options relating to push hook.  Note that verify and no-verify are NOT
     # opposites of each other, which is why they store to different locations.
@@ -252,7 +256,7 @@ in all projects listed in the manifest.
             branch.uploaded = False
             continue
 
-        self.Push(branch, dest_branch=destination)
+        self.Push(branch, dest_branch=destination, force=opt.force_push)
         branch.uploaded = True
       except UploadError as e:
         branch.error = e
@@ -287,7 +291,7 @@ in all projects listed in the manifest.
       sys.exit(1)
 
   def Push(self, branch_base, branch=None,
-                      dest_branch=None):
+                      dest_branch=None, force=False):
     """Pushs the named branch.
     """
     project = branch_base.project
@@ -313,6 +317,10 @@ in all projects listed in the manifest.
 
     remote = branch.remote.name
     cmd = ['push']
+
+    if force:
+       cmd.append('--force')
+
     cmd.append(remote)
 
     if dest_branch.startswith(R_HEADS):
