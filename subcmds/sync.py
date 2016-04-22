@@ -19,12 +19,14 @@ import netrc
 from optparse import SUPPRESS_HELP
 import os
 import re
+import portable
 import shutil
 import socket
 import subprocess
 import sys
 import tempfile
 import time
+import stat
 
 from pyversion import is_python3
 if is_python3():
@@ -490,7 +492,7 @@ later is required to fix a server side protocol bug.
             else:
               print('Deleting obsolete path %s' % project.worktree,
                     file=sys.stderr)
-              shutil.rmtree(project.worktree)
+              portable.rmtree(project.worktree)
               # Try deleting parent subdirs if they are empty
               project_dir = os.path.dirname(project.worktree)
               while project_dir != self.manifest.topdir:

@@ -20,8 +20,15 @@ if isUnix():
 def to_windows_path(path):
   return path.replace('/', '\\')
 
-def rmtree(path):
-  shutil.rmtree(path, onerror=onerror)
+def rmtree(top):
+  for root, dirs, files in os.walk(top, topdown=False):
+    for name in files:
+      filename = os.path.join(root, name)
+      os.chmod(filename, stat.S_IWRITE)
+      os.remove(filename)
+    for name in dirs:
+      rmtree(os.path.join(root, name))
+  os.rmdir(top)
 
 def rename(src, dst):
   if isUnix():

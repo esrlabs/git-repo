@@ -229,7 +229,7 @@ to update the working directory files.
       # Better delete the manifest git dir if we created it; otherwise next
       # time (when user fixes problems) we won't go through the "is_new" logic.
       if is_new:
-        shutil.rmtree(m.gitdir)
+        portable.rmtree(m.gitdir)
       sys.exit(1)
 
     if opt.manifest_branch:

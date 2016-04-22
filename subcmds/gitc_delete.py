@@ -52,4 +52,4 @@ and all locally downloaded sources.
       if not response == 'yes':
         print('Response was not "yes"\n Exiting...')
         sys.exit(1)
-    shutil.rmtree(self.gitc_manifest.gitc_client_dir)
+    portable.rmtree(self.gitc_manifest.gitc_client_dir)
