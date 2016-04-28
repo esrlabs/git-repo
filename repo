@@ -24,7 +24,7 @@ REPO_REV = 'stable'
 VERSION = (1, 24)
 
 # increment this if the MAINTAINER_KEYS block is modified
-KEYRING_VERSION = (1, 2)
+KEYRING_VERSION = (1, 3)
 MAINTAINER_KEYS = """
 
      Repo Maintainer (E.S.R.Labs) <repo@esrlabs.com>
