@@ -1,7 +1,7 @@
 ## Repo for Microsoft Windows and Linux ##
 
 This is E.S.R.Labs Repo - just like Google Repo but this one also runs under Microsoft Windows.
-For more information, see [Version Control with Repo and Git](http://source.android.com/source/version-control.html).
+For more information, see [Version Control with Repo and Git](http://source.android.com/source/using-repo.html).
 
 Repo is a repository management tool that Google built on top of Git. Repo unifies many Git repositories when necessary,
 does the uploads to a revision control system, and automates parts of the development workflow.
