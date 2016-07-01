@@ -253,7 +253,7 @@ class _LinkFile(object):
     if not portable.os_path_islink(absDest) or (portable.os_path_realpath(absDest) != relSrc):
       try:
         # remove existing file first, since it might be read-only
-        if os.path.exists(absDest):
+        if os.path.lexists(absDest):
           os.remove(absDest)
         else:
           dest_dir = os.path.dirname(absDest)
@@ -1115,7 +1115,8 @@ class Project(object):
       clone_bundle=True,
       no_tags=False,
       archive=False,
-      optimized_fetch=False):
+      optimized_fetch=False,
+      prune=False):
     """Perform only the network IO portion of the sync process.
        Local working directory/branch state is not affected.
     """
@@ -1186,7 +1187,7 @@ class Project(object):
     if (need_to_fetch
         and not self._RemoteFetch(initial=is_new, quiet=quiet, alt_dir=alt_dir,
                                   current_branch_only=current_branch_only,
-                                  no_tags=no_tags)):
+                                  no_tags=no_tags, prune=prune)):
       return False
 
     if self.worktree:
@@ -1587,8 +1588,6 @@ class Project(object):
 
     if kill:
       old = self.bare_git.GetHead()
-      if old is None:
-        old = 'refs/heads/please_never_use_this_as_a_branch_name'
 
       try:
         self.bare_git.DetachHead(rev)
@@ -1600,7 +1599,10 @@ class Project(object):
                        capture_stderr=True)
         b.Wait()
       finally:
-        self.bare_git.SetHead(old)
+        if ID_RE.match(old):
+          self.bare_git.DetachHead(old)
+        else:
+          self.bare_git.SetHead(old)
         left = self._allrefs
 
       for branch in kill:
@@ -1800,7 +1802,8 @@ class Project(object):
                    initial=False,
                    quiet=False,
                    alt_dir=None,
-                   no_tags=False):
+                   no_tags=False,
+                   prune=False):
 
     is_sha1 = False
     tag_name = None
@@ -1912,6 +1915,9 @@ class Project(object):
       cmd.append('--no-tags')
     else:
       cmd.append('--tags')
+
+    if prune:
+      cmd.append('--prune')
 
     spec = []
     if not current_branch_only:

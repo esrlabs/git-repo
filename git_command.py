@@ -169,6 +169,9 @@ class GitCommand(object):
       if p is not None:
         s = p + ' ' + s
       _setenv(env, 'GIT_CONFIG_PARAMETERS', s)
+    if 'GIT_ALLOW_PROTOCOL' not in env:
+      _setenv(env, 'GIT_ALLOW_PROTOCOL',
+              'file:git:http:https:ssh:persistent-http:persistent-https:sso:rpc')
 
     if project:
       if not cwd:

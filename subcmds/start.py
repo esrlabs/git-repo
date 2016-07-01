@@ -57,10 +57,15 @@ revision specified in the manifest.
         print("error: at least one project must be specified", file=sys.stderr)
         sys.exit(1)
 
+    all_projects = self.GetProjects(projects,
+                                    missing_ok=bool(self.gitc_manifest))
+
+    # This must happen after we find all_projects, since GetProjects may need
+    # the local directory, which will disappear once we save the GITC manifest.
     if self.gitc_manifest:
-      all_projects = self.GetProjects(projects, manifest=self.gitc_manifest,
-                                      missing_ok=True)
-      for project in all_projects:
+      gitc_projects = self.GetProjects(projects, manifest=self.gitc_manifest,
+                                       missing_ok=True)
+      for project in gitc_projects:
         if project.old_revision:
           project.already_synced = True
         else:
@@ -70,8 +75,10 @@ revision specified in the manifest.
       # Save the GITC manifest.
       gitc_utils.save_manifest(self.gitc_manifest)
 
-    all_projects = self.GetProjects(projects,
-                                    missing_ok=bool(self.gitc_manifest))
+      # Make sure we have a valid CWD
+      if not os.path.exists(os.getcwd()):
+        os.chdir(self.manifest.topdir)
+
     pm = Progress('Starting %s' % nb, len(all_projects))
     for project in all_projects:
       pm.update()

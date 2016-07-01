@@ -179,7 +179,7 @@ to update the working directory files.
       r.Save()
 
     groups = re.split(r'[,\s]+', opt.groups)
-    all_platforms = ['linux', 'darwin']
+    all_platforms = ['linux', 'darwin', 'windows']
     platformize = lambda x: 'platform-' + x
     if opt.platform == 'auto':
       if (not opt.mirror and
@@ -188,7 +188,7 @@ to update the working directory files.
     elif opt.platform == 'all':
       groups.extend(map(platformize, all_platforms))
     elif opt.platform in all_platforms:
-      groups.extend(platformize(opt.platform))
+      groups.append(platformize(opt.platform))
     elif opt.platform != 'none':
       print('fatal: invalid platform flag', file=sys.stderr)
       sys.exit(1)

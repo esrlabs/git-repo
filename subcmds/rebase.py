@@ -54,6 +54,11 @@ branch but need to incorporate new upstream changes "underneath" them.
     p.add_option('--auto-stash',
                  dest='auto_stash', action='store_true',
                  help='Stash local modifications before starting')
+    p.add_option('-m', '--onto-manifest',
+                 dest='onto_manifest', action='store_true',
+                 help='Rebase onto the manifest version instead of upstream '
+                      'HEAD.  This helps to make sure the local tree stays '
+                      'consistent if you previously synced to a manifest.')
 
   def Execute(self, opt, args):
     all_projects = self.GetProjects(args)
@@ -105,6 +110,10 @@ branch but need to incorporate new upstream changes "underneath" them.
 
       if opt.interactive:
         args.append("-i")
+
+      if opt.onto_manifest:
+        args.append('--onto')
+        args.append(project.revisionExpr)
 
       args.append(upbranch.LocalMerge)
 

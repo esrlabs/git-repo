@@ -47,12 +47,12 @@ following DTD:
     <!ATTLIST default sync-s      CDATA #IMPLIED>
 
     <!ELEMENT manifest-server (EMPTY)>
-    <!ATTLIST url              CDATA #REQUIRED>
+    <!ATTLIST manifest-server url CDATA #REQUIRED>
 
     <!ELEMENT project (annotation*,
                        project*,
-                       copyfile?,
-                       linkfile?)>
+                       copyfile*,
+                       linkfile*)>
     <!ATTLIST project name        CDATA #REQUIRED>
     <!ATTLIST project path        CDATA #IMPLIED>
     <!ATTLIST project remote      IDREF #IMPLIED>
@@ -71,14 +71,14 @@ following DTD:
     <!ATTLIST annotation keep  CDATA "true">
 
     <!ELEMENT copyfile (EMPTY)>
-    <!ATTLIST src value  CDATA #REQUIRED>
-    <!ATTLIST dest value CDATA #REQUIRED>
+    <!ATTLIST copyfile src  CDATA #REQUIRED>
+    <!ATTLIST copyfile dest CDATA #REQUIRED>
 
     <!ELEMENT linkfile (EMPTY)>
-    <!ATTLIST src value  CDATA #REQUIRED>
-    <!ATTLIST dest value CDATA #REQUIRED>
+    <!ATTLIST linkfile src CDATA #REQUIRED>
+    <!ATTLIST linkfile dest CDATA #REQUIRED>
 
-    <!ELEMENT extend-project>
+    <!ELEMENT extend-project (EMPTY)>
     <!ATTLIST extend-project name CDATA #REQUIRED>
     <!ATTLIST extend-project path CDATA #IMPLIED>
     <!ATTLIST extend-project groups CDATA #IMPLIED>
