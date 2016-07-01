@@ -69,6 +69,7 @@ The editrights tools is provided as part of git-repo for Microsoft Windows.
     $ curl https://raw.githubusercontent.com/esrlabs/git-repo/stable/repo > ~/bin/repo
     $ chmod a+x ~/bin/repo
 
+
 ### Usage ###
 
 For more detailed instructions regarding git-repo usage, please visit [git-repo](http://source.android.com/source/using-repo.html).
@@ -105,3 +106,29 @@ you have to add `gpg.exe` to your PATH variable. The executable can be found in 
 
 * Added push.py sub command to upload and bypass the code review system.
 * Added interactive workflow test
+
+
+### Developer Information ###
+
+##### Resyncing with official google repo #####
+
+For resyncing with the official google repo git, here are the commands for resyncing with the tag v1.12.33 of the official google repo:
+
+    # add google git-repo remote with tag
+    git remote add googlesource https://android.googlesource.com/tools/repo/
+    git checkout v1.12.33 -b google-latest
+
+    # checkout basis for resync
+    git checkout google-git-repo-base -b update
+    git merge --allow-unrelated-histories -Xtheirs --squash google-latest
+    git commit -m "Update: google git-repo v1.12.33"
+    git rebase stable
+
+    # solve conflicts; keep portability in mind
+
+    git checkout stable
+    git rebase update
+
+    # cleanup
+    git branch -D update
+    git branch -D google-latest
