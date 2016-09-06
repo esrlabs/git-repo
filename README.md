@@ -44,6 +44,13 @@ The editrights tools is provided as part of git-repo for Microsoft Windows.
     curl https://raw.githubusercontent.com/esrlabs/git-repo/stable/repo > %USERPROFILE%/bin/repo
     curl https://raw.githubusercontent.com/esrlabs/git-repo/stable/repo.cmd > %USERPROFILE%/bin/repo.cmd
 
+###### Windows PowerShell ######
+
+    md $env:USERPROFILE\bin
+    curl https://raw.githubusercontent.com/esrlabs/git-repo/stable/repo > $env:USERPROFILE/bin/repo
+    curl https://raw.githubusercontent.com/esrlabs/git-repo/stable/repo.cmd > $env:USERPROFILE/bin/repo.cmd
+
+
 ###### Git Bash ######
 
     mkdir ~/bin
