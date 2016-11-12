@@ -77,7 +77,11 @@ For more detailed instructions regarding git-repo usage, please visit [git-repo]
 #### FAQ Troubleshooting ###
 
 ##### I can not see any colors for `repo status` #####
-The pager which is used for `repo status` is set per default to `less` which is not capable of parsing color codes on Windows. This can be fixed by setting the default pager to `more`. This can be done by
+The pager which is used for `repo status` is set per default to `less`, which unless otherwise configured will ignore escape sequences. You can set the environment variable `LESS` to `-FRSX` to make `less` handle colors.
+_(You might also want to set `LESSCHARSET` to `utf-8`)_
+
+##### It still doesn't work! ###
+You can try using `more` as your pager of choice. It doesn't behave exactly the same as `less` but it might be enough for you.
 
     git config --global core.pager more
 
