@@ -2553,8 +2553,8 @@ class Project(object):
       except AttributeError:
         pass
       if line.startswith('ref: '):
-        return line[5:-1]
-      return line[:-1]
+        return line[5:].strip()
+      return line.strip()
 
     def SetHead(self, ref, message=None):
       cmdv = []
