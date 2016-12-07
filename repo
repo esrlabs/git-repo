@@ -556,7 +556,7 @@ def _DownloadBundle(url, local, quiet):
     try:
       r = urllib.request.urlopen(url)
     except urllib.error.HTTPError as e:
-      if e.code in [401, 403, 404]:
+      if e.code in [401, 403, 404, 406]:
         return False
       _print('fatal: Cannot get %s' % url, file=sys.stderr)
       _print('fatal: HTTP error %s' % e.code, file=sys.stderr)
