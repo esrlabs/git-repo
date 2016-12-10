@@ -149,10 +149,10 @@ For resyncing with the official google repo git, here are the commands for resyn
 
 Commands for creating a new version of repo:
 
-* replace KEYID (something like 0x..)
-* the v0.4.16 (two times)
-* replace COMMENT with something more explaining
-
     git tag -s -u KEYID v0.4.16 -m "COMMENT"
     git push origin stable:stable
     git push origin v0.4.16
+
+* replace `KEYID` (something like 0x..)
+* the `v0.4.16` (two times)
+* replace `COMMENT` with something more explaining
