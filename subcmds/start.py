@@ -54,8 +54,7 @@ revision specified in the manifest.
     if not opt.all:
       projects = args[1:]
       if len(projects) < 1:
-        print("error: at least one project must be specified", file=sys.stderr)
-        sys.exit(1)
+        projects = ['.',]  # start it in the local project by default
 
     all_projects = self.GetProjects(projects,
                                     missing_ok=bool(self.gitc_manifest))

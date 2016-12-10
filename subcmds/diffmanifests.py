@@ -71,6 +71,10 @@ synced and their revisions won't be found.
     p.add_option('--no-color',
                  dest='color', action='store_false', default=True,
                  help='does not display the diff in color.')
+    p.add_option('--pretty-format',
+                 dest='pretty_format', action='store',
+                 metavar='<FORMAT>',
+                 help='print the log using a custom git pretty format string')
 
   def _printRawDiff(self, diff):
     for project in diff['added']:
@@ -92,7 +96,7 @@ synced and their revisions won't be found.
                                      otherProject.revisionExpr))
       self.out.nl()
 
-  def _printDiff(self, diff, color=True):
+  def _printDiff(self, diff, color=True, pretty_format=None):
     if diff['added']:
       self.out.nl()
       self.printText('added projects : \n')
@@ -124,7 +128,8 @@ synced and their revisions won't be found.
         self.printText(' to ')
         self.printRevision(otherProject.revisionExpr)
         self.out.nl()
-        self._printLogs(project, otherProject, raw=False, color=color)
+        self._printLogs(project, otherProject, raw=False, color=color,
+                        pretty_format=pretty_format)
         self.out.nl()
 
     if diff['unreachable']:
@@ -139,9 +144,13 @@ synced and their revisions won't be found.
         self.printText(' not found')
         self.out.nl()
 
-  def _printLogs(self, project, otherProject, raw=False, color=True):
-    logs = project.getAddedAndRemovedLogs(otherProject, oneline=True,
-                                          color=color)
+  def _printLogs(self, project, otherProject, raw=False, color=True,
+                 pretty_format=None):
+
+    logs = project.getAddedAndRemovedLogs(otherProject,
+                                          oneline=(pretty_format is None),
+                                          color=color,
+                                          pretty_format=pretty_format)
     if logs['removed']:
       removedLogs = logs['removed'].split('\n')
       for log in removedLogs:
@@ -192,4 +201,4 @@ synced and their revisions won't be found.
     if opt.raw:
       self._printRawDiff(diff)
     else:
-      self._printDiff(diff, color=opt.color)
+      self._printDiff(diff, color=opt.color, pretty_format=opt.pretty_format)

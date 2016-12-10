@@ -24,7 +24,9 @@ import git_command
 import git_config
 import wrapper
 
-NUM_BATCH_RETRIEVE_REVISIONID = 300
+from error import ManifestParseError
+
+NUM_BATCH_RETRIEVE_REVISIONID = 32
 
 def get_gitc_manifest_dir():
   return wrapper.Wrapper().get_gitc_manifest_dir()
@@ -54,7 +56,11 @@ def _set_project_revisions(projects):
     if gitcmd.Wait():
       print('FATAL: Failed to retrieve revisionExpr for %s' % proj)
       sys.exit(1)
-    proj.revisionExpr = gitcmd.stdout.split('\t')[0]
+    revisionExpr = gitcmd.stdout.split('\t')[0]
+    if not revisionExpr:
+      raise(ManifestParseError('Invalid SHA-1 revision project %s (%s)' %
+                               (proj.remote.url, proj.revisionExpr)))
+    proj.revisionExpr = revisionExpr
 
 def _manifest_groups(manifest):
   """Returns the manifest group string that should be synced
@@ -127,7 +133,7 @@ def generate_gitc_manifest(gitc_manifest, manifest, paths=None):
         repo_proj.revisionExpr = None
 
   # Convert URLs from relative to absolute.
-  for name, remote in manifest.remotes.iteritems():
+  for _name, remote in manifest.remotes.iteritems():
     remote.fetchUrl = remote.resolvedFetchUrl
 
   # Save the manifest.

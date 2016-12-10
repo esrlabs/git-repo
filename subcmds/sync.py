@@ -244,7 +244,7 @@ later is required to fix a server side protocol bug.
     if show_smart:
       p.add_option('-s', '--smart-sync',
                    dest='smart_sync', action='store_true',
-                   help='smart sync using manifest from a known good build')
+                   help='smart sync using manifest from the latest known good build')
       p.add_option('-t', '--smart-tag',
                    dest='smart_tag', action='store',
                    help='smart sync using manifest from a known tag')
@@ -399,9 +399,12 @@ later is required to fix a server side protocol bug.
     return fetched
 
   def _GCProjects(self, projects):
-    gitdirs = {}
+    gc_gitdirs = {}
     for project in projects:
-      gitdirs[project.gitdir] = project.bare_git
+      if len(project.manifest.GetProjectsWithName(project.name)) > 1:
+        print('Shared project %s found, disabling pruning.' % project.name)
+        project.bare_git.config('--replace-all', 'gc.pruneExpire', 'never')
+      gc_gitdirs[project.gitdir] = project.bare_git
 
     has_dash_c = git_require((1, 7, 2))
     if multiprocessing and has_dash_c:
@@ -411,7 +414,7 @@ later is required to fix a server side protocol bug.
     jobs = min(self.jobs, cpu_count)
 
     if jobs < 2:
-      for bare_git in gitdirs.values():
+      for bare_git in gc_gitdirs.values():
         bare_git.gc('--auto')
       return
 
@@ -433,7 +436,7 @@ later is required to fix a server side protocol bug.
       finally:
         sem.release()
 
-    for bare_git in gitdirs.values():
+    for bare_git in gc_gitdirs.values():
       if err_event.isSet():
         break
       sem.acquire()
@@ -456,6 +459,65 @@ later is required to fix a server side protocol bug.
     else:
       self.manifest._Unload()
 
+  def _DeleteProject(self, path):
+    print('Deleting obsolete path %s' % path, file=sys.stderr)
+
+    # Delete the .git directory first, so we're less likely to have a partially
+    # working git repository around. There shouldn't be any git projects here,
+    # so rmtree works.
+    try:
+      portable.rmtree(os.path.join(path, '.git'))
+    except OSError:
+      print('Failed to remove %s' % os.path.join(path, '.git'), file=sys.stderr)
+      print('error: Failed to delete obsolete path %s' % path, file=sys.stderr)
+      print('       remove manually, then run sync again', file=sys.stderr)
+      return -1
+
+    # Delete everything under the worktree, except for directories that contain
+    # another git project
+    dirs_to_remove = []
+    failed = False
+    for root, dirs, files in os.walk(path):
+      for f in files:
+        try:
+          os.remove(os.path.join(root, f))
+        except OSError:
+          print('Failed to remove %s' % os.path.join(root, f), file=sys.stderr)
+          failed = True
+      dirs[:] = [d for d in dirs
+                 if not os.path.lexists(os.path.join(root, d, '.git'))]
+      dirs_to_remove += [os.path.join(root, d) for d in dirs
+                         if os.path.join(root, d) not in dirs_to_remove]
+    for d in reversed(dirs_to_remove):
+      if portable.os_path_islink(d):
+        try:
+          os.remove(d)
+        except OSError:
+          print('Failed to remove %s' % os.path.join(root, d), file=sys.stderr)
+          failed = True
+      elif len(os.listdir(d)) == 0:
+        try:
+          os.rmdir(d)
+        except OSError:
+          print('Failed to remove %s' % os.path.join(root, d), file=sys.stderr)
+          failed = True
+          continue
+    if failed:
+      print('error: Failed to delete obsolete path %s' % path, file=sys.stderr)
+      print('       remove manually, then run sync again', file=sys.stderr)
+      return -1
+
+    # Try deleting parent dirs if they are empty
+    project_dir = path
+    while project_dir != self.manifest.topdir:
+      if len(os.listdir(project_dir)) == 0:
+        os.rmdir(project_dir)
+      else:
+        break
+      project_dir = os.path.dirname(project_dir)
+
+    return 0
+
   def UpdateProjectList(self):
     new_project_paths = []
     for project in self.GetProjects(None, missing_ok=True):
@@ -476,8 +538,8 @@ later is required to fix a server side protocol bug.
           continue
         if path not in new_project_paths:
           # If the path has already been deleted, we don't need to do it
-          if os.path.exists(self.manifest.topdir + '/' + path):
-            gitdir = os.path.join(self.manifest.topdir, path, '.git')
+          gitdir = os.path.join(self.manifest.topdir, path, '.git')
+          if os.path.exists(gitdir):
             project = Project(
                            manifest = self.manifest,
                            name = path,
@@ -496,18 +558,8 @@ later is required to fix a server side protocol bug.
               print('       commit changes, then run sync again',
                     file=sys.stderr)
               return -1
-            else:
-              print('Deleting obsolete path %s' % project.worktree,
-                    file=sys.stderr)
-              portable.rmtree(project.worktree)
-              # Try deleting parent subdirs if they are empty
-              project_dir = os.path.dirname(project.worktree)
-              while project_dir != self.manifest.topdir:
-                try:
-                  os.rmdir(project_dir)
-                except OSError:
-                  break
-                project_dir = os.path.dirname(project_dir)
+            elif self._DeleteProject(project.worktree):
+              return -1
 
     new_project_paths.sort()
     fd = open(file_path, 'w')

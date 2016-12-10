@@ -384,7 +384,7 @@ class _KerberosAuthHandler(urllib.request.BaseHandler):
     self.context = None
     self.handler_order = urllib.request.BaseHandler.handler_order - 50
 
-  def http_error_401(self, req, fp, code, msg, headers):
+  def http_error_401(self, req, fp, code, msg, headers): # pylint:disable=unused-argument
     host = req.get_host()
     retry = self.http_error_auth_reqed('www-authenticate', host, req, headers)
     return retry

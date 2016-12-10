@@ -61,6 +61,11 @@ directory use as much data as possible from the local reference
 directory when fetching from the server. This will make the sync
 go a lot faster by reducing data traffic on the network.
 
+The --no-clone-bundle option disables any attempt to use
+$URL/clone.bundle to bootstrap a new Git repository from a
+resumeable bundle file on a content delivery network. This
+may be necessary if there are problems with the local Python
+HTTP client or proxy configuration, but the Git binary works.
 
 Switching Manifest Branches
 ---------------------------
@@ -113,6 +118,9 @@ to update the working directory files.
                  help='restrict manifest projects to ones with a specified '
                       'platform group [auto|all|none|linux|darwin|...]',
                  metavar='PLATFORM')
+    g.add_option('--no-clone-bundle',
+                 dest='no_clone_bundle', action='store_true',
+                 help='disable use of /clone.bundle on HTTP/HTTPS')
 
     # Tool
     g = p.add_option_group('repo Version options')
@@ -222,7 +230,8 @@ to update the working directory files.
               'in another location.', file=sys.stderr)
         sys.exit(1)
 
-    if not m.Sync_NetworkHalf(is_new=is_new):
+    if not m.Sync_NetworkHalf(is_new=is_new, quiet=opt.quiet,
+        clone_bundle=not opt.no_clone_bundle):
       r = m.GetRemote(m.remote.name)
       print('fatal: cannot obtain manifest %s' % r.url, file=sys.stderr)
 

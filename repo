@@ -28,6 +28,9 @@ VERSION = (1, 25)
 
 # increment this if the MAINTAINER_KEYS block is modified
 KEYRING_VERSION = (1, 3)
+
+# Each individual key entry is created by using:
+# gpg --armor --export keyid
 MAINTAINER_KEYS = """
 
      Repo Maintainer (E.S.R.Labs) <repo@esrlabs.com>
@@ -209,6 +212,9 @@ group.add_option('-p', '--platform',
                  help='restrict manifest projects to ones with a specified '
                       'platform group [auto|all|none|linux|darwin|...]',
                  metavar='PLATFORM')
+group.add_option('--no-clone-bundle',
+                 dest='no_clone_bundle', action='store_true',
+                 help='disable use of /clone.bundle on HTTP/HTTPS')
 
 
 # Tool
@@ -352,7 +358,7 @@ def _Init(args, gitc_init=False):
       can_verify = True
 
     dst = os.path.abspath(os.path.join(repodir, S_repo))
-    _Clone(url, dst, opt.quiet)
+    _Clone(url, dst, opt.quiet, not opt.no_clone_bundle)
 
     if can_verify and not opt.no_repo_verify:
       rev = _Verify(dst, branch, opt.quiet)
@@ -445,7 +451,10 @@ def SetupGnuPG(quiet):
       sys.exit(1)
 
   env = os.environ.copy()
-  env['GNUPGHOME'] = gpg_dir.encode()
+  try:
+    env['GNUPGHOME'] = gpg_dir
+  except UnicodeEncodeError:
+    env['GNUPGHOME'] = gpg_dir.encode()
 
   cmd = ['gpg', '--import']
   try:
@@ -556,7 +565,7 @@ def _DownloadBundle(url, local, quiet):
     try:
       r = urllib.request.urlopen(url)
     except urllib.error.HTTPError as e:
-      if e.code in [401, 403, 404, 406]:
+      if e.code in [401, 403, 404, 406, 501]:
         return False
       _print('fatal: Cannot get %s' % url, file=sys.stderr)
       _print('fatal: HTTP error %s' % e.code, file=sys.stderr)
@@ -588,7 +597,7 @@ def _ImportBundle(local):
     os.remove(path)
 
 
-def _Clone(url, local, quiet):
+def _Clone(url, local, quiet, clone_bundle):
   """Clones a git repository to a new subdirectory of repodir
   """
   try:
@@ -618,7 +627,7 @@ def _Clone(url, local, quiet):
   _SetConfig(local,
              'remote.origin.fetch',
              '+refs/heads/*:refs/remotes/origin/*')
-  if _DownloadBundle(url, local, quiet):
+  if clone_bundle and _DownloadBundle(url, local, quiet):
     _ImportBundle(local)
   _Fetch(url, local, 'origin', quiet)
 
@@ -652,7 +661,10 @@ def _Verify(cwd, branch, quiet):
       _print(file=sys.stderr)
 
   env = os.environ.copy()
-  env['GNUPGHOME'] = gpg_dir.encode()
+  try:
+    env['GNUPGHOME'] = gpg_dir
+  except UnicodeEncodeError:
+    env['GNUPGHOME'] = gpg_dir.encode()
 
   cmd = [GIT, 'tag', '-v', cur]
   proc = subprocess.Popen(cmd,

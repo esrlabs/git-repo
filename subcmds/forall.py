@@ -121,6 +121,9 @@ without iterating through the remaining projects.
     p.add_option('-r', '--regex',
                  dest='regex', action='store_true',
                  help="Execute the command only on projects matching regex or wildcard expression")
+    p.add_option('-i', '--inverse-regex',
+                 dest='inverse_regex', action='store_true',
+                 help="Execute the command only on projects not matching regex or wildcard expression")
     p.add_option('-g', '--groups',
                  dest='groups',
                  help="Execute the command only on projects matching the specified groups")
@@ -216,10 +219,12 @@ without iterating through the remaining projects.
     if os.path.isfile(smart_sync_manifest_path):
       self.manifest.Override(smart_sync_manifest_path)
 
-    if not opt.regex:
-      projects = self.GetProjects(args, groups=opt.groups)
-    else:
+    if opt.regex:
       projects = self.FindProjects(args)
+    elif opt.inverse_regex:
+      projects = self.FindProjects(args, inverse=True)
+    else:
+      projects = self.GetProjects(args, groups=opt.groups)
 
     os.environ['REPO_COUNT'] = str(len(projects))
 

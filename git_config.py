@@ -464,9 +464,13 @@ def _open_ssh(host, port=None):
              % (host,port, str(e)), file=sys.stderr)
       return False
 
+    time.sleep(1)
+    ssh_died = (p.poll() is not None)
+    if ssh_died:
+      return False
+
     _master_processes.append(p)
     _master_keys.add(key)
-    time.sleep(1)
     return True
   finally:
     _master_keys_lock.release()
@@ -568,6 +572,7 @@ class Remote(object):
     self._config = config
     self.name = name
     self.url = self._Get('url')
+    self.pushUrl = self._Get('pushurl')
     self.review = self._Get('review')
     self.projectname = self._Get('projectname')
     self.fetch = list(map(RefSpec.FromString,
@@ -700,6 +705,10 @@ class Remote(object):
     """Save this remote to the configuration.
     """
     self._Set('url', self.url)
+    if self.pushUrl is not None:
+      self._Set('pushurl', self.pushUrl + '/' + self.projectname)
+    else:
+      self._Set('pushurl', self.pushUrl)
     self._Set('review', self.review)
     self._Set('projectname', self.projectname)
     self._Set('fetch', list(map(str, self.fetch)))

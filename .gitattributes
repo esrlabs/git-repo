@@ -1,4 +1,4 @@
 # Prevent /bin/sh scripts from being clobbered by autocrlf=true
 git_ssh text eol=lf
-main.py text eol=lf
 repo text eol=lf
+hooks/* text eol=lf
