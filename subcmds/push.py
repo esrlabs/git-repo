@@ -376,9 +376,15 @@ in all projects listed in the manifest.
       if avail:
         pending.append((project, avail))
 
-    if pending and (not opt.bypass_hooks):
+    if not pending:
+      print("no branches ready for upload", file=sys.stderr)
+      return
+
+    if not opt.bypass_hooks:
       hook = RepoHook('pre-push', self.manifest.repo_hooks_project,
-                      self.manifest.topdir, abort_if_user_denies=True)
+                      self.manifest.topdir,
+                      self.manifest.manifestProject.GetRemote('origin').url,
+                      abort_if_user_denies=True)
       pending_proj_names = [project.name for (project, avail) in pending]
       pending_worktrees = [project.worktree for (project, avail) in pending]
       try:
